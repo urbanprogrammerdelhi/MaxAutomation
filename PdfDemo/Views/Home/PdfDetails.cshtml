@@ -1,0 +1,135 @@
+﻿@model  Pdfdemo.PdfReportViewModel
+
+<div id="FinalReport">
+    <dl class="form-control">
+        <dt>
+            @Html.DisplayNameFor(model => model.Header.BranchCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Header.BranchCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Header.BranchName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Header.BranchName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Header.FOName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Header.FOName)
+        </dd>
+
+    </dl>
+
+    <table class="table-bordered">
+        <tr style="background-color:lightblue;color:black;font-family:Arial;font-size:11px;font-weight:bold;">
+            <th class="Column1">
+                @Html.DisplayNameFor(model => model.ColumnDetails.ChecklistId)
+            </th>
+            <th class="Column2">
+                @Html.DisplayNameFor(model => model.ColumnDetails.SubHeader)
+            </th>
+            <th class="Column3">
+                @Html.DisplayNameFor(model => model.ColumnDetails.Text)
+            </th>
+            <th class="Column4">
+                @Html.DisplayNameFor(model => model.ColumnDetails.Photo)
+            </th>
+            <th class="Column5">
+                @Html.DisplayNameFor(model => model.ColumnDetails.Remarks)
+            </th>
+        </tr>
+
+
+        @foreach (IGrouping<string, Pdfdemo.ReportBody> packageGroup in Model.MasterdetailList)
+            {
+            <tr>
+                <td colspan="5" style="background-color: silver;color:black;font-family:Verdana;font-size:11px;font-weight:bold;text-align:center;height:20px;">
+                    @Html.DisplayFor(modelItem => packageGroup.Key)
+
+                </td>
+            </tr>
+            foreach (Pdfdemo.ReportBody checkListItem in packageGroup)
+            {
+
+                <tr style="background-color: white;color:black;font-family:Verdana;font-size:11px;font-weight:normal;border:2px solid gray;">
+                    <td class="Column1">
+                        @Html.DisplayFor(modelItem => checkListItem.ChecklistId)
+                    </td>
+                    <td class="Column2">
+                        @Html.DisplayFor(modelItem => checkListItem.SubHeader)
+                    </td>
+                    <td class="Column3">
+                        @Html.DisplayFor(modelItem => checkListItem.Text)
+                    </td>
+                    <td class="Column4">
+                        <img src="~/ImageWriterUpdated.png" />
+                    </td>
+                    <td class="Column5">
+                        @Html.DisplayFor(modelItem => checkListItem.Remarks)
+                    </td>
+
+                </tr>
+            }
+
+        }
+
+
+
+    </table>
+</div>
+</body>
+</html>
+
+<style>
+    .Column1 {
+        width: 5%;
+        height: auto;
+        margin: 5px;
+        text-align: center;
+        padding: 5px;
+        border:1px solid black;
+    }
+
+    .Column2 {
+        width: 40%;
+        height: auto;
+        margin: 5px;
+        text-align: center;
+        padding: 5px;
+        border:1px solid black;
+    }
+
+    .Column3 {
+        width: 5%;
+        height: auto;
+        margin: 5px;
+        text-align: center;
+        padding: 5px;
+        border:1px solid black;
+    }
+
+    .Column4 {
+        width: 20%;
+        height: auto;
+        margin: 5px;
+        padding: 5px;
+        border:1px solid black;
+    }
+
+    .Column5 {
+        height: auto;
+        width: 20%;
+        margin: 5px;
+        text-align: center;
+        padding: 5px;
+        border:1px solid black;
+    }
+</style>

@@ -1,0 +1,168 @@
+﻿@model Pdfdemo.PdfReportViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+
+</head>
+<body>
+    @*<a href="@Url.Action("ExportToPdf", "PdfReport", new { Branch = Model.Branch, AuditDate = Model.AuditDate, Location = "206" })"
+       type="submit"
+       id="runReport"
+       target="_blank"
+       class="button Secondary">
+        Export to PDF
+    </a>*@
+
+    @*@Html.ActionLink("Print Details View To PDF", "ExportToPdf", new { Branch = Model.Branch, AuditDate = Model.AuditDate, Location = "206" }) |*@
+    @using (Html.BeginForm("Export", "Home", FormMethod.Post))
+    {
+                @Html.HiddenFor(model => model.Branch)
+                @Html.HiddenFor(model => model.AuditDate)
+
+                <input type="submit" id="btnSubmit" value="Export" />
+    }
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#btnSubmit").click(function () {
+                $("input[name='GridHtml']").val($("#FinalReport").html());
+            });
+        });
+    </script>
+
+    <div id="FinalReport">
+        <dl class="form-control">
+            <dt>
+                @Html.DisplayNameFor(model => model.Header.BranchCode)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Header.BranchCode)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Header.BranchName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Header.BranchName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Header.FOName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Header.FOName)
+            </dd>
+
+        </dl>
+
+        <table class="table-bordered">
+            <tr style="background-color:lightblue;color:black;font-family:Arial;font-size:11px;font-weight:bold;">
+                <th class="Column1">
+                    @Html.DisplayNameFor(model => model.ColumnDetails.ChecklistId)
+                </th>
+                <th class="Column2">
+                    @Html.DisplayNameFor(model => model.ColumnDetails.SubHeader)
+                </th>
+                <th class="Column3">
+                    @Html.DisplayNameFor(model => model.ColumnDetails.Text)
+                </th>
+                <th class="Column4">
+                    @Html.DisplayNameFor(model => model.ColumnDetails.Photo)
+                </th>
+                <th class="Column5">
+                    @Html.DisplayNameFor(model => model.ColumnDetails.Remarks)
+                </th>
+            </tr>
+
+
+            @foreach (IGrouping<string, Pdfdemo.ReportBody> packageGroup in Model.MasterdetailList)
+            {
+                <tr>
+                    <td colspan="5" style="background-color: silver;color:black;font-family:Verdana;font-size:11px;font-weight:bold;text-align:center;height:20px;">
+                        @Html.DisplayFor(modelItem => packageGroup.Key)
+
+                    </td>
+                </tr>
+                foreach (Pdfdemo.ReportBody checkListItem in packageGroup)
+                {
+
+                    <tr style="background-color: white;color:black;font-family:Verdana;font-size:11px;font-weight:normal;border:2px solid gray;">
+                        <td class="Column1">
+                            @Html.DisplayFor(modelItem => checkListItem.ChecklistId)
+                        </td>
+                        <td class="Column2">
+                            @Html.DisplayFor(modelItem => checkListItem.SubHeader)
+                        </td>
+                        <td class="Column3">
+                            @Html.DisplayFor(modelItem => checkListItem.Text)
+                        </td>
+                        <td class="Column4">
+                            <img src="~/Images/ImageWriterUpdated.png" />
+                        </td>
+                        <td class="Column5">
+                            @Html.DisplayFor(modelItem => checkListItem.Remarks)
+                        </td>
+
+                    </tr>
+                }
+
+            }
+
+
+
+        </table>
+    </div>
+</body>
+</html>
+
+<style>
+    .Column1 {
+        width: 5%;
+        height: auto;
+        margin: 5px;
+        text-align: center;
+        padding: 5px;
+    }
+
+    .Column2 {
+        width: 25%;
+        height: auto;
+        margin: 5px;
+        text-align: center;
+        padding: 5px;
+    }
+
+    .Column3 {
+        width: 5%;
+        height: auto;
+        margin: 5px;
+        text-align: center;
+        padding: 5px;
+    }
+
+    .Column4 {
+        width: 20%;
+        height: auto;
+        margin: 5px;
+        padding: 5px;
+    }
+
+    .Column5 {
+        height: auto;
+        width: 35%;
+        margin: 5px;
+        text-align: center;
+        padding: 5px;
+    }
+</style>

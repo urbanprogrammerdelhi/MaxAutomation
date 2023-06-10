@@ -1,0 +1,56 @@
+﻿@model IEnumerable<Pdfdemo.BranchDetails>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SerialNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BranchCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BranchName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AuditTime)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SerialNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BranchCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BranchName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AuditTime)
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "Details", new { Branch = item.BranchCode, AuditDate = item.AuditTime, Location = "215" }) |
+                </td>
+            </tr>
+        }
+
+    </table>
+</body>
+</html>
