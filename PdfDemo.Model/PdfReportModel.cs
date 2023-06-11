@@ -1,5 +1,4 @@
-﻿using iTextSharp.text;
-using iTextSharp.text.pdf;
+﻿
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 
-namespace Pdfdemo
+namespace PdfDemo.Model
 {
 
     public class PdfReportViewModel
@@ -53,10 +52,15 @@ namespace Pdfdemo
     }
     public class BranchDetails
     {
+        [Display(Name ="Sl No.")]
         public int SerialNumber { get; set; }
+        [Display(Name = "Branch Code")]
         public string BranchCode { get; set; }
+        [Display(Name = "Branch Name")]
         public string BranchName { get; set; }
+        [Display(Name = "Audit Time")]
         public string AuditTime { get; set; }
+        public string LocationCode { get; set; }
 
     }
  

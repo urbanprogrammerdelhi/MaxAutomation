@@ -1,6 +1,7 @@
 ﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
-using Pdfdemo;
+using PdfDemo.Data;
+using PdfDemo.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -84,6 +85,7 @@ namespace PdfDemo
             cell.AddElement(chunk);
             return cell;
         }
+        
         public void CreateHeader(Reportheader header)
         {
             var headerLabel = DefaultTable(1);

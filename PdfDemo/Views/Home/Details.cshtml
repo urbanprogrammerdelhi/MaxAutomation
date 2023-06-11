@@ -1,4 +1,5 @@
-﻿@model Pdfdemo.PdfReportViewModel
+﻿@using PdfDemo.Model
+@model PdfReportViewModel
 
 @{
     Layout = null;
@@ -86,7 +87,7 @@
             </tr>
 
 
-            @foreach (IGrouping<string, Pdfdemo.ReportBody> packageGroup in Model.MasterdetailList)
+            @foreach (IGrouping<string, ReportBody> packageGroup in Model.MasterdetailList)
             {
                 <tr>
                     <td colspan="5" style="background-color: silver;color:black;font-family:Verdana;font-size:11px;font-weight:bold;text-align:center;height:20px;">
@@ -94,7 +95,7 @@
 
                     </td>
                 </tr>
-                foreach (Pdfdemo.ReportBody checkListItem in packageGroup)
+                foreach (ReportBody checkListItem in packageGroup)
                 {
 
                     <tr style="background-color: white;color:black;font-family:Verdana;font-size:11px;font-weight:normal;border:2px solid gray;">

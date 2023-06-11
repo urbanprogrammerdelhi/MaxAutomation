@@ -1,24 +1,26 @@
-﻿using iTextSharp.text;
-using iTextSharp.text.pdf;
-using Pdfdemo;
+﻿
+
+using PdfDemo.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Web;
 
-namespace PdfDemo
+namespace PdfDemo.Data
 {
 
-    
+
     public class DataAccessLayer
     {
+        private static readonly string ConnectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString();
         public static byte[] GetImageById(int id)
         {
-            using (SqlConnection con = new SqlConnection(ApplicationConstants.Connectionstring))
+            using (SqlConnection con = new SqlConnection(ConnectionString))
             {
                 string sql = "SELECT Image FROM MaxBupaChecklistImageMasterUpdated WHERE ImageAutoId =" + id.ToString();
                 using (SqlDataAdapter sda = new SqlDataAdapter(sql, con))
@@ -27,14 +29,14 @@ namespace PdfDemo
                     sda.Fill(dt);
                     if (dt == null || dt.Rows == null || dt.Rows.Count <= 0)
                         return null;
-                   return (byte[])dt.Rows[0]["Image"];
-                   
+                    return (byte[])dt.Rows[0]["Image"];
+
                 }
             }
         }
         public static List<BranchDetails> FetchClientCode(string ClientCode, string FromDate, string ToDate)
         {
-            using (SqlConnection connection = new SqlConnection(ApplicationConstants.Connectionstring))
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
 
             {
                 connection.Open();
@@ -69,7 +71,7 @@ namespace PdfDemo
                 result.AuditDate = AuditDate;
                 result.Branch = Branch;
                 result.Location = Location;
-                using (SqlConnection connection = new SqlConnection(ApplicationConstants.Connectionstring))
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
 
                 {
                     connection.Open();
@@ -105,6 +107,7 @@ namespace PdfDemo
             return null;
 
         }
+
 
     }
 }
