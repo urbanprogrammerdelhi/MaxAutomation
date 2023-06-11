@@ -95,7 +95,7 @@ namespace PdfDemo.Data
                         header.AuditDate = AuditDate;
                         result.Header = header;
                         var detail = ds.Tables[0].ToList<ReportBody>();
-                        result.MasterdetailList = detail.ToLookup(lkp => lkp.MainHeader + "," + lkp.HeaderIndex);
+                        result.MasterdetailList = detail.ToLookup(lkp => lkp.MainHeader);// + "," + lkp.HeaderIndex);
                         result.ColumnDetails = detail.FirstOrDefault();
                         return result;
                     }

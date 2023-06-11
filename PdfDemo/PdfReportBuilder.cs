@@ -15,10 +15,18 @@ using System.Web;
 namespace PdfDemo
 {
 
-   
+
     public class PdfReportBuilder
     {
         Document _pdfDoc;
+        private static readonly CellPadding TopLabelHeader = new CellPadding { Bottom = 10, Top = 5, Left = 250, Right = 0 };
+        private static readonly System.Drawing.Color HeaderBackgroundColor = System.Drawing.Color.LightBlue;
+        private static readonly CellPadding TopHeader = new CellPadding { Bottom = 10, Top = 5, Left = 40, Right = 0 };
+        private static readonly System.Drawing.Color DetailBackgroundColor = System.Drawing.Color.White;
+        private static readonly System.Drawing.Color GroupBackgroundColor = System.Drawing.Color.Gray;
+        private static readonly CellPadding DetailDefaultPadding = new CellPadding { Bottom = 5, Top = 5, Left = 40, Right = 0 };
+        private static readonly CellPadding DetailDefaultLongPadding = new CellPadding { Bottom = 0, Top = 0, Left = 10, Right = 0 };
+
         public PdfReportBuilder(Document pdfDoc)
         {
             _pdfDoc = pdfDoc;
@@ -45,9 +53,10 @@ namespace PdfDemo
             Image image = Image.GetInstance(imageUrl);
             image.ScaleAbsolute(100, 50);
             imagecell.AddElement(image);
-            return imagecell;        }
+            return imagecell;
+        }
 
-        private PdfPCell DefaultImageCell(byte[] ImageStream)
+        private PdfPCell DefaultImageCell(byte[] ImageStream, CellPadding padding)
         {
 
             PdfPCell imagecell = new PdfPCell();
@@ -57,6 +66,17 @@ namespace PdfDemo
                 image.ScaleAbsolute(100, 50);
                 imagecell.AddElement(image);
             }
+            else
+            {
+                string defaultImage = ConfigurationManager.AppSettings["BaseUrl"].ToString() + @"NoImagesFound.jpg";
+                Image image = Image.GetInstance(defaultImage);
+                image.ScaleAbsolute(100, 40);
+                imagecell.AddElement(image);
+            }
+            imagecell.PaddingTop = padding.Top;
+            imagecell.PaddingBottom = padding.Bottom;
+            imagecell.PaddingLeft = padding.Left;
+
             return imagecell;
         }
         public class CellPadding
@@ -74,37 +94,51 @@ namespace PdfDemo
         {
 
             var chunk = new Chunk(cellValue);
-           
+
             var cell = new PdfPCell();
             cell.VerticalAlignment = Element.ALIGN_MIDDLE;
             cell.HorizontalAlignment = Element.ALIGN_MIDDLE;
             cell.PaddingTop = padding.Top;
-            cell.PaddingBottom =padding.Bottom;
+            cell.PaddingBottom = padding.Bottom;
             cell.PaddingLeft = padding.Left;
             cell.BackgroundColor = new BaseColor(color);
             cell.AddElement(chunk);
             return cell;
         }
-        private static readonly CellPadding TopLabelHeader = new CellPadding { Bottom = 5, Top = 5, Left = 250, Right = 0 };
-        private static readonly System.Drawing.Color HeaderBackgroundColor = System.Drawing.Color.LightBlue;
-        private static readonly CellPadding TopHeader = new CellPadding { Bottom = 5, Top = 5, Left = 40, Right = 0 };
-        private static readonly System.Drawing.Color DetailBackgroundColor = System.Drawing.Color.White;
-        private static readonly System.Drawing.Color GroupBackgroundColor = System.Drawing.Color.Gray;
+        private PdfPCell DetailCell(string cellValue, System.Drawing.Color color, CellPadding padding)
+        {
+
+            var chunk = new Chunk(cellValue);
+
+            var cell = new PdfPCell();
+            cell.VerticalAlignment = Element.ALIGN_MIDDLE;
+            cell.HorizontalAlignment = Element.ALIGN_MIDDLE;
+            cell.PaddingTop = padding.Top;
+            cell.PaddingBottom = padding.Bottom;
+            cell.PaddingLeft = padding.Left;
+            cell.BackgroundColor = new BaseColor(color);
+            cell.AddElement(chunk);
+            return cell;
+        }
         public void CreateHeader(Reportheader header)
         {
             var headerLabel = DefaultTable(1);
             headerLabel.WidthPercentage = 100f;
             headerLabel.AddCell(HeaderCell("Max Audit Report", HeaderBackgroundColor, TopLabelHeader));
             _pdfDoc.Add(headerLabel);
-            var topHeader = DefaultTable(3);
+            var topHeader = DefaultTable(4);
             topHeader.AddCell(HeaderCell($"Branch Code", HeaderBackgroundColor, TopHeader));
             topHeader.AddCell(HeaderCell($"Branch Name", HeaderBackgroundColor, TopHeader));
             topHeader.AddCell(HeaderCell($"FO Name", HeaderBackgroundColor, TopHeader));
+            topHeader.AddCell(HeaderCell($"Audit date", HeaderBackgroundColor, TopHeader));
+
             _pdfDoc.Add(topHeader);
-            var topHeaderValue = DefaultTable(3);
+            var topHeaderValue = DefaultTable(4);
             topHeaderValue.AddCell(HeaderCell($"{header.BranchCode}", DetailBackgroundColor, TopHeader));
             topHeaderValue.AddCell(HeaderCell($"{header.BranchName}", DetailBackgroundColor, TopHeader));
             topHeaderValue.AddCell(HeaderCell($"{header.FOName}", DetailBackgroundColor, TopHeader));
+            topHeaderValue.AddCell(HeaderCell($"{header.AuditDate}", DetailBackgroundColor, TopHeader));
+
             _pdfDoc.Add(topHeaderValue);
         }
         public void CreateDetails(ILookup<string, ReportBody> details)
@@ -118,19 +152,19 @@ namespace PdfDemo
             table.AddCell(HeaderCell("Comments", HeaderBackgroundColor, TopHeader));
             foreach (IGrouping<string, ReportBody> packageGroup in details)
             {
-                string header = packageGroup.Key.Substring(0, packageGroup.Key.LastIndexOf(","));
+                string header = packageGroup.Key;//.Substring(0, packageGroup.Key.LastIndexOf(","));
                 var cell = HeaderCell(header, GroupBackgroundColor, TopLabelHeader);
                 cell.Colspan = 5;
                 cell.HorizontalAlignment = Element.ALIGN_MIDDLE;
                 table.AddCell(cell);
                 foreach (ReportBody checkListItem in packageGroup)
                 {
-                    table.AddCell(DefaultCell(checkListItem.ChecklistId.ToString()));
-                    table.AddCell(DefaultCell(checkListItem.SubHeader));
-                    table.AddCell(DefaultCell(checkListItem.Text));
+                    table.AddCell(DetailCell(checkListItem.ChecklistId.ToString(), DetailBackgroundColor, DetailDefaultPadding));
+                    table.AddCell(DetailCell(checkListItem.SubHeader, DetailBackgroundColor, DetailDefaultLongPadding));
+                    table.AddCell(DetailCell(checkListItem.Text, DetailBackgroundColor, DetailDefaultPadding));
                     var imageArray = DataAccessLayer.GetImageById(checkListItem.ImageAutoId);
-                    table.AddCell(DefaultImageCell(imageArray));
-                    table.AddCell(DefaultCell(checkListItem.Remarks));                   
+                    table.AddCell(DefaultImageCell(imageArray, DetailDefaultLongPadding));
+                    table.AddCell(DetailCell(checkListItem.Remarks, DetailBackgroundColor, DetailDefaultPadding));
                 }
             }
             _pdfDoc.Add(table);
@@ -138,5 +172,5 @@ namespace PdfDemo
 
     }
 
-  
+
 }

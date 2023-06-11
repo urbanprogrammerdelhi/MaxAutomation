@@ -44,9 +44,7 @@ namespace PdfDemo
             {
                 throw;
             }
-            //var test = _master.FetchLocations("", "");
-            //var data = DataAccessLayer.FetchClientCode("215", "29-May-2023", "31-May-2023");
-            //return View(data);
+          
         }
         [HttpPost]
         public ActionResult Search()
@@ -77,7 +75,7 @@ namespace PdfDemo
         [ValidateInput(false)]
         public ActionResult Export()
         {
-            string location = "215";
+            string location = Request.Form["Location"].ToString();
             string branch = Request.Form["Branch"].ToString();
             string auditdate = Request.Form["AuditDate"].ToString();
             var data = DataAccessLayer.GetReportValues(location, branch, auditdate);
@@ -98,5 +96,25 @@ namespace PdfDemo
             return View();
 
         }
+
+        public ActionResult RetrieveImage(int ImageId)
+        {
+            byte[] cover = DataAccessLayer.GetImageById(ImageId);
+            if (cover != null)
+            {
+                return File(cover, "image/jpg");
+            }
+            else
+            {
+                string path = Server.MapPath("~/Images/NoImagesFound.jpg");
+
+                //Read the File data into Byte Array.
+                byte[] bytes = System.IO.File.ReadAllBytes(path);
+
+                //Send the File to Download.
+                return File(bytes, "image/jpg");
+            }
+        }
+       
     }
 }

@@ -4,41 +4,28 @@
 @{
     Layout = null;
 }
-
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Details</title>
-
+    <title>Audit Details</title>
 </head>
 <body>
-    @*<a href="@Url.Action("ExportToPdf", "PdfReport", new { Branch = Model.Branch, AuditDate = Model.AuditDate, Location = "206" })"
-           type="submit"
-           id="runReport"
-           target="_blank"
-           class="button Secondary">
-            Export to PDF
-        </a>*@
 
-    @*@Html.ActionLink("Print Details View To PDF", "ExportToPdf", new { Branch = Model.Branch, AuditDate = Model.AuditDate, Location = "206" }) |*@
     @using (Html.BeginForm("Export", "Home", FormMethod.Post))
     {
+        @Html.HiddenFor(model => model.Location)
+
         @Html.HiddenFor(model => model.Branch)
         @Html.HiddenFor(model => model.AuditDate)
+        <div style="padding:10px;">
 
-        <input type="submit" id="btnSubmit" value="Export" />
+            @Html.ActionLink("Back to Home", "Index", "Home", new { @class = "btn btn-primary" })
+            <input type="submit" class="btn btn-primary" id="btnSubmit" value="Export to PDF" />
+        </div>
     }
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script type="text/javascript">
-        $(function () {
-            $("#btnSubmit").click(function () {
-                $("input[name='GridHtml']").val($("#FinalReport").html());
-            });
-        });
-    </script>
-    <div class="PageHeaderSection" style="height:100%;position:unset;">
+
+    <div class="PageHeaderSection" style="height:100%;position:unset;padding:10px;">
         <div class="card">
             <div class="card-body bg-info text-white"><h4 style="text-align:center;">Max Life Audit Report</h4></div>
         </div>
@@ -46,13 +33,13 @@
 
             <div class="form-group table-striped">
 
-                <div class="row">
+                <div class="row" style="padding:5px;">
                     <div class="col-md-4">
 
-                       
-                            @Html.LabelWithColonFor(model => model.Header.BranchCode)
-                            @Html.DisplayFor(model => model.Header.BranchCode)
-                </div>
+
+                        @Html.LabelWithColonFor(model => model.Header.BranchCode)
+                        @Html.DisplayFor(model => model.Header.BranchCode)
+                    </div>
                     <div class="col-md-4">
                         @Html.LabelWithColonFor(model => model.Header.BranchName)<span>:</span>
                         @Html.DisplayFor(model => model.Header.BranchName)
@@ -79,24 +66,24 @@
         </div>
 
     </div>
-    <div id="FinalReport">
-     
+    <div id="FinalReport" style="padding:10px;">
+
 
         <table class="table-bordered">
             <tr style="background-color:lightblue;color:black;font-family:Arial;font-size:11px;font-weight:bold;">
-                <th class="Column1">
+                <th class="Column1 text-center">
                     @Html.DisplayNameFor(model => model.ColumnDetails.ChecklistId)
                 </th>
-                <th class="Column2">
+                <th class="Column2 text-center">
                     @Html.DisplayNameFor(model => model.ColumnDetails.SubHeader)
                 </th>
-                <th class="Column3">
+                <th class="Column3 text-center">
                     @Html.DisplayNameFor(model => model.ColumnDetails.Text)
                 </th>
-                <th class="Column4">
+                <th class="Column4 text-center">
                     @Html.DisplayNameFor(model => model.ColumnDetails.Photo)
                 </th>
-                <th class="Column5">
+                <th class="Column5 text-center">
                     @Html.DisplayNameFor(model => model.ColumnDetails.Remarks)
                 </th>
             </tr>
@@ -105,8 +92,9 @@
             @foreach (IGrouping<string, ReportBody> packageGroup in Model.MasterdetailList)
             {
                 <tr>
-                    <td colspan="5" style="background-color: silver;color:black;font-family:Verdana;font-size:11px;font-weight:bold;text-align:center;height:20px;">
-                        @Html.DisplayFor(modelItem => packageGroup.Key)
+                    <td colspan="5" style="background-color: silver;color:black;font-family:Arial;font-size:11px;font-weight:bold;text-align:center;padding:5px;">
+
+                        @Html.DisplayFor(modelItem => packageGroup.Key))
 
                     </td>
                 </tr>
@@ -123,8 +111,8 @@
                         <td class="Column3">
                             @Html.DisplayFor(modelItem => checkListItem.Text)
                         </td>
-                        <td class="Column4">
-                            <img src="~/Images/ImageWriterUpdated.png" />
+                        <td class="Column4 text-center">
+                            <img src='@Url.Action("RetrieveImage", "Home", new {ImageId = checkListItem.ImageAutoId})' />
                         </td>
                         <td class="Column5">
                             @Html.DisplayFor(modelItem => checkListItem.Remarks)
@@ -147,4 +135,12 @@
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/bootstrap.min.js"></script>
 <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#btnSubmit").click(function () {
+            $("input[name='GridHtml']").val($("#FinalReport").html());
+        });
+    });
+</script>
 
