@@ -92,6 +92,7 @@ namespace PdfDemo.Data
                     if (ds != null && ds.Tables.Count > 1)
                     {
                         var header = ds.Tables[1].ToList<Reportheader>().FirstOrDefault();
+                        header.AuditDate = AuditDate;
                         result.Header = header;
                         var detail = ds.Tables[0].ToList<ReportBody>();
                         result.MasterdetailList = detail.ToLookup(lkp => lkp.MainHeader + "," + lkp.HeaderIndex);

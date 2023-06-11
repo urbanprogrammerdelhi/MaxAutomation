@@ -1,0 +1,144 @@
+﻿.display-name{
+   font-family:Arial;
+   font-stretch:wider;
+   font-size:small;
+}
+    .IndexColumn1 {
+        width: 5%;
+        height: auto;
+        margin: 5px;
+        text-align: center;
+        padding: 5px;
+    }
+
+    .IndexColumn2 {
+        width: 35%;
+        height: auto;
+        margin: 5px;
+        text-align: center;
+        padding: 5px;
+    }
+
+    .IndexColumn3 {
+        width: 35%;
+        height: auto;
+        margin: 5px;
+        text-align: center;
+        padding: 5px;
+    }
+
+    .IndexColumn4 {
+        width: 20%;
+        height: auto;
+        margin: 5px;
+        padding: 5px;
+    }
+
+    .IndexColumn5 {
+        height: auto;
+        width: 25%;
+        margin: 5px;
+        text-align: center;
+        padding: 5px;
+    }
+
+
+    .Column1 {
+        width: 5%;
+        height: auto;
+        margin: 5px;
+        text-align: center;
+        padding: 5px;
+    }
+
+    .Column2 {
+        width: 25%;
+        height: auto;
+        margin: 5px;
+        text-align: center;
+        padding: 5px;
+    }
+
+    .Column3 {
+        width: 5%;
+        height: auto;
+        margin: 5px;
+        text-align: center;
+        padding: 5px;
+    }
+
+    .Column4 {
+        width: 20%;
+        height: auto;
+        margin: 5px;
+        padding: 5px;
+    }
+
+    .Column5 {
+        height: auto;
+        width: 35%;
+        margin: 5px;
+        text-align: center;
+        padding: 5px;
+    }
+       th.nth-child
+       {
+           background-color:darkgrey;
+       }
+        tr:nth-child(odd) {
+            background-color: lightgray;
+        }
+
+        tr:nth-child(even) {
+            background-color: whitesmoke;
+        }
+
+        th.nth-child {
+            background-color: darkblue;
+        }
+
+        .SubmitButton {
+            margin-top: 25px;
+        }
+
+        .PageHeaderSection {
+            width: 100%;
+            position: relative;
+            float: left;
+            background-color: white;
+            border-radius: 5px;
+            border-width: 5px;
+            border-color: black;
+            align-content:center !important;
+        }
+        .bodyHeaderContent{
+            background-color:lightblue;
+            color:black;
+        }
+        .card {
+            background-color: lightblue;
+            padding: 5px;
+            font-family: Arial;
+            font-size: small;
+            font-stretch: wider;
+        }
+        .card-body{
+            padding:5px;
+        }
+       
+
+        .BodyHeaderSection {
+            width: 100%;
+            position: relative;
+            float: left;
+            background-color: transparent;
+            border-radius: 5px;
+            border-width: 5px;
+            border-color: black;
+            overflow:no-display;
+            padding:5px;
+        }
+        .equalDivide tr td th
+         { 
+            width:25%; 
+        }

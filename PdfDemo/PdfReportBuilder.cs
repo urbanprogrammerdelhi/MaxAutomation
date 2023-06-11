@@ -85,37 +85,41 @@ namespace PdfDemo
             cell.AddElement(chunk);
             return cell;
         }
-        
+        private static readonly CellPadding TopLabelHeader = new CellPadding { Bottom = 5, Top = 5, Left = 250, Right = 0 };
+        private static readonly System.Drawing.Color HeaderBackgroundColor = System.Drawing.Color.LightBlue;
+        private static readonly CellPadding TopHeader = new CellPadding { Bottom = 5, Top = 5, Left = 40, Right = 0 };
+        private static readonly System.Drawing.Color DetailBackgroundColor = System.Drawing.Color.White;
+        private static readonly System.Drawing.Color GroupBackgroundColor = System.Drawing.Color.Gray;
         public void CreateHeader(Reportheader header)
         {
             var headerLabel = DefaultTable(1);
             headerLabel.WidthPercentage = 100f;
-            headerLabel.AddCell(HeaderCell("Max Audit Report", System.Drawing.Color.LightBlue, new CellPadding { Bottom = 5, Top = 5, Left = 250, Right = 0 }));
+            headerLabel.AddCell(HeaderCell("Max Audit Report", HeaderBackgroundColor, TopLabelHeader));
             _pdfDoc.Add(headerLabel);
             var topHeader = DefaultTable(3);
-            topHeader.AddCell(HeaderCell($"Branch Code", System.Drawing.Color.LightBlue, new CellPadding { Bottom = 5, Top = 5, Left = 40, Right = 0 }));
-            topHeader.AddCell(HeaderCell($"Branch Name", System.Drawing.Color.LightBlue, new CellPadding { Bottom = 5, Top = 5, Left = 40, Right = 0 }));
-            topHeader.AddCell(HeaderCell($"FO Name", System.Drawing.Color.LightBlue, new CellPadding { Bottom = 5, Top = 5, Left = 40, Right = 0 }));
+            topHeader.AddCell(HeaderCell($"Branch Code", HeaderBackgroundColor, TopHeader));
+            topHeader.AddCell(HeaderCell($"Branch Name", HeaderBackgroundColor, TopHeader));
+            topHeader.AddCell(HeaderCell($"FO Name", HeaderBackgroundColor, TopHeader));
             _pdfDoc.Add(topHeader);
             var topHeaderValue = DefaultTable(3);
-            topHeaderValue.AddCell(HeaderCell($"{header.BranchCode}", System.Drawing.Color.White, new CellPadding { Bottom = 5, Top = 5, Left = 40, Right = 0 }));
-            topHeaderValue.AddCell(HeaderCell($"{header.BranchName}", System.Drawing.Color.White, new CellPadding { Bottom = 5, Top = 5, Left = 40, Right = 0 }));
-            topHeaderValue.AddCell(HeaderCell($"{header.FOName}", System.Drawing.Color.White, new CellPadding { Bottom = 5, Top = 5, Left = 40, Right = 0 }));
+            topHeaderValue.AddCell(HeaderCell($"{header.BranchCode}", DetailBackgroundColor, TopHeader));
+            topHeaderValue.AddCell(HeaderCell($"{header.BranchName}", DetailBackgroundColor, TopHeader));
+            topHeaderValue.AddCell(HeaderCell($"{header.FOName}", DetailBackgroundColor, TopHeader));
             _pdfDoc.Add(topHeaderValue);
         }
         public void CreateDetails(ILookup<string, ReportBody> details)
         {
             var baseUrl = ConfigurationManager.AppSettings["BaseUrl"].ToString();
             var table = DefaultTable(5);
-            table.AddCell(HeaderCell("S.No.", System.Drawing.Color.LightBlue, new CellPadding { Bottom = 5, Top = 5, Left = 40, Right = 0 }));
-            table.AddCell(HeaderCell("Question", System.Drawing.Color.LightBlue, new CellPadding { Bottom = 5, Top = 5, Left = 40, Right = 0 }));
-            table.AddCell(HeaderCell("Response", System.Drawing.Color.LightBlue, new CellPadding { Bottom = 5, Top = 5, Left = 40, Right = 0 }));
-            table.AddCell(HeaderCell("Photo", System.Drawing.Color.LightBlue, new CellPadding { Bottom = 5, Top = 5, Left = 40, Right = 0 }));
-            table.AddCell(HeaderCell("Comments", System.Drawing.Color.LightBlue, new CellPadding { Bottom = 5, Top = 5, Left = 40, Right = 0 }));
+            table.AddCell(HeaderCell("S.No.", HeaderBackgroundColor, TopHeader));
+            table.AddCell(HeaderCell("Question", HeaderBackgroundColor, TopHeader));
+            table.AddCell(HeaderCell("Response", HeaderBackgroundColor, TopHeader));
+            table.AddCell(HeaderCell("Photo", HeaderBackgroundColor, TopHeader));
+            table.AddCell(HeaderCell("Comments", HeaderBackgroundColor, TopHeader));
             foreach (IGrouping<string, ReportBody> packageGroup in details)
             {
                 string header = packageGroup.Key.Substring(0, packageGroup.Key.LastIndexOf(","));
-                var cell = HeaderCell(header,System.Drawing.Color.Gray, new CellPadding { Bottom = 5, Top =5, Left = 250, Right = 0 });
+                var cell = HeaderCell(header, GroupBackgroundColor, TopLabelHeader);
                 cell.Colspan = 5;
                 cell.HorizontalAlignment = Element.ALIGN_MIDDLE;
                 table.AddCell(cell);

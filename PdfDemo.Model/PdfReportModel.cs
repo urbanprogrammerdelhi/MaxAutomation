@@ -25,11 +25,18 @@ namespace PdfDemo.Model
   
     public class Reportheader
     {
+        [Display(Name = "Branch Code")]
         public string BranchCode { get; set; }
+        [Display(Name = "Branch Name")]
         public string BranchName { get; set; }
+        [Display(Name = "Field Officer Name")]
         public string FOName { get; set; }
-
-
+        [Display(Name = "Audit Date")]
+        public string AuditDate { get; set; }
+        [Display(Name ="SPOC Name")]
+        public string SpocName { get; set; }
+        [Display(Name = "SPOC Number")]
+        public string SpocNumber { get; set; }
     }
     public class ReportBody
     {

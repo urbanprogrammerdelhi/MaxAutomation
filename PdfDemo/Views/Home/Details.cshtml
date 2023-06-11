@@ -15,20 +15,20 @@
 </head>
 <body>
     @*<a href="@Url.Action("ExportToPdf", "PdfReport", new { Branch = Model.Branch, AuditDate = Model.AuditDate, Location = "206" })"
-       type="submit"
-       id="runReport"
-       target="_blank"
-       class="button Secondary">
-        Export to PDF
-    </a>*@
+           type="submit"
+           id="runReport"
+           target="_blank"
+           class="button Secondary">
+            Export to PDF
+        </a>*@
 
     @*@Html.ActionLink("Print Details View To PDF", "ExportToPdf", new { Branch = Model.Branch, AuditDate = Model.AuditDate, Location = "206" }) |*@
     @using (Html.BeginForm("Export", "Home", FormMethod.Post))
     {
-                @Html.HiddenFor(model => model.Branch)
-                @Html.HiddenFor(model => model.AuditDate)
+        @Html.HiddenFor(model => model.Branch)
+        @Html.HiddenFor(model => model.AuditDate)
 
-                <input type="submit" id="btnSubmit" value="Export" />
+        <input type="submit" id="btnSubmit" value="Export" />
     }
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <script type="text/javascript">
@@ -38,34 +38,49 @@
             });
         });
     </script>
+    <div class="PageHeaderSection" style="height:100%;position:unset;">
+        <div class="card">
+            <div class="card-body bg-info text-white"><h4 style="text-align:center;">Max Life Audit Report</h4></div>
+        </div>
+        <div class="card-body">
 
+            <div class="form-group table-striped">
+
+                <div class="row">
+                    <div class="col-md-4">
+
+                       
+                            @Html.LabelWithColonFor(model => model.Header.BranchCode)
+                            @Html.DisplayFor(model => model.Header.BranchCode)
+                </div>
+                    <div class="col-md-4">
+                        @Html.LabelWithColonFor(model => model.Header.BranchName)<span>:</span>
+                        @Html.DisplayFor(model => model.Header.BranchName)
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelWithColonFor(model => model.Header.FOName)<span>:</span>
+                        @Html.DisplayFor(model => model.Header.FOName)
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelWithColonFor(model => model.Header.AuditDate)<span>:</span>
+                        @Html.DisplayFor(model => model.Header.AuditDate)
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelWithColonFor(model => model.Header.SpocName)<span>:</span>
+                        @Html.DisplayFor(model => model.Header.SpocName)
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelWithColonFor(model => model.Header.SpocNumber)<span>:</span>
+                        @Html.DisplayFor(model => model.Header.SpocNumber)
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
     <div id="FinalReport">
-        <dl class="form-control">
-            <dt>
-                @Html.DisplayNameFor(model => model.Header.BranchCode)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Header.BranchCode)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Header.BranchName)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Header.BranchName)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Header.FOName)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Header.FOName)
-            </dd>
-
-        </dl>
+     
 
         <table class="table-bordered">
             <tr style="background-color:lightblue;color:black;font-family:Arial;font-size:11px;font-weight:bold;">
@@ -126,44 +141,10 @@
     </div>
 </body>
 </html>
+<link rel="stylesheet" href="~/Content/bootstrap.css" />
+<link rel="stylesheet" href="~/Content/code.jquery.com_ui_1.11.4_themes_smoothness_jquery-ui.css" />
+<link rel="stylesheet" href="~/Content/MaxLifeStyleSheet.css" />
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
 
-<style>
-    .Column1 {
-        width: 5%;
-        height: auto;
-        margin: 5px;
-        text-align: center;
-        padding: 5px;
-    }
-
-    .Column2 {
-        width: 25%;
-        height: auto;
-        margin: 5px;
-        text-align: center;
-        padding: 5px;
-    }
-
-    .Column3 {
-        width: 5%;
-        height: auto;
-        margin: 5px;
-        text-align: center;
-        padding: 5px;
-    }
-
-    .Column4 {
-        width: 20%;
-        height: auto;
-        margin: 5px;
-        padding: 5px;
-    }
-
-    .Column5 {
-        height: auto;
-        width: 35%;
-        margin: 5px;
-        text-align: center;
-        padding: 5px;
-    }
-</style>
