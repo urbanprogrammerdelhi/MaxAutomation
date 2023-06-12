@@ -18,11 +18,14 @@
 
         @Html.HiddenFor(model => model.Branch)
         @Html.HiddenFor(model => model.AuditDate)
-        <div style="padding:10px;">
-
-            @Html.ActionLink("Back to Home", "Index", "Home", new { @class = "btn btn-primary" })
-            <input type="submit" class="btn btn-primary" id="btnSubmit" value="Export to PDF" />
-        </div>
+    <div style="padding:10px;">
+        <input action="action"
+               onclick="window.history.go(-1); return false;"
+               type="submit"
+               value="Back to Home"  class="btn btn-primary" />
+        @*@Html.ActionLink("Back to Home", "Index", "Home", new { @class = "btn btn-primary" })*@
+        <input type="submit" class="btn btn-primary" id="btnSubmit" value="Export to PDF" />
+    </div>
     }
 
     <div class="PageHeaderSection" style="height:100%;position:unset;padding:10px;">
@@ -112,7 +115,7 @@
                             @Html.DisplayFor(modelItem => checkListItem.Text)
                         </td>
                         <td class="Column4 text-center">
-                            <img src='@Url.Action("RetrieveImage", "Home", new {ImageId = checkListItem.ImageAutoId})' />
+                            <img style="width:150px;height:150px;" src='@Url.Action("RetrieveImage", "Home", new {ImageId = checkListItem.ImageAutoId})' />
                         </td>
                         <td class="Column5">
                             @Html.DisplayFor(modelItem => checkListItem.Remarks)

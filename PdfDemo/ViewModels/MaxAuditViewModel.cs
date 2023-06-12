@@ -24,6 +24,7 @@ namespace PdfDemo
         {
             get
             {
+                var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
                 return new MaxAuditViewModel
                 {
                     BranchDetails = new List<BranchDetails>(),
@@ -32,8 +33,8 @@ namespace PdfDemo
                     CurrentCompany = string.Empty,
                     CurrentLocation = string.Empty,
                     Locations = new List<SelectListItem>(),
-                    FromDate=DateTime.Now.AddDays(Convert.ToInt32(ConfigurationManager.AppSettings["FromDays"])),
-                    ToDate =DateTime.Now
+                    FromDate= currentDate.AddDays(Convert.ToInt32(ConfigurationManager.AppSettings["FromDays"])),
+                    ToDate = currentDate
 
                 };
             }

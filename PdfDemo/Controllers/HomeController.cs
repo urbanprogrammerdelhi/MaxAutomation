@@ -36,7 +36,7 @@ namespace PdfDemo
                     var locations = _master.FetchLocations(vm.CurrentCompany, "All");
                     vm.Locations = locations.ToSelectList("LocationAutoId", "Locationdesc");
                 }
-                var data = DataAccessLayer.FetchClientCode(vm.CurrentLocation,vm.FromDate.ToString(),vm.ToDate.ToString());
+                var data = DataAccessLayer.FetchClientCode(vm.CurrentLocation, vm.FromDate.ToString("dd-MMM-yyyy"), vm.ToDate.ToString("dd-MMM-yyyy"));
                 vm.BranchDetails = data;
                 return View(vm);
             }

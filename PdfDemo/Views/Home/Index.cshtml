@@ -44,7 +44,7 @@
                                 @Html.EditorFor(model => model.ToDate, new { htmlAttributes = new { @class = "form-control", @readonly = "true" } })
                             </div>
                             <div class="col-md-2">
-                                <button type="submit" class="btn btn-primary SubmitButton">View Audit Branch details</button>
+                                <button type="submit" class="btn btn-primary SubmitButton" onclick="return ValidateSearch();">View Audit Branch details</button>
                             </div>
 
                         </div>
@@ -98,7 +98,7 @@
                                         @Html.DisplayFor(modelItem => item.AuditTime)
                                     </td>
                                     <td class="text-center">
-                                        @Html.ActionLink("View Audit Report", "Details", new { Branch = item.BranchCode, AuditDate = item.AuditTime, Location = item.LocationCode }) |
+                                        @Html.ActionLink("View Audit Report", "Details", new { Branch = item.BranchCode, AuditDate = item.AuditTime, Location = item.LocationCode }, new { @class = "btn btn-primary" } ) 
                                     </td>
                                 </tr>
 
@@ -119,6 +119,47 @@
     <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
 
     <script>
+        function ValidateSearch()
+                {
+            debugger;
+            let selectedCompany = $("#CurrentCompany").val();
+            if (selectedCompany == null || selectedCompany == '') {
+                alert('Please select a company to continue');
+                return false;
+            }
+
+            let selectedLocation = $("#CurrentLocation").val();
+            if (selectedLocation == null || selectedLocation == '' || selectedLocation=='Select Location') {
+                alert('Please select a location to continue');
+                return false;
+            }
+            let fromDate = $("#FromDate").val();
+            let toDate = $("#ToDate").val();
+            if (fromDate == null || fromDate == '')
+            { alert('Please enter From Date'); return false;}
+
+            if (toDate == null || toDate == '') { alert('Please enter To Date'); return false; }
+            return ValidateFromToDate($("#FromDate"), $("#ToDate"));
+            
+            
+
+            return true;
+        }
+        function ValidateFromToDate(FromDate, ToDate) {
+
+            if (!FromDate || !ToDate)
+                return false;
+            let fromDate = FromDate.val();
+            let toDate = ToDate.val();
+            if ((fromDate != null && fromDate != '') && (toDate != null && toDate != '')) {
+                let mappedfrom = new Date(fromDate);
+                let mappedTo = new Date(toDate);
+                if (mappedfrom > mappedTo)
+                { alert('From date can not be greater than To Date'); return false; }
+                 
+            }
+            return true;
+        }
         $("#CurrentCompany").change(function () {
             var CompanyCode = $(this).val();
             $.ajax({
