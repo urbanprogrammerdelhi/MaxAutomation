@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -31,8 +32,8 @@ namespace PdfDemo
                     CurrentCompany = string.Empty,
                     CurrentLocation = string.Empty,
                     Locations = new List<SelectListItem>(),
-                    FromDate=DateTime.Now.AddDays(-5),
-                    ToDate=DateTime.Now
+                    FromDate=DateTime.Now.AddDays(Convert.ToInt32(ConfigurationManager.AppSettings["FromDays"])),
+                    ToDate =DateTime.Now
 
                 };
             }
