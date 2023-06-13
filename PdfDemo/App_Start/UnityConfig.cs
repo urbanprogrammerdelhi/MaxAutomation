@@ -1,5 +1,6 @@
 using PdfDemo.Business;
 using PdfDemo.Dal.DAL;
+using PdfDemo.Logger;
 using System;
 
 using Unity;
@@ -46,6 +47,7 @@ namespace PdfDemo
             // container.RegisterType<IProductRepository, ProductRepository>();
             container.RegisterType<IMasterBusiness, MasterBusiness>();
             container.RegisterType<IMasterData, MasterData>();
+            container.RegisterSingleton<ILoggerManager, LoggerManager>();
         }
     }
 }

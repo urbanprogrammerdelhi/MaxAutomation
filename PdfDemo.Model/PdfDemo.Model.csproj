@@ -45,6 +45,15 @@
     <Compile Include="PdfReportModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PdfDemo.Logger\PdfDemo.Logger.csproj">
+      <Project>{a216686b-7077-44bf-81e7-a4a6699b2d69}</Project>
+      <Name>PdfDemo.Logger</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

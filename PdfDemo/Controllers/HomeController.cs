@@ -2,6 +2,7 @@
 using iTextSharp.text.pdf;
 using PdfDemo.Business;
 using PdfDemo.Data;
+using PdfDemo.Logger;
 using PdfDemo.Model;
 using System;
 using System.Collections.Generic;
@@ -16,12 +17,16 @@ namespace PdfDemo
     public class HomeController : Controller
     {
         private readonly IMasterBusiness _master;
-        public HomeController(IMasterBusiness master)
+        private readonly ILoggerManager _loggerManager;
+        public HomeController(IMasterBusiness master,ILoggerManager loggerManager)
         {
             _master = master;
+            _loggerManager = loggerManager;
         }
         public ActionResult Index()
         {
+            _loggerManager.LogError($"Logging Test");
+
             try
             {
                 var vm = MaxAuditViewModel.DefaultInstance;
@@ -42,6 +47,7 @@ namespace PdfDemo
             }
             catch (Exception ex)
             {
+                _loggerManager.LogError($"Exception in Index {ex}");
                 throw;
             }
           
