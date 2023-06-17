@@ -95,7 +95,7 @@ namespace PdfDemo
             pdfDoc.Close();
             Response.Buffer = true;
             Response.ContentType = "application/pdf";
-            Response.AddHeader("content-disposition", $"attachment;filename={branch.Trim()}.pdf");
+            Response.AddHeader("content-disposition", $"attachment;filename={data.Header.BranchName.Trim()}.pdf");
             Response.Cache.SetCacheability(HttpCacheability.NoCache);
             Response.Write(pdfDoc);
             Response.End();

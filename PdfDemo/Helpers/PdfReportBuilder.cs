@@ -25,7 +25,7 @@ namespace PdfDemo
         private static readonly System.Drawing.Color DetailBackgroundColor = System.Drawing.Color.White;
         private static readonly System.Drawing.Color GroupBackgroundColor = System.Drawing.Color.Gray;
         private static readonly CellPadding DetailDefaultPadding = new CellPadding { Bottom = 5, Top = 5, Left = 40, Right = 0 };
-        private static readonly CellPadding DetailDefaultLongPadding = new CellPadding { Bottom = 0, Top = 0, Left = 10, Right = 0 };
+        private static readonly CellPadding DetailDefaultLongPadding = new CellPadding { Bottom = 10, Top = 10, Left = 10, Right = 10 };
 
         public PdfReportBuilder(Document pdfDoc)
         {

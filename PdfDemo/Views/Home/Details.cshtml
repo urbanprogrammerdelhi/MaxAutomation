@@ -97,7 +97,7 @@
                 <tr>
                     <td colspan="5" style="background-color: silver;color:black;font-family:Arial;font-size:11px;font-weight:bold;text-align:center;padding:5px;">
 
-                        @Html.DisplayFor(modelItem => packageGroup.Key))
+                        @Html.DisplayFor(modelItem => packageGroup.Key)
 
                     </td>
                 </tr>
@@ -114,7 +114,7 @@
                         <td class="Column3">
                             @Html.DisplayFor(modelItem => checkListItem.Text)
                         </td>
-                        <td class="Column4 text-center">
+                        <td class="Column4 text-center" style="padding:5px;">
                             <img style="width:150px;height:150px;" src='@Url.Action("RetrieveImage", "Home", new {ImageId = checkListItem.ImageAutoId})' />
                         </td>
                         <td class="Column5">
