@@ -1,5 +1,7 @@
 ﻿
 
+using PdfDemo.Dal;
+using PdfDemo.Dal.DAL;
 using PdfDemo.Model;
 using System;
 using System.Collections.Generic;
@@ -15,12 +17,11 @@ namespace PdfDemo.Data
 {
 
 
-    public class DataAccessLayer
+    public class BranchCodeData:IBranchCodeData
     {
-        private static readonly string ConnectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString();
         public byte[] GetImageById(int id)
         {
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            using (SqlConnection con = new SqlConnection(ApplicationConstants.ConnectionString))
             {
                 string sql = "SELECT Image FROM MaxBupaChecklistImageMasterUpdated WHERE ImageAutoId =" + id.ToString();
                 using (SqlDataAdapter sda = new SqlDataAdapter(sql, con))
@@ -36,7 +37,7 @@ namespace PdfDemo.Data
         }
         public  List<BranchDetails> FetchClientCode(string ClientCode, string FromDate, string ToDate)
         {
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            using (SqlConnection connection = new SqlConnection(ApplicationConstants.ConnectionString))
 
             {
                 connection.Open();
@@ -71,7 +72,7 @@ namespace PdfDemo.Data
                 result.AuditDate = AuditDate;
                 result.Branch = Branch;
                 result.Location = Location;
-                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                using (SqlConnection connection = new SqlConnection(ApplicationConstants.ConnectionString))
 
                 {
                     connection.Open();

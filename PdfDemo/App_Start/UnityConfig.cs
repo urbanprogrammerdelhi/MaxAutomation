@@ -49,7 +49,7 @@ namespace PdfDemo
             container.RegisterType<IMasterBusiness, MasterBusiness>();
             container.RegisterType<IMasterData, MasterData>();
             container.RegisterType<AccountData, AccountData>();
-            container.RegisterType<DataAccessLayer>();
+            container.RegisterType<IBranchCodeData,BranchCodeData>();
             container.RegisterType<IAccountData, AccountData>();
             container.RegisterSingleton<ILoggerManager, LoggerManager>();
         }

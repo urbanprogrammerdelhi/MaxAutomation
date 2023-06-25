@@ -1,6 +1,7 @@
 ﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
 using PdfDemo.Business;
+using PdfDemo.Dal.DAL;
 using PdfDemo.Data;
 using PdfDemo.Logger;
 using PdfDemo.Model;
@@ -17,8 +18,8 @@ namespace PdfDemo.Controllers
     {
         private readonly IMasterBusiness _master;
         private readonly ILoggerManager _loggerManager;
-        private readonly DataAccessLayer _dataAccesLayer;
-        public BranchController(IMasterBusiness master, ILoggerManager loggerManager,DataAccessLayer dataAccesLayer)
+        private readonly IBranchCodeData _dataAccesLayer;
+        public BranchController(IMasterBusiness master, ILoggerManager loggerManager,IBranchCodeData dataAccesLayer)
         {
             _master = master;
             _loggerManager = loggerManager;

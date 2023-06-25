@@ -1,5 +1,6 @@
 ﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
+using PdfDemo.Dal.DAL;
 using PdfDemo.Data;
 using PdfDemo.Model;
 using System;
@@ -18,7 +19,7 @@ namespace PdfDemo
 
     public class PdfReportBuilder
     {
-        private readonly DataAccessLayer _dal;
+        private readonly IBranchCodeData _branchCodeData;
        
         Document _pdfDoc;
         private static readonly CellPadding TopLabelHeader = new CellPadding { Bottom = 10, Top = 5, Left = 250, Right = 0 };
@@ -29,9 +30,9 @@ namespace PdfDemo
         private static readonly CellPadding DetailDefaultPadding = new CellPadding { Bottom = 5, Top = 5, Left = 50, Right = 0 };
         private static readonly CellPadding DetailDefaultLongPadding = new CellPadding { Bottom = 10, Top = 10, Left = 30, Right = 10 };
 
-        public PdfReportBuilder(Document pdfDoc, DataAccessLayer dal)
+        public PdfReportBuilder(Document pdfDoc, IBranchCodeData branchCodeData)
         {
-            _dal = dal;
+            _branchCodeData = branchCodeData;
             _pdfDoc = pdfDoc;
         }
         private PdfPTable DefaultTable(int cellSize)
@@ -167,7 +168,7 @@ namespace PdfDemo
                     table.AddCell(DetailCell(checkListItem.ChecklistId.ToString(), DetailBackgroundColor, new CellPadding { Bottom = 5, Top = 5, Left = 20, Right = 0 }));
                     table.AddCell(DetailCell(checkListItem.SubHeader, DetailBackgroundColor, DetailDefaultLongPadding));
                     table.AddCell(DetailCell(checkListItem.Text, DetailBackgroundColor, new CellPadding { Bottom = 5, Top = 5, Left = 40, Right = 0 }));
-                    var imageArray = _dal.GetImageById(checkListItem.ImageAutoId);
+                    var imageArray = _branchCodeData.GetImageById(checkListItem.ImageAutoId);
                     table.AddCell(DefaultImageCell(imageArray, DetailDefaultLongPadding));
                     table.AddCell(DetailCell(checkListItem.Remarks, DetailBackgroundColor, DetailDefaultPadding));
                 }

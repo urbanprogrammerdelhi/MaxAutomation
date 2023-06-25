@@ -42,12 +42,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="ApplicationConstants.cs" />
     <Compile Include="DAL\Contract\IAccountData.cs" />
+    <Compile Include="DAL\Contract\IBranchCodeData.cs" />
     <Compile Include="DAL\Contract\IMasterData.cs" />
     <Compile Include="DAL\Implementation\AccountData.cs" />
     <Compile Include="DAL\Implementation\MasterData.cs" />
-    <Compile Include="DAL\DataAccessLayer.cs" />
+    <Compile Include="DAL\Implementation\BranchCodeData.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
