@@ -18,17 +18,20 @@ namespace PdfDemo
 
     public class PdfReportBuilder
     {
+        private readonly DataAccessLayer _dal;
+       
         Document _pdfDoc;
         private static readonly CellPadding TopLabelHeader = new CellPadding { Bottom = 10, Top = 5, Left = 250, Right = 0 };
         private static readonly System.Drawing.Color HeaderBackgroundColor = System.Drawing.Color.LightBlue;
-        private static readonly CellPadding TopHeader = new CellPadding { Bottom = 10, Top = 5, Left = 40, Right = 0 };
+        private static readonly CellPadding TopHeader = new CellPadding { Bottom = 10, Top = 5, Left = 10, Right = 0 };
         private static readonly System.Drawing.Color DetailBackgroundColor = System.Drawing.Color.White;
         private static readonly System.Drawing.Color GroupBackgroundColor = System.Drawing.Color.Gray;
-        private static readonly CellPadding DetailDefaultPadding = new CellPadding { Bottom = 5, Top = 5, Left = 40, Right = 0 };
-        private static readonly CellPadding DetailDefaultLongPadding = new CellPadding { Bottom = 10, Top = 10, Left = 10, Right = 10 };
+        private static readonly CellPadding DetailDefaultPadding = new CellPadding { Bottom = 5, Top = 5, Left = 50, Right = 0 };
+        private static readonly CellPadding DetailDefaultLongPadding = new CellPadding { Bottom = 10, Top = 10, Left = 30, Right = 10 };
 
-        public PdfReportBuilder(Document pdfDoc)
+        public PdfReportBuilder(Document pdfDoc, DataAccessLayer dal)
         {
+            _dal = dal;
             _pdfDoc = pdfDoc;
         }
         private PdfPTable DefaultTable(int cellSize)
@@ -144,12 +147,14 @@ namespace PdfDemo
         public void CreateDetails(ILookup<string, ReportBody> details)
         {
             var baseUrl = ConfigurationManager.AppSettings["BaseUrl"].ToString();
+
             var table = DefaultTable(5);
-            table.AddCell(HeaderCell("S.No.", HeaderBackgroundColor, TopHeader));
-            table.AddCell(HeaderCell("Question", HeaderBackgroundColor, TopHeader));
-            table.AddCell(HeaderCell("Response", HeaderBackgroundColor, TopHeader));
-            table.AddCell(HeaderCell("Photo", HeaderBackgroundColor, TopHeader));
-            table.AddCell(HeaderCell("Comments", HeaderBackgroundColor, TopHeader));
+            table.SetWidths(new float[] {10,30,18,25,15 });
+            table.AddCell(HeaderCell("S.No.", HeaderBackgroundColor, new CellPadding { Bottom = 10, Top = 5, Left = 15, Right = 0 }));
+            table.AddCell(HeaderCell("Question", HeaderBackgroundColor, new CellPadding { Bottom = 10, Top = 5, Left = 60, Right = 0 }));
+            table.AddCell(HeaderCell("Response", HeaderBackgroundColor, new CellPadding { Bottom = 10, Top = 5, Left = 25, Right = 0 }));
+            table.AddCell(HeaderCell("Photo", HeaderBackgroundColor, new CellPadding { Bottom = 10, Top = 5, Left = 60, Right = 0 }));
+            table.AddCell(HeaderCell("Comments", HeaderBackgroundColor, new CellPadding { Bottom = 10, Top = 5, Left = 20, Right = 0 }));
             foreach (IGrouping<string, ReportBody> packageGroup in details)
             {
                 string header = packageGroup.Key;//.Substring(0, packageGroup.Key.LastIndexOf(","));
@@ -159,10 +164,10 @@ namespace PdfDemo
                 table.AddCell(cell);
                 foreach (ReportBody checkListItem in packageGroup)
                 {
-                    table.AddCell(DetailCell(checkListItem.ChecklistId.ToString(), DetailBackgroundColor, DetailDefaultPadding));
+                    table.AddCell(DetailCell(checkListItem.ChecklistId.ToString(), DetailBackgroundColor, new CellPadding { Bottom = 5, Top = 5, Left = 20, Right = 0 }));
                     table.AddCell(DetailCell(checkListItem.SubHeader, DetailBackgroundColor, DetailDefaultLongPadding));
-                    table.AddCell(DetailCell(checkListItem.Text, DetailBackgroundColor, DetailDefaultPadding));
-                    var imageArray = DataAccessLayer.GetImageById(checkListItem.ImageAutoId);
+                    table.AddCell(DetailCell(checkListItem.Text, DetailBackgroundColor, new CellPadding { Bottom = 5, Top = 5, Left = 40, Right = 0 }));
+                    var imageArray = _dal.GetImageById(checkListItem.ImageAutoId);
                     table.AddCell(DefaultImageCell(imageArray, DetailDefaultLongPadding));
                     table.AddCell(DetailCell(checkListItem.Remarks, DetailBackgroundColor, DetailDefaultPadding));
                 }

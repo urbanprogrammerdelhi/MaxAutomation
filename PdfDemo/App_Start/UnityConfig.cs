@@ -1,6 +1,6 @@
 using PdfDemo.Business;
 using PdfDemo.Dal.DAL;
-using PdfDemo.Dal.DAL.Implementation;
+using PdfDemo.Data;
 using PdfDemo.Logger;
 using System;
 
@@ -49,6 +49,8 @@ namespace PdfDemo
             container.RegisterType<IMasterBusiness, MasterBusiness>();
             container.RegisterType<IMasterData, MasterData>();
             container.RegisterType<AccountData, AccountData>();
+            container.RegisterType<DataAccessLayer>();
+            container.RegisterType<IAccountData, AccountData>();
             container.RegisterSingleton<ILoggerManager, LoggerManager>();
         }
     }

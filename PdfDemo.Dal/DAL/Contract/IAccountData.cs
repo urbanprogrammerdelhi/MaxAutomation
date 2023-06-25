@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PdfDemo.Dal.DAL.Contract
+namespace PdfDemo.Dal.DAL
 {
-    interface IAccountData
+    public interface IAccountData
     {
         IList<Account> ListOfAccounts();
         Account AccountByCredentials(string userName, string password);

@@ -18,7 +18,7 @@ namespace PdfDemo.Data
     public class DataAccessLayer
     {
         private static readonly string ConnectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString();
-        public static byte[] GetImageById(int id)
+        public byte[] GetImageById(int id)
         {
             using (SqlConnection con = new SqlConnection(ConnectionString))
             {
@@ -34,7 +34,7 @@ namespace PdfDemo.Data
                 }
             }
         }
-        public static List<BranchDetails> FetchClientCode(string ClientCode, string FromDate, string ToDate)
+        public  List<BranchDetails> FetchClientCode(string ClientCode, string FromDate, string ToDate)
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
 
@@ -63,7 +63,7 @@ namespace PdfDemo.Data
             }
         }
 
-        public static PdfReportViewModel GetReportValues(string Location, string Branch, string AuditDate)
+        public  PdfReportViewModel GetReportValues(string Location, string Branch, string AuditDate)
         {
             try
             {

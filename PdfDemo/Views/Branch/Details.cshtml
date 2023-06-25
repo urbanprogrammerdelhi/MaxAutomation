@@ -12,7 +12,7 @@
 </head>
 <body>
 
-    @using (Html.BeginForm("Export", "Home", FormMethod.Post))
+    @using (Html.BeginForm("Export", "Branch", FormMethod.Post))
     {
         @Html.HiddenFor(model => model.Location)
 
@@ -115,7 +115,7 @@
                             @Html.DisplayFor(modelItem => checkListItem.Text)
                         </td>
                         <td class="Column4 text-center" style="padding:5px;">
-                            <img style="width:150px;height:150px;" src='@Url.Action("RetrieveImage", "Home", new {ImageId = checkListItem.ImageAutoId})' />
+                            <img style="width:150px;height:150px;" src='@Url.Action("RetrieveImage", "Branch", new {ImageId = checkListItem.ImageAutoId})' />
                         </td>
                         <td class="Column5">
                             @Html.DisplayFor(modelItem => checkListItem.Remarks)

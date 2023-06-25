@@ -1,5 +1,4 @@
-﻿using PdfDemo.Dal.DAL.Contract;
-using PdfDemo.Data;
+﻿using PdfDemo.Data;
 using PdfDemo.Model;
 using System;
 using System.Collections.Generic;
@@ -9,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PdfDemo.Dal.DAL.Implementation
+namespace PdfDemo.Dal.DAL
 {
     public class AccountData : IAccountData
     {

@@ -18,5 +18,9 @@ namespace PdfDemo
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             UnityConfig.Container.RegisterTypes();
         }
+      protected void AuthentiateRequest()
+      {
+
+      }
     }
 }
