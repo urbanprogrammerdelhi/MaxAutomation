@@ -22,7 +22,21 @@ namespace PdfDemo.Data
             }
             return item;
         }
+        public static T ConvertFromDataRow<T>(this DataRow row) where T : new()
+        {
+            T item = new T();
+            List<PropertyInfo> properties = typeof(T).GetProperties().ToList();
 
+            foreach (var property in properties)
+            {
+                if (row.Table.Columns.Contains(property.Name))
+                {
+                    if (row[property.Name] != DBNull.Value)
+                        property.SetValue(item, row[property.Name], null);
+                }
+            }
+            return item;
+        }
         public static List<T> ToList<T>(this DataTable table) where T : new()
         {
             List<PropertyInfo> properties = typeof(T).GetProperties().ToList();

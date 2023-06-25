@@ -30,7 +30,7 @@ namespace PdfDemo
                     BranchDetails = new List<BranchDetails>(),
                     Companies = new List<SelectListItem>(),
                     CurrentBranch = new BranchDetails(),
-                    CurrentCompany = string.Empty,
+                    CurrentCompany = "Max",
                     CurrentLocation = string.Empty,
                     Locations = new List<SelectListItem>(),
                     FromDate= currentDate.AddDays(Convert.ToInt32(ConfigurationManager.AppSettings["FromDays"])),
