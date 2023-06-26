@@ -110,6 +110,32 @@ namespace PdfDemo.Data
 
         }
 
+        public List<ImageModel> FetchCheckListImageList(string location,string branch,string auditDate,string checkListId)
+        {
+            using (SqlConnection connection = new SqlConnection(ApplicationConstants.ConnectionString))
+
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand();
+                command.Connection = connection;
+                command.CommandText = "[SP_FetchICheckListImageList]";
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add(new SqlParameter("@LocationAutoId", location));
+                command.Parameters.Add(new SqlParameter("@FromDate", auditDate));
+                command.Parameters.Add(new SqlParameter("@ClientCode", branch));
+                command.Parameters.Add(new SqlParameter("@CheckListId", checkListId));
+
+                
+                SqlDataAdapter adpt = new SqlDataAdapter();
+                adpt.SelectCommand = command;
+                var dt = new DataTable();
+                adpt.Fill(dt);
+                return dt.ToList<ImageModel>();
+               
+
+            }
+        }
+
 
     }
 }

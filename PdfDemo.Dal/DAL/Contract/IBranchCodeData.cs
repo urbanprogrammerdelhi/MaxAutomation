@@ -18,6 +18,7 @@ namespace PdfDemo.Dal.DAL
         List<BranchDetails> FetchClientCode(string ClientCode, string FromDate, string ToDate);
 
         PdfReportViewModel GetReportValues(string Location, string Branch, string AuditDate);
+        List<ImageModel> FetchCheckListImageList(string location, string branch, string auditDate, string checkListId);
     }
    
 

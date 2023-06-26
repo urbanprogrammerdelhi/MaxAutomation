@@ -18,14 +18,14 @@
 
         @Html.HiddenFor(model => model.Branch)
         @Html.HiddenFor(model => model.AuditDate)
-    <div style="padding:10px;">
-        <input action="action"
-               onclick="window.history.go(-1); return false;"
-               type="submit"
-               value="Back to Home"  class="btn btn-primary" />
-        @*@Html.ActionLink("Back to Home", "Index", "Home", new { @class = "btn btn-primary" })*@
-        <input type="submit" class="btn btn-primary" id="btnSubmit" value="Export to PDF" />
-    </div>
+        <div style="padding:10px;">
+            <input action="action"
+                   onclick="window.history.go(-1); return false;"
+                   type="submit"
+                   value="Back to Home" class="btn btn-primary" />
+            @*@Html.ActionLink("Back to Home", "Index", "Home", new { @class = "btn btn-primary" })*@
+            <input type="submit" class="btn btn-primary" id="btnSubmit" value="Export to PDF" />
+        </div>
     }
 
     <div class="PageHeaderSection" style="height:100%;position:unset;padding:10px;">
@@ -115,7 +115,15 @@
                             @Html.DisplayFor(modelItem => checkListItem.Text)
                         </td>
                         <td class="Column4 text-center" style="padding:5px;">
-                            <img style="width:150px;height:150px;" src='@Url.Action("RetrieveImage", "Branch", new {ImageId = checkListItem.ImageAutoId})' />
+                            <div style="padding:5px;" class="form-group">
+                                <div class="row">
+                                    <img style="width:150px;height:150px;" src='@Url.Action("RetrieveImage", "Branch", new {ImageId = checkListItem.ImageAutoId})' />
+                                </div>
+                                <div class="row">
+                                    <a href="@Url.Action("ViewMore", "Branch",new {CheckListId=checkListItem.ChecklistId,AuditDate=Model.AuditDate,Location=Model.Location,Branch=Model.Branch })" target="_blank">View More</a>
+                                    @*<img id="imgViewMore" style="width:90px;height:50px; cursor:pointer;" src="~/Images/view_more.png" onclick="return ShowImageList('@checkListItem.ChecklistId','@Model.AuditDate','@Model.Branch','@Model.Location');" />*@
+                                </div>
+                            </div>
                         </td>
                         <td class="Column5">
                             @Html.DisplayFor(modelItem => checkListItem.Remarks)
@@ -139,11 +147,6 @@
 <script src="~/Scripts/bootstrap.min.js"></script>
 <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
 <script type="text/javascript" src="~/Scripts/jquery-3.4.1.min.js"></script>
-<script type="text/javascript">
-    $(function () {
-        $("#btnSubmit").click(function () {
-            $("input[name='GridHtml']").val($("#FinalReport").html());
-        });
-    });
-</script>
+<script src="~/Scripts/CommonFunctions.js"></script>
+ 
 

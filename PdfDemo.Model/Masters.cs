@@ -17,4 +17,8 @@ namespace PdfDemo.Model
         public string CompanyCode { get; set; }
         public string CompanyDesc { get; set; }
     }
+    public class ImageModel
+    {
+        public int ImageAutoId { get; set; }
+    }
 }

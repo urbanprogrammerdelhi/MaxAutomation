@@ -123,6 +123,12 @@ namespace PdfDemo.Controllers
                 return File(bytes, "image/jpg");
             }
         }
+        public ActionResult ViewMore(string CheckListId,string AuditDate, string Location, string Branch)
+        {
+            var images = _dataAccesLayer.FetchCheckListImageList(Location, Branch, AuditDate, CheckListId);
+            return View(images);
+        }
+
     }
     public class CustomAuthorizeAttribute : AuthorizeAttribute
     {

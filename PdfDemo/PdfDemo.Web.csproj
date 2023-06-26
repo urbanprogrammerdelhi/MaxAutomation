@@ -291,6 +291,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Images\ImageWriterUpdated.png" />
     <Content Include="Images\NoImagesFound.jpg" />
+    <Content Include="Images\view_more.png" />
     <Content Include="Scripts\ai.0.22.9-build00167.js" />
     <Content Include="Scripts\ai.0.22.9-build00167.min.js" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -307,6 +308,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-3.5.1.intellisense.js" />
+    <Content Include="Scripts\CommonFunctions.js" />
     <Content Include="Scripts\jquery-3.5.1.js" />
     <Content Include="Scripts\jquery-3.5.1.min.js" />
     <Content Include="Scripts\jquery-3.5.1.slim.js" />
@@ -345,6 +347,7 @@
     <Content Include="Views\Branch\Index.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Views\Branch\ViewMore.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
