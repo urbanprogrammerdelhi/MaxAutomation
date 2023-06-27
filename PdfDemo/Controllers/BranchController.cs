@@ -141,7 +141,7 @@ namespace PdfDemo.Controllers
         }
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
-            filterContext.Result = new HttpUnauthorizedResult();
+            filterContext.Result = new RedirectToRouteResult(new System.Web.Routing.RouteValueDictionary(new {Controller="Home",Action="Login" })); //new HttpUnauthorizedResult();
         }
     }
 }

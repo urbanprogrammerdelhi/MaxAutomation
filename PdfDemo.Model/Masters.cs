@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,8 +18,10 @@ namespace PdfDemo.Model
         public string CompanyCode { get; set; }
         public string CompanyDesc { get; set; }
     }
+    
     public class ImageModel
     {
+       
         public int ImageAutoId { get; set; }
     }
 }

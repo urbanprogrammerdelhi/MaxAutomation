@@ -9,37 +9,33 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Audit Details</title>
+    <title>Checklist Details</title>
 </head>
 <body>
-
-    <div id="FinalReport" style="padding:10px;">
-
-
-        <table class="table-bordered">
-
-
-
-            @foreach (var imgeId in Model)
-            {
-
-                <tr>
-                    <td class="Column4 text-center" style="padding:5px;">
-                        <div style="padding:5px;" class="form-group">
-                            <div class="row">
-                                <img style="width:150px;height:150px;" src='@Url.Action("RetrieveImage", "Branch", new {ImageId = imgeId.ImageAutoId})' />
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            }
+    
 
 
 
 
+        @if (Model == null || @Model.Count <= 0)
+        {
+            <span style="min-width:100%;">No Images were uploaded</span>
+        }
+        else
+        {
 
-        </table>
-    </div>
+
+            <div class="form-control form-group">
+                @foreach (var item in Model)
+                {
+                    <img style="width:50%;height:50%; align-self:center;padding:30px;"   src='@Url.Action("RetrieveImage", "Branch", new {ImageId = item.ImageAutoId})' />
+                 
+
+                }
+            </div>
+        }
+
+
 </body>
 </html>
 <link rel="stylesheet" href="~/Content/bootstrap.css" />
