@@ -53,9 +53,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PdfDemo.Model\PdfDemo.Model.csproj">
+    <ProjectReference Include="..\PdfDemo.Model\MaxAutomation.Model.csproj">
       <Project>{f1dd3d92-8194-4c94-afff-91db191cac8b}</Project>
-      <Name>PdfDemo.Model</Name>
+      <Name>MaxAutomation.Model</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

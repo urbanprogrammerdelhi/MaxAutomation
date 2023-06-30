@@ -47,9 +47,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PdfDemo.Logger\PdfDemo.Logger.csproj">
+    <ProjectReference Include="..\PdfDemo.Logger\MaxAutomation.Logger.csproj">
       <Project>{a216686b-7077-44bf-81e7-a4a6699b2d69}</Project>
-      <Name>PdfDemo.Logger</Name>
+      <Name>MaxAutomation.Logger</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

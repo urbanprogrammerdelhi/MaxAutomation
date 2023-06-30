@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 
-namespace PdfDemo.Model
+namespace MaxAutomation.Model
 {
 
     public class PdfReportViewModel

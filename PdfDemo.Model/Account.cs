@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PdfDemo.Model
+namespace MaxAutomation.Model
 {
     public class Account
     {

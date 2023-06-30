@@ -1,8 +1,8 @@
 ﻿using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartupAttribute(typeof(PdfDemo.Startup))]
-namespace PdfDemo
+[assembly: OwinStartupAttribute(typeof(MaxAutomation.Startup))]
+namespace MaxAutomation
 {
     public partial class Startup
     {

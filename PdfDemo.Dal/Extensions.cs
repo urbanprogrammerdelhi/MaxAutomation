@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 
-namespace PdfDemo.Data
+namespace MaxAutomation.Data
 {
     public static class Extensions
     {

@@ -1,12 +1,12 @@
-using PdfDemo.Business;
-using PdfDemo.Dal.DAL;
-using PdfDemo.Data;
-using PdfDemo.Logger;
+using MaxAutomation.Business;
+using MaxAutomation.Dal.DAL;
+using MaxAutomation.Data;
+using MaxAutomation.Logger;
 using System;
 
 using Unity;
 
-namespace PdfDemo
+namespace MaxAutomation
 {
     /// <summary>
     /// Specifies the Unity configuration for the main container.

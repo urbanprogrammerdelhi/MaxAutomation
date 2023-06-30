@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PdfDemo.Dal
+namespace MaxAutomation.Dal
 {
     public class ApplicationConstants
     {

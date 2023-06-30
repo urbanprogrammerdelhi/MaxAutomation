@@ -1,17 +1,17 @@
 ﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
-using PdfDemo.Business;
-using PdfDemo.Dal.DAL;
-using PdfDemo.Data;
-using PdfDemo.Logger;
-using PdfDemo.Model;
+using MaxAutomation.Business;
+using MaxAutomation.Dal.DAL;
+using MaxAutomation.Data;
+using MaxAutomation.Logger;
+using MaxAutomation.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace PdfDemo.Controllers
+namespace MaxAutomation.Controllers
 {
     [CustomAuthorizeAttribute]
    public class BranchController : Controller

@@ -1,8 +1,8 @@
 ﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
-using PdfDemo.Dal.DAL;
-using PdfDemo.Data;
-using PdfDemo.Model;
+using MaxAutomation.Dal.DAL;
+using MaxAutomation.Data;
+using MaxAutomation.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 
-namespace PdfDemo
+namespace MaxAutomation
 {
 
 

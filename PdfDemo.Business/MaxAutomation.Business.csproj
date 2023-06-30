@@ -45,13 +45,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PdfDemo.Dal\PdfDemo.Data.csproj">
+    <ProjectReference Include="..\PdfDemo.Dal\MaxAutomation.Data.csproj">
       <Project>{c44e0bfe-5cb8-434b-a9aa-eac07402d414}</Project>
-      <Name>PdfDemo.Data</Name>
+      <Name>MaxAutomation.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PdfDemo.Model\PdfDemo.Model.csproj">
+    <ProjectReference Include="..\PdfDemo.Model\MaxAutomation.Model.csproj">
       <Project>{F1DD3D92-8194-4C94-AFFF-91DB191CAC8B}</Project>
-      <Name>PdfDemo.Model</Name>
+      <Name>MaxAutomation.Model</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

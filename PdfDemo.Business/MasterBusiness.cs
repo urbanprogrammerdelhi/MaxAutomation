@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PdfDemo.Model;
-using PdfDemo.Dal.DAL;
+using MaxAutomation.Model;
+using MaxAutomation.Dal.DAL;
 
-namespace PdfDemo.Business
+namespace MaxAutomation.Business
 {
     public class MasterBusiness : IMasterBusiness
     {

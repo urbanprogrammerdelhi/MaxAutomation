@@ -1,8 +1,8 @@
 ﻿
 
-using PdfDemo.Dal;
-using PdfDemo.Dal.DAL;
-using PdfDemo.Model;
+using MaxAutomation.Dal;
+using MaxAutomation.Dal.DAL;
+using MaxAutomation.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 
-namespace PdfDemo.Data
+namespace MaxAutomation.Data
 {
 
 

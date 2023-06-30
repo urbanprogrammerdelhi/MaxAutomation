@@ -1,11 +1,11 @@
-﻿using PdfDemo.Model;
+﻿using MaxAutomation.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PdfDemo.Business
+namespace MaxAutomation.Business
 {
     public interface IMasterBusiness
     {

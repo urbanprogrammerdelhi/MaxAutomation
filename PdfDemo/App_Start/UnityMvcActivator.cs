@@ -3,10 +3,10 @@ using System.Web.Mvc;
 
 using Unity.AspNet.Mvc;
 
-[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(PdfDemo.UnityMvcActivator), nameof(PdfDemo.UnityMvcActivator.Start))]
-[assembly: WebActivatorEx.ApplicationShutdownMethod(typeof(PdfDemo.UnityMvcActivator), nameof(PdfDemo.UnityMvcActivator.Shutdown))]
+[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(MaxAutomation.UnityMvcActivator), nameof(MaxAutomation.UnityMvcActivator.Start))]
+[assembly: WebActivatorEx.ApplicationShutdownMethod(typeof(MaxAutomation.UnityMvcActivator), nameof(MaxAutomation.UnityMvcActivator.Shutdown))]
 
-namespace PdfDemo
+namespace MaxAutomation
 {
     /// <summary>
     /// Provides the bootstrapping for integrating Unity with ASP.NET MVC.
