@@ -357,19 +357,19 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PdfDemo.Business\MaxAutomation.Business.csproj">
+    <ProjectReference Include="..\MaxAutomation.Business\MaxAutomation.Business.csproj">
       <Project>{66470d49-516a-42ab-97e9-5f3b58d6c35e}</Project>
       <Name>MaxAutomation.Business</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PdfDemo.Dal\MaxAutomation.Data.csproj">
+    <ProjectReference Include="..\MaxAutomation.Dal\MaxAutomation.Data.csproj">
       <Project>{C44E0BFE-5CB8-434B-A9AA-EAC07402D414}</Project>
       <Name>MaxAutomation.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PdfDemo.Logger\MaxAutomation.Logger.csproj">
+    <ProjectReference Include="..\MaxAutomation.Logger\MaxAutomation.Logger.csproj">
       <Project>{A216686B-7077-44BF-81E7-A4A6699B2D69}</Project>
       <Name>MaxAutomation.Logger</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PdfDemo.Model\MaxAutomation.Model.csproj">
+    <ProjectReference Include="..\MaxAutomation.Model\MaxAutomation.Model.csproj">
       <Project>{f1dd3d92-8194-4c94-afff-91db191cac8b}</Project>
       <Name>MaxAutomation.Model</Name>
     </ProjectReference>

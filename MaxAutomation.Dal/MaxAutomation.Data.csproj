@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{66470D49-516A-42AB-97E9-5F3B58D6C35E}</ProjectGuid>
+    <ProjectGuid>{C44E0BFE-5CB8-434B-A9AA-EAC07402D414}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PdfDemo.Business</RootNamespace>
-    <AssemblyName>PdfDemo.Business</AssemblyName>
+    <RootNamespace>PdfDemo.Dal</RootNamespace>
+    <AssemblyName>PdfDemo.Dal</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,6 +31,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -40,17 +42,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IMasterBusiness.cs" />
-    <Compile Include="MasterBusiness.cs" />
+    <Compile Include="ApplicationConstants.cs" />
+    <Compile Include="DAL\Contract\IAccountData.cs" />
+    <Compile Include="DAL\Contract\IBranchCodeData.cs" />
+    <Compile Include="DAL\Contract\IMasterData.cs" />
+    <Compile Include="DAL\Implementation\AccountData.cs" />
+    <Compile Include="DAL\Implementation\MasterData.cs" />
+    <Compile Include="DAL\Implementation\BranchCodeData.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PdfDemo.Dal\MaxAutomation.Data.csproj">
-      <Project>{c44e0bfe-5cb8-434b-a9aa-eac07402d414}</Project>
-      <Name>MaxAutomation.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PdfDemo.Model\MaxAutomation.Model.csproj">
-      <Project>{F1DD3D92-8194-4C94-AFFF-91DB191CAC8B}</Project>
+    <ProjectReference Include="..\MaxAutomation.Model\MaxAutomation.Model.csproj">
+      <Project>{f1dd3d92-8194-4c94-afff-91db191cac8b}</Project>
       <Name>MaxAutomation.Model</Name>
     </ProjectReference>
   </ItemGroup>

@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.33529.398
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaxAutomation.Web", "PdfDemo\MaxAutomation.Web.csproj", "{52ECF644-AB94-4BAF-B42B-8E4ACAD7A182}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaxAutomation.Web", "MaxAutomation.Web\MaxAutomation.Web.csproj", "{52ECF644-AB94-4BAF-B42B-8E4ACAD7A182}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaxAutomation.Business", "PdfDemo.Business\MaxAutomation.Business.csproj", "{66470D49-516A-42AB-97E9-5F3B58D6C35E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaxAutomation.Business", "MaxAutomation.Business\MaxAutomation.Business.csproj", "{66470D49-516A-42AB-97E9-5F3B58D6C35E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaxAutomation.Data", "PdfDemo.Dal\MaxAutomation.Data.csproj", "{C44E0BFE-5CB8-434B-A9AA-EAC07402D414}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaxAutomation.Data", "MaxAutomation.Dal\MaxAutomation.Data.csproj", "{C44E0BFE-5CB8-434B-A9AA-EAC07402D414}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaxAutomation.Model", "PdfDemo.Model\MaxAutomation.Model.csproj", "{F1DD3D92-8194-4C94-AFFF-91DB191CAC8B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaxAutomation.Model", "MaxAutomation.Model\MaxAutomation.Model.csproj", "{F1DD3D92-8194-4C94-AFFF-91DB191CAC8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaxAutomation.Logger", "PdfDemo.Logger\MaxAutomation.Logger.csproj", "{A216686B-7077-44BF-81E7-A4A6699B2D69}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaxAutomation.Logger", "MaxAutomation.Logger\MaxAutomation.Logger.csproj", "{A216686B-7077-44BF-81E7-A4A6699B2D69}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
