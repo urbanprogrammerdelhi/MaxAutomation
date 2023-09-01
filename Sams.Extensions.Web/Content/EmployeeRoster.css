@@ -1,0 +1,88 @@
+﻿.display-name{
+   font-family:Arial;
+   font-stretch:wider;
+   font-size:small;
+}
+
+
+.Header {
+    width: auto;
+    height: auto;
+    margin: 5px;
+    text-align: center;
+    padding: 5px;
+    text-wrap:none;
+}
+.Details {
+    width: auto;
+    height: auto;
+    margin: 5px;
+    text-align: left;
+    padding: 5px;
+    text-wrap: none;
+}
+    
+       th.nth-child
+       {
+           background-color:darkgrey;
+       }
+        tr:nth-child(odd) {
+            background-color: lightgray;
+        }
+
+        tr:nth-child(even) {
+            background-color: whitesmoke;
+        }
+
+        th.nth-child {
+            background-color: darkblue;
+        }
+
+        .SubmitButton {
+            margin-top: 25px;
+        }
+
+        .PageHeaderSection {
+            width: 100%;
+            position: relative;
+            float: left;
+            background-color: white;
+            border-radius: 5px;
+            border-width: 5px;
+            border-color: black;
+            align-content:center !important;
+        }
+        .bodyHeaderContent{
+            background-color:lightgray;
+            color:black;
+        }
+        .card {
+            background-color: lightgray;
+            padding: 5px;
+            font-family: Arial;
+            font-size: small;
+            font-stretch: wider;
+            width:100%;
+            margin:15px;
+            text-align:center;
+        }
+        .card-body{
+            padding:5px;
+        }
+       
+
+        .BodyHeaderSection {
+            width: 100%;
+            position: relative;
+            float: left;
+            background-color: transparent;
+            border-radius: 5px;
+            border-width: 5px;
+            border-color: black;
+            overflow:no-display;
+            padding:5px;
+        }
+        .equalDivide tr td th
+         { 
+            width:25%; 
+        }

@@ -1,0 +1,14 @@
+﻿@using Sams.Extensions.Model;
+@if(ViewBag.MessageInfo!=null)
+{
+    var messageInfo = (MessageInfo)ViewBag.MessageInfo;
+  
+    if(messageInfo.HasIssue)
+    {
+        <p style="color:red;font-family:Verdana;font-size:larger;align-content:center;padding:10px; margin:5px 5px 5px 10px">@messageInfo.Message</p>
+    }
+    else
+    {
+        <p style="color:green;font-family:Verdana;font-size:smaller;align-content:center;padding:10px;margin:5px 5px 5px 10px">@messageInfo.Message</p>
+    }
+}

@@ -1,0 +1,49 @@
+﻿@using Sams.Extensions.Model
+
+@model List<ImageModel>
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Checklist Details</title>
+</head>
+<body>
+    
+
+
+
+
+        @if (Model == null || @Model.Count <= 0)
+        {
+            <span style="min-width:100%;">No Images were uploaded</span>
+        }
+        else
+        {
+
+
+            <div class="form-control form-group">
+                @foreach (var item in Model)
+                {
+                    <img style="width:300px;height:300px;padding:5px;" src='@Url.Action("RetrieveImage", "Branch", new {ImageId = item.ImageAutoId})' />
+
+                }
+            </div>
+        }
+
+
+</body>
+</html>
+<link rel="stylesheet" href="~/Content/bootstrap.css" />
+<link rel="stylesheet" href="~/Content/code.jquery.com_ui_1.11.4_themes_smoothness_jquery-ui.css" />
+<link rel="stylesheet" href="~/Content/MaxLifeStyleSheet.css" />
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/CommonFunctions.js"></script>
+
+
