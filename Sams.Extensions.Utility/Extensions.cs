@@ -31,7 +31,7 @@ namespace Sams.Extensions.Utility
         static readonly string ImageStartingTag = "<img height='75px' width='75px' src=\'data:image/jpg;base64,";
         public static int ParseInt(this string input)
         {
-            if(int.TryParse(input, out int output))
+            if (int.TryParse(input, out int output))
             {
                 return output;
             }
@@ -39,7 +39,7 @@ namespace Sams.Extensions.Utility
         }
         public static string NullifEmpty(this string input)
         {
-            return input.NullIf(x => string.IsNullOrEmpty(x) || x.Trim().Length <= 0);           
+            return input.NullIf(x => string.IsNullOrEmpty(x) || x.Trim().Length <= 0);
         }
         public static T NullIf<T>(this T @this, Func<T, bool> predicate) where T : class
         {
@@ -141,9 +141,9 @@ namespace Sams.Extensions.Utility
                         }
                         else
                         {
-                           
-                                sb.Append(string.Format(ColumnFormat, string.Empty));
-                            
+
+                            sb.Append(string.Format(ColumnFormat, string.Empty));
+
                         }
                     }
                     sb.Append(EndRowTag);
@@ -200,7 +200,7 @@ namespace Sams.Extensions.Utility
 
 
 
-     
+
         public static int ParseToInteger(this string str)
         {
             if (int.TryParse(str, out int result)) return result;
@@ -265,7 +265,7 @@ Func<IEnumerable<T>, TData> dataSelector)
             return eo;
         }
 
-        public static string GenerateHtmlTableV2<T>(this List<T> list, IEnumerable<string> requiredFields = null,IEnumerable<string> comparisionFields=null ) where T : new()
+        public static string GenerateHtmlTableV2<T>(this List<T> list, IEnumerable<string> requiredFields = null, IEnumerable<string> comparisionFields = null) where T : new()
         {
             try
             {
@@ -295,7 +295,7 @@ Func<IEnumerable<T>, TData> dataSelector)
                         {
                             if (property.PropertyType == typeof(byte[]))
                             {
-                                var image= property.GetValue(row, null);
+                                var image = property.GetValue(row, null);
                                 if (image != null)
                                 {
                                     sb.Append(DefaultCellBeginFormat);
@@ -340,6 +340,21 @@ Func<IEnumerable<T>, TData> dataSelector)
                 yield return sourceList.Take(ListSize);
                 sourceList = sourceList.Skip(ListSize);
             }
+        }
+
+        public static string ConcatinateCells(this ClosedXML.Excel.IXLRow row)
+        {
+            var cells = row.Cells(false, XLCellsUsedOptions.All)
+                .Where(cl => !string.IsNullOrEmpty(cl.Value.ParseToText())).Select(cl1 => cl1.Value.ParseToText());
+            return string.Join(",", cells);
+        }
+        public static string RemoveDateColumnName(this string columnName)
+        {
+            if(columnName.Contains("_"))
+            {
+                return columnName.Substring(columnName.LastIndexOf("_") + 1);
+            }
+            return columnName;
         }
     }
 }

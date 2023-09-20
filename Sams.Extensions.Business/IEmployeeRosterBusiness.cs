@@ -13,6 +13,7 @@ namespace Sams.Extensions.Business
     {
         int SaveEmployeeData(EmployeeRosterHeader employee);
         string SaveEmployeeRosterData(EmployeeRosterDetails employeeRoster);
-        Dictionary<string, DataTable> FetchEmployeeRosterData(ViewEmployeeRosterSearchModel viewEmployeeRosterSearchModel);
+        EmployeeRosterReportModel FetchEmployeeRosterDataReport(ViewEmployeeRosterSearchModel viewEmployeeRosterSearchModel);
+
     }
 }

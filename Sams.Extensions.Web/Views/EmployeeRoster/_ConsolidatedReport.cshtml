@@ -1,0 +1,53 @@
+﻿
+@using System.Data
+@using System.Collections
+@using System.Collections.Generic
+@using Sams.Extensions.Model
+@using Sams.Extensions.Utility
+@using Sams.Extensions
+@using Sams.Extensions.Model
+@using Sams.Extensions.Web
+@model EmployeeRosterViewModel
+@{var dt = Model.ReportData.ReportData["data"];}
+
+<table class="table-bordered" style="margin-top:5px;">
+    <tr style="background-color:dodgerblue;color:white;font-family:Verdana;font-size:15px;font-weight:bold;">
+        <th class="Header text-center" />
+        <th class="Header text-center" />
+        <th class="Header text-center" />
+        <th class="Header text-center" />
+
+        @foreach (string header in Model.ReportData.Header)
+        {
+            <th class="Header text-center" colspan="2">
+                @header
+            </th>
+
+        }
+    </tr>
+
+
+    <tr style="background-color:lightblue;color:black;font-family:Arial;font-size:11px;font-weight:bold;">
+        @foreach (DataColumn dataColumn in dt.Columns)
+        {
+            <th class="Header text-center">
+                @Html.DisplayName(dataColumn.ColumnName.RemoveDateColumnName())
+            </th>
+        }
+    </tr>
+
+    @foreach (DataRow dr in dt.Rows)
+    {
+        <tr style="background-color: white;color:black;font-family:Verdana;font-size:11px;font-weight:normal;border:2px solid gray;">
+            @foreach (DataColumn dataColumn in dt.Columns)
+            {
+                <td class="Details text-left">
+                    @Html.DisplayName(dr[dataColumn].ParseToText())
+                </td>
+            }
+        </tr>
+    }
+
+
+</table>
+

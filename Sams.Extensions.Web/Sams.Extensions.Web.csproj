@@ -440,10 +440,12 @@
     <Content Include="Views\EmployeeRoster\Index.cshtml" />
     <Content Include="Views\Home\DashBoard.cshtml" />
     <Content Include="Views\Shared\_CustomMessagePartial.cshtml" />
-    <Content Include="Views\EmployeeRoster\ViewEmployeeRoster.cshtml" />
+    <Content Include="Views\EmployeeRoster\Reports.cshtml" />
     <Content Include="Views\GroupLReports\Index.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\GroupLReports\PDFInvoice.cshtml" />
+    <Content Include="Views\EmployeeRoster\_DetailedReport.cshtml" />
+    <Content Include="Views\EmployeeRoster\_ConsolidatedReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

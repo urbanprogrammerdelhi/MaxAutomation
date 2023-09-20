@@ -20,14 +20,15 @@
     <meta name="viewport" content="width=device-width" />
     <title>Audit Details</title>
     <style>
-        .LeaveClass{
-            background-color:red;
-            color:yellow;
-            font-family:Verdana;
-            font-size:small;
-            font-weight:bold;
-            text-align:left;
+        .LeaveClass {
+            background-color: red;
+            color: yellow;
+            font-family: Verdana;
+            font-size: small;
+            font-weight: bold;
+            text-align: left;
         }
+
         .OffClass {
             background-color: yellow;
             color: black;
@@ -36,6 +37,7 @@
             font-weight: bold;
             text-align: left;
         }
+
         .Otherclass {
             background-color: grey;
             color: white;
@@ -77,12 +79,19 @@
                                 <label for="ToDate">Month</label>
                                 @Html.DropDownListFor(model => model.CurrentMonth, Model.Months as List<SelectListItem>, "Select Month", new { @class = "form-control" })
                             </div>
-
+                            <div class="col-md-2">
+                                <label for="ToDate">Post</label>
+                                @Html.DropDownListFor(model => model.SelectedPost, Model.Posts as List<SelectListItem>, "All", new { @class = "form-control" })
+                            </div>
+                            <div class="col-md-2">
+                                <label for="ToDate">Report</label>
+                                @Html.DropDownListFor(model => model.CurrentReport, Model.Reports as List<SelectListItem>, "Select Report", new { @class = "form-control" })
+                            </div>
 
                         </div>
                     </div>
                     <div class="form-group">
-                        <input type="submit" id="btnViewEmployeeRoster" name="Submit" value="View Employee Roster" class="btn btn-primary SubmitButton" onclick="return ValidateSearch();" />
+                        <input type="submit" id="btnViewEmployeeRoster" name="Submit" value="Submit" class="btn btn-primary SubmitButton" onclick="return ValidateSearch();" />
                         @if (Model.ShowExportToExcelButton)
                         {
                             <input type="submit" id="btnExport" name="Submit" value="Export to Excel" class="btn btn-primary SubmitButton" />
@@ -97,53 +106,24 @@
     }
 
     <div id="FinalReport" style="padding:10px;">
-        @if (Model == null || Model.EmployeeRosterData == null || Model.EmployeeRosterData.Count <= 0)
+        @if (Model == null || Model.ReportData == null || Model.ReportData.ReportData == null || Model.ReportData.ReportData == null || Model.ReportData.ReportData.Count <= 0)
         {
-            <h1>No employee roster data found</h1>
+            <h1>No records found</h1>
         }
-        @foreach (var floorData in Model.EmployeeRosterData)
+        else
         {
-            var cellCount = floorData.Value.Columns.Count;
-            var key = floorData.Key.Split(',');
-
-            <table class="table-bordered" style="margin-top:5px;">
-                <tr style="background-color:dodgerblue;color:white;font-family:Verdana;font-size:15px;font-weight:bold;">
-                    <th colspan="@cellCount" class="Details">
-                        <span>@key[0]</span><span>(@key[1])</span>
-                    </th>
-
-                </tr>
-                <tr style="background-color:lightblue;color:black;font-family:Arial;font-size:11px;font-weight:bold;">
-                    @foreach (DataColumn dataColumn in floorData.Value.Columns)
-                    {
-
-
-                        <th class="Header text-center">
-                            @Html.DisplayName(dataColumn.ColumnName)
-                        </th>
-                    }
-                </tr>
-
-                @foreach (DataRow dr in floorData.Value.Rows)
-                {
-                    <tr style="background-color: white;color:black;font-family:Verdana;font-size:11px;font-weight:normal;border:2px solid gray;">
-                        @foreach (DataColumn dataColumn in floorData.Value.Columns)
-                        {
-                            <td class="Details text-left">
-                                @Html.DisplayName(dr[dataColumn].ParseToText())
-                            </td>
-                        }
-                    </tr>
-                }
-
-
-            </table>
+            if (Model.ReportData.ReportType == EmployeeRosterReports.EmployeeRosterDetailed)
+            {
+                @Html.Partial("_DetailedReport", Model)
+            }
+            if (Model.ReportData.ReportType == EmployeeRosterReports.EmployeeRosterConsolidated)
+            {
+                @Html.Partial("_ConsolidatedReport", Model)
+            }
         }
+
     </div>
-    @*@using (Html.BeginForm("Export", "EmployeeRoster", FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
 
-        }*@
 
 </body>
 </html>
@@ -172,7 +152,7 @@
                 alert('Please select a location to continue');
                 return false;
             }
-          
+
             let selectedYear = $("#CurrentYear").val();
             if (selectedYear == null || selectedYear == '' || selectedYear == 'Select Year') {
                 alert('Please select a Year to continue');

@@ -36,5 +36,10 @@ namespace Sams.Extensions.Business
         {
             return _masterData.FetchReports(companycode);
         }
+
+        public List<string> ListOfPosts()
+        {
+            return _masterData.ListOfPosts();
+        }
     }
 }

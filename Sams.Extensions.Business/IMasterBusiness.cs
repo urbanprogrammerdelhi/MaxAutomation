@@ -13,6 +13,8 @@ namespace Sams.Extensions.Business
         List<CompanyDetails> FetchCompanyDetails();
         List<ReportDataModel> FetchReports(string companycode);
         List<Region> FetchRegions(string companycode);
+        List<string> ListOfPosts();
+
 
 
     }

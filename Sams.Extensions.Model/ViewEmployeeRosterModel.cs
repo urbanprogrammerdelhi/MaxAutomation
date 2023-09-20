@@ -13,6 +13,7 @@ namespace Sams.Extensions.Model
         public string RosterDay { get; set; }
         public string Shift { get; set; }
         public string Post { get; set; }
+        public string ShiftPost { get; set; }
 
     }
     public class ViewEmployeeRosterSearchModel
@@ -20,5 +21,8 @@ namespace Sams.Extensions.Model
         public string Year { get; set; }
         public string Month { get; set; }
         public string Location { get; set; }
+        public string Post { get; set; }
+        public EmployeeRosterReports ReportType { get; set; }
+
     }
 }

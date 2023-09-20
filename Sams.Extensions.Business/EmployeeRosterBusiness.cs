@@ -16,9 +16,10 @@ namespace Sams.Extensions.Business
         {
             _employeeRoster = employeeRoster;
         }
-        public Dictionary<string, DataTable> FetchEmployeeRosterData(ViewEmployeeRosterSearchModel viewEmployeeRosterSearchModel)
+
+        public EmployeeRosterReportModel FetchEmployeeRosterDataReport(ViewEmployeeRosterSearchModel viewEmployeeRosterSearchModel)
         {
-            return _employeeRoster.FetchEmployeeRosterData(viewEmployeeRosterSearchModel);
+            return _employeeRoster.FetchEmployeeRosterDataReport(viewEmployeeRosterSearchModel);
         }
 
         public int SaveEmployeeData(EmployeeRosterHeader employee)

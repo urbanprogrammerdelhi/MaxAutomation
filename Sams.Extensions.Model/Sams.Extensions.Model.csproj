@@ -63,6 +63,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account.cs" />
+    <Compile Include="EmployeeRosterDetailedReportModel.cs" />
+    <Compile Include="EmployeeRosterPostModel.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="GroupLReportSearchModel.cs" />
     <Compile Include="GroupLReports\GroupLReportDataSet.cs" />

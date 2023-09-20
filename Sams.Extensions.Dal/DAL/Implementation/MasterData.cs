@@ -87,5 +87,21 @@ namespace Sams.Extensions.Dal
             }
         }
 
+        public List<string> ListOfPosts()
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand();
+                command.Connection = connection;
+                command.CommandText = "UDP_Search_Post";
+                command.CommandType = CommandType.StoredProcedure;
+                SqlDataAdapter adpt = new SqlDataAdapter();
+                adpt.SelectCommand = command;
+                var dt = new DataTable();
+                adpt.Fill(dt);
+                return dt.ToList<EmployeeRosterPostModel>().Select(pst=>pst.Post).ToList();
+            }
+        }
     }
 }
