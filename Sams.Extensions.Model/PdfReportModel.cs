@@ -19,6 +19,7 @@ namespace Sams.Extensions.Model
         public Reportheader Header { get; set; }
         public ILookup<string, ReportBody> MasterdetailList { get; set; }
         public ReportBody ColumnDetails { get; set; }
+        public string ChecklistType { get; set; }
 
 
     }
@@ -37,6 +38,8 @@ namespace Sams.Extensions.Model
         public string SpocName { get; set; }
         [Display(Name = "SPOC Number")]
         public string SpocNumber { get; set; }
+        [Display(Name = "Checklist Type")]
+        public string CheckListType { get; set; }
     }
     public class ReportBody
     {
@@ -54,6 +57,7 @@ namespace Sams.Extensions.Model
         public string Remarks { get; set; }
         public int HeaderIndex { get; set; }
         public string Photo { get; set; }
+        public string ChecklistType { get; set; }
 
 
     }
@@ -68,6 +72,7 @@ namespace Sams.Extensions.Model
         [Display(Name = "Audit Time")]
         public string AuditTime { get; set; }
         public string LocationCode { get; set; }
+        public string ChecklistType { get; set; }
 
     }
  

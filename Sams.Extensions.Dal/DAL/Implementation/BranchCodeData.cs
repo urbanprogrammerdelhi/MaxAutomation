@@ -18,11 +18,12 @@ namespace Sams.Extensions.Dal
 
     public class BranchCodeData:BaseDataAccess, IBranchCodeData
     {
-        public byte[] GetImageById(int id)
+        public byte[] GetImageById(int id,bool forCheckListId=false)
         {
             using (SqlConnection con = new SqlConnection(ConnectionString))
             {
-                string sql = "SELECT Image FROM MaxBupaChecklistImageMasterUpdated WHERE ImageAutoId =" + id.ToString();
+                string tableName = forCheckListId ? "MaxLifeChecklistImageMaster" : "MaxBupaChecklistImageMasterUpdated";
+                string sql = "SELECT Image FROM "+ tableName+" WHERE ImageAutoId =" + id.ToString();
                 using (SqlDataAdapter sda = new SqlDataAdapter(sql, con))
                 {
                     DataTable dt = new DataTable();
@@ -135,7 +136,104 @@ namespace Sams.Extensions.Dal
             }
         }
 
+        public List<BranchDetails> FetchClientCodeV2(string ClientCode, string FromDate, string ToDate,string checkistType)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
 
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand();
+                command.Connection = connection;
+                command.CommandText = "udp_FetchBranchGroupDetails";
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add(new SqlParameter("@LocationAutoId", ClientCode));
+                command.Parameters.Add(new SqlParameter("@FromDate", FromDate));
+                command.Parameters.Add(new SqlParameter("@ToDate", ToDate));
+                command.Parameters.Add(new SqlParameter("@ChecklistType", checkistType));
+
+                SqlDataAdapter adpt = new SqlDataAdapter();
+                adpt.SelectCommand = command;
+                var dt = new DataTable();
+                adpt.Fill(dt);
+                var list = dt.ToList<BranchDetails>();
+                int counter = 1;
+                foreach (var lst in list)
+                {
+                    lst.SerialNumber = counter;
+                    counter++;
+                }
+                return list;
+
+            }
+        }
+
+        public PdfReportViewModel GetReportValuesV2(string Location, string Branch, string AuditDate, string checkistType)
+        {
+            try
+            {
+                PdfReportViewModel result = new PdfReportViewModel();
+                result.AuditDate = AuditDate;
+                result.Branch = Branch;
+                result.Location = Location;
+                result.ChecklistType = checkistType;
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand();
+                    command.Connection = connection;
+                    command.CommandText = "udp_GetMaxReportValuesUpdatedV2";
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("@Clientcode", Branch));
+                    command.Parameters.Add(new SqlParameter("@LocationautoId", Location));
+                    command.Parameters.Add(new SqlParameter("@FromDate", AuditDate));
+                    command.Parameters.Add(new SqlParameter("@ChecklistType", checkistType));
+
+
+                    SqlDataAdapter adpt = new SqlDataAdapter();
+                    adpt.SelectCommand = command;
+                    DataSet ds = new DataSet();
+                    adpt.Fill(ds);
+                    if (ds != null && ds.Tables.Count > 1)
+                    {
+                        var header = ds.Tables[1].ToList<Reportheader>().FirstOrDefault();
+                        header.AuditDate = AuditDate;
+                        result.Header = header;
+                        var detail = ds.Tables[0].ToList<ReportBody>();
+                        result.MasterdetailList = detail.ToLookup(lkp => lkp.MainHeader);// + "," + lkp.HeaderIndex);
+                        result.ColumnDetails = detail.FirstOrDefault();
+                        return result;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return null;
+        }
+
+        public List<CheckListTypeModel> FetchChecklistTypes()
+        {
+
+                 using (SqlConnection connection = new SqlConnection(ConnectionString))
+
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand();
+                command.Connection = connection;
+                command.CommandText = "udp_FetchMaxLifeCheckListTypes";
+                command.CommandType = CommandType.StoredProcedure;
+              
+                SqlDataAdapter adpt = new SqlDataAdapter();
+                adpt.SelectCommand = command;
+                var dt = new DataTable();
+                adpt.Fill(dt);
+                return dt.ToList<CheckListTypeModel>();
+               
+
+            }
+        }
     }
 }
 

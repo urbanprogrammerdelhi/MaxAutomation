@@ -1,0 +1,153 @@
+﻿@using Sams.Extensions.Model
+@model PdfReportViewModel
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Audit Details</title>
+</head>
+<body>
+
+    @using (Html.BeginForm("Export", "BranchNew", FormMethod.Post))
+    {
+        @Html.HiddenFor(model => model.Location)
+
+        @Html.HiddenFor(model => model.Branch)
+        @Html.HiddenFor(model => model.AuditDate)
+        @Html.HiddenFor(model => model.ChecklistType)
+
+        <div style="padding:10px;">
+            <input action="action"
+                   onclick="window.history.go(-1); return false;"
+                   type="submit"
+                   value="Back to Home" class="btn btn-primary" />
+            @*@Html.ActionLink("Back to Home", "Index", "Home", new { @class = "btn btn-primary" })*@
+            <input type="submit" class="btn btn-primary" id="btnSubmit" value="Export to PDF" />
+        </div>
+    }
+
+    <div class="PageHeaderSection" style="height:100%;position:unset;padding:10px;">
+        <div class="card">
+            <div class="card-body bg-info text-white"><h4 style="text-align:center;">Max Life Audit Report</h4></div>
+        </div>
+        <div class="card-body">
+
+            <div class="form-group table-striped">
+
+                <div class="row" style="padding:5px;">
+                    <div class="col-md-4">
+
+
+                        @Html.LabelWithColonFor(model => model.Header.BranchCode)
+                        @Html.DisplayFor(model => model.Header.BranchCode)
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelWithColonFor(model => model.Header.BranchName)<span>:</span>
+                        @Html.DisplayFor(model => model.Header.BranchName)
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelWithColonFor(model => model.Header.FOName)<span>:</span>
+                        @Html.DisplayFor(model => model.Header.FOName)
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelWithColonFor(model => model.Header.AuditDate)<span>:</span>
+                        @Html.DisplayFor(model => model.Header.AuditDate)
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelWithColonFor(model => model.Header.CheckListType)<span>:</span>
+                        @Html.DisplayFor(model => model.Header.CheckListType)
+                    </div>
+                    @*<div class="col-md-4">
+                        @Html.LabelWithColonFor(model => model.Header.SpocNumber)<span>:</span>
+                        @Html.DisplayFor(model => model.Header.SpocNumber)
+                    </div>*@
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div id="FinalReport" style="padding:10px;">
+
+
+        <table class="table-bordered">
+            <tr style="background-color:lightblue;color:black;font-family:Arial;font-size:11px;font-weight:bold;">
+                <th class="Column1 text-center">
+                    @Html.DisplayNameFor(model => model.ColumnDetails.ChecklistId)
+                </th>
+                <th class="Column2 text-center">
+                    @Html.DisplayNameFor(model => model.ColumnDetails.SubHeader)
+                </th>
+                <th class="Column3 text-center">
+                    @Html.DisplayNameFor(model => model.ColumnDetails.Text)
+                </th>
+                <th class="Column4 text-center">
+                    @Html.DisplayNameFor(model => model.ColumnDetails.Photo)
+                </th>
+                <th class="Column5 text-center">
+                    @Html.DisplayNameFor(model => model.ColumnDetails.Remarks)
+                </th>
+            </tr>
+
+
+            @foreach (IGrouping<string, ReportBody> packageGroup in Model.MasterdetailList)
+            {
+                <tr>
+                    <td colspan="5" style="background-color: silver;color:black;font-family:Arial;font-size:11px;font-weight:bold;text-align:center;padding:5px;">
+
+                        @Html.DisplayFor(modelItem => packageGroup.Key)
+
+                    </td>
+                </tr>
+                foreach (ReportBody checkListItem in packageGroup)
+                {
+
+                    <tr style="background-color: white;color:black;font-family:Verdana;font-size:11px;font-weight:normal;border:2px solid gray;">
+                        <td class="Column1">
+                            @Html.DisplayFor(modelItem => checkListItem.ChecklistId)
+                        </td>
+                        <td class="Column2">
+                            @Html.DisplayFor(modelItem => checkListItem.SubHeader)
+                        </td>
+                        <td class="Column3">
+                            @Html.DisplayFor(modelItem => checkListItem.Text)
+                        </td>
+                        <td class="Column4 text-center" style="padding:5px;">
+                            <div style="padding:5px;" class="form-group">
+                                <div class="row">
+                                    <img style="width:150px;height:150px;" src='@Url.Action("RetrieveImage", "BranchNew", new {ImageId = checkListItem.ImageAutoId})' />
+                                </div>
+                                <div class="row">
+                                    <a href="@Url.Action("ViewMore", "Branch",new {CheckListId=checkListItem.ChecklistId,AuditDate=Model.AuditDate,Location=Model.Location,Branch=Model.Branch })" target="_blank">View More</a>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="Column5">
+                            @Html.DisplayFor(modelItem => checkListItem.Remarks)
+                        </td>
+
+                    </tr>
+                }
+
+            }
+
+
+
+        </table>
+    </div>
+</body>
+</html>
+<link rel="stylesheet" href="~/Content/bootstrap.css" />
+<link rel="stylesheet" href="~/Content/code.jquery.com_ui_1.11.4_themes_smoothness_jquery-ui.css" />
+<link rel="stylesheet" href="~/Content/MaxLifeStyleSheet.css" />
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/CommonFunctions.js"></script>
+ 
+

@@ -25,15 +25,18 @@
                 var userInfo = (Account)Session["UserInfo"];
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        @if (userInfo.Company.ToUpper() == "KSAAMSS")
-                        {
-                            <li>@Html.ActionLink("Upload Employee Roster", "Index", "EmployeeRoster")</li>
-                            <li>@Html.ActionLink("Employee Roster Reports", "Reports", "EmployeeRoster")</li>
-                        }
-                        else if (userInfo.Company.ToUpper() == "MAX")
+                        @*@if (userInfo.Company.ToUpper() == "KSAAMSS")
+        {
+            <li>@Html.ActionLink("Upload Employee Roster", "Index", "EmployeeRoster")</li>
+            <li>@Html.ActionLink("Employee Roster Reports", "Reports", "EmployeeRoster")</li>
+        }*@
+                        @if (userInfo.Company.ToUpper() == "MAX")
                         {
                             <li>@Html.ActionLink("Max Automation", "Index", "Branch")</li>
+                            <li>@Html.ActionLink("Max Automation New", "Index", "BranchNew")</li>
+
                         }
+
                         <li>@Html.ActionLink("Reports", "Index", "GroupLReports")</li>
 
                     </ul>

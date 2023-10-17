@@ -308,6 +308,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityMvcActivator.cs" />
+    <Compile Include="Controllers\BranchnNewController.cs" />
     <Compile Include="Controllers\GroupLReportsController.cs" />
     <Compile Include="Controllers\EmployeeRosterController.cs" />
     <Compile Include="Controllers\BranchController.cs" />
@@ -446,6 +447,13 @@
     <Content Include="Views\GroupLReports\PDFInvoice.cshtml" />
     <Content Include="Views\EmployeeRoster\_DetailedReport.cshtml" />
     <Content Include="Views\EmployeeRoster\_ConsolidatedReport.cshtml" />
+    <Content Include="Views\BranchNew\Details.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\BranchNew\Index.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\BranchNew\ViewMore.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

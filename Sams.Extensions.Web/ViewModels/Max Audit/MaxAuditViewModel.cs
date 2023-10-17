@@ -12,6 +12,7 @@ namespace Sams.Extensions.Web
 {
     public class MaxAuditViewModel
     {
+        public IList<SelectListItem> ChecklistTypes { get; set; }
         public IList<SelectListItem> Locations { get; set; }
         public IList<SelectListItem> Companies { get; set; }
         public string CurrentCompany { get; set; }
@@ -35,11 +36,14 @@ namespace Sams.Extensions.Web
                     CurrentLocation = string.Empty,
                     Locations = new List<SelectListItem>(),
                     FromDate= currentDate.AddDays(Convert.ToInt32(ConfigurationManager.AppSettings["FromDays"])),
-                    ToDate = currentDate
+                    ToDate = currentDate,
+                    ChecklistTypes=new List<SelectListItem>(),
+                    SelectedChecklistType=string.Empty
 
                 };
             }
         }
+        public string SelectedChecklistType { get; set; }
     }
 
 }

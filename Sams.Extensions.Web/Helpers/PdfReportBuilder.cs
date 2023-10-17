@@ -27,7 +27,7 @@ namespace Sams.Extensions
         private static readonly CellPadding TopHeader = new CellPadding { Bottom = 10, Top = 5, Left = 10, Right = 0 };
         private static readonly System.Drawing.Color DetailBackgroundColor = System.Drawing.Color.White;
         private static readonly System.Drawing.Color GroupBackgroundColor = System.Drawing.Color.Gray;
-        private static readonly CellPadding DetailDefaultPadding = new CellPadding { Bottom = 5, Top = 5, Left = 50, Right = 0 };
+        private static readonly CellPadding DetailDefaultPadding = new CellPadding { Bottom = 5, Top = 5, Left = 50, Right = 10 };
         private static readonly CellPadding DetailDefaultLongPadding = new CellPadding { Bottom = 10, Top = 10, Left = 30, Right = 10 };
 
         public PdfReportBuilder(Document pdfDoc, IBranchCodeData branchCodeData)
@@ -120,19 +120,28 @@ namespace Sams.Extensions
             headerLabel.WidthPercentage = 100f;
             headerLabel.AddCell(HeaderCell("Max Audit Report", HeaderBackgroundColor, TopLabelHeader));
             _pdfDoc.Add(headerLabel);
-            var topHeader = DefaultTable(4);
+            var topHeader = DefaultTable(string.IsNullOrEmpty(header.CheckListType)?4:5);
             topHeader.AddCell(HeaderCell($"Branch Code", HeaderBackgroundColor, TopHeader));
             topHeader.AddCell(HeaderCell($"Branch Name", HeaderBackgroundColor, TopHeader));
             topHeader.AddCell(HeaderCell($"FO Name", HeaderBackgroundColor, TopHeader));
             topHeader.AddCell(HeaderCell($"Audit date", HeaderBackgroundColor, TopHeader));
+            if(!string.IsNullOrEmpty(header.CheckListType))
+            {
+                topHeader.AddCell(HeaderCell($"Checklist Type", HeaderBackgroundColor, TopHeader));
+
+            }
 
             _pdfDoc.Add(topHeader);
-            var topHeaderValue = DefaultTable(4);
+            var topHeaderValue = DefaultTable(string.IsNullOrEmpty(header.CheckListType) ? 4 : 5);
             topHeaderValue.AddCell(HeaderCell($"{header.BranchCode}", DetailBackgroundColor, TopHeader));
             topHeaderValue.AddCell(HeaderCell($"{header.BranchName}", DetailBackgroundColor, TopHeader));
             topHeaderValue.AddCell(HeaderCell($"{header.FOName}", DetailBackgroundColor, TopHeader));
             topHeaderValue.AddCell(HeaderCell($"{header.AuditDate}", DetailBackgroundColor, TopHeader));
+            if (!string.IsNullOrEmpty(header.CheckListType))
+            {
+                topHeaderValue.AddCell(HeaderCell($"{header.CheckListType}", DetailBackgroundColor, TopHeader));
 
+            }
             _pdfDoc.Add(topHeaderValue);
         }
         public void CreateDetails(ILookup<string, ReportBody> details)
@@ -140,7 +149,7 @@ namespace Sams.Extensions
             var baseUrl = ConfigurationManager.AppSettings["BaseUrl"].ToString();
 
             var table = DefaultTable(5);
-            table.SetWidths(new float[] {10,30,18,25,15 });
+            table.SetWidths(new float[] {10,30,18,25,17 });
             table.AddCell(HeaderCell("S.No.", HeaderBackgroundColor, new CellPadding { Bottom = 10, Top = 5, Left = 15, Right = 0 }));
             table.AddCell(HeaderCell("Question", HeaderBackgroundColor, new CellPadding { Bottom = 10, Top = 5, Left = 60, Right = 0 }));
             table.AddCell(HeaderCell("Response", HeaderBackgroundColor, new CellPadding { Bottom = 10, Top = 5, Left = 25, Right = 0 }));
@@ -158,7 +167,7 @@ namespace Sams.Extensions
                     table.AddCell(DetailCell(checkListItem.ChecklistId.ToString(), DetailBackgroundColor, new CellPadding { Bottom = 5, Top = 5, Left = 20, Right = 0 }));
                     table.AddCell(DetailCell(checkListItem.SubHeader, DetailBackgroundColor, DetailDefaultLongPadding));
                     table.AddCell(DetailCell(checkListItem.Text, DetailBackgroundColor, new CellPadding { Bottom = 5, Top = 5, Left = 40, Right = 0 }));
-                    var imageArray = _branchCodeData.GetImageById(checkListItem.ImageAutoId);
+                    var imageArray = _branchCodeData.GetImageById(checkListItem.ImageAutoId,!string.IsNullOrEmpty(checkListItem.ChecklistType));
                     table.AddCell(DefaultImageCell(imageArray, DetailDefaultLongPadding));
                     table.AddCell(DetailCell(checkListItem.Remarks, DetailBackgroundColor, DetailDefaultPadding));
                 }
