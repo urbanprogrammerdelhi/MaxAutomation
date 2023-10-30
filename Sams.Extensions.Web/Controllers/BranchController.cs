@@ -89,24 +89,31 @@ namespace Sams.Extensions.Web.Controllers
         [ValidateInput(false)]
         public ActionResult Export()
         {
-            string location = Request.Form["Location"].ToString();
-            string branch = Request.Form["Branch"].ToString();
-            string auditdate = Request.Form["AuditDate"].ToString();
-            var data = _dataAccesLayer.GetReportValues(location, branch, auditdate);
-            Document pdfDoc = new Document(PageSize.A4, 0, 0, 0, 0);
-            PdfWriter pdfWriter = PdfWriter.GetInstance(pdfDoc, Response.OutputStream);
-            pdfDoc.Open();
-            PdfReportBuilder builder = new PdfReportBuilder(pdfDoc,_dataAccesLayer);
-            builder.CreateHeader(data.Header);
-            builder.CreateDetails(data.MasterdetailList);
-            pdfWriter.CloseStream = false;
-            pdfDoc.Close();
-            Response.Buffer = true;
-            Response.ContentType = "application/pdf";
-            Response.AddHeader("content-disposition", $"attachment;filename={data.Header.BranchName.Trim()}.pdf");
-            Response.Cache.SetCacheability(HttpCacheability.NoCache);
-            Response.Write(pdfDoc);
-            Response.End();
+            try
+            {
+                string location = Request.Form["Location"].ToString();
+                string branch = Request.Form["Branch"].ToString();
+                string auditdate = Request.Form["AuditDate"].ToString();
+                var data = _dataAccesLayer.GetReportValues(location, branch, auditdate);
+                Document pdfDoc = new Document(PageSize.A4, 0, 0, 0, 0);
+                PdfWriter pdfWriter = PdfWriter.GetInstance(pdfDoc, Response.OutputStream);
+                pdfDoc.Open();
+                PdfReportBuilder builder = new PdfReportBuilder(pdfDoc, _dataAccesLayer);
+                builder.CreateHeader(data.Header);
+                builder.CreateDetails(data.MasterdetailList);
+                pdfWriter.CloseStream = false;
+                pdfDoc.Close();
+                Response.Buffer = true;
+                Response.ContentType = "application/pdf";
+                Response.AddHeader("content-disposition", $"attachment;filename={data.Header.BranchName.Trim()}.pdf");
+                Response.Cache.SetCacheability(HttpCacheability.NoCache);
+                Response.Write(pdfDoc);
+                Response.End();
+            }
+            catch(Exception ex)
+            {
+                _loggerManager.LogError(ex.Message + Environment.NewLine + ex.StackTrace);
+            }
             return View();
 
         }

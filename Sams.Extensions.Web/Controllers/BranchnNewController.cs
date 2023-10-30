@@ -92,28 +92,35 @@ namespace Sams.Extensions.Web.Controllers
         [ValidateInput(false)]
         public ActionResult Export()
         {
-            string location = Request.Form["Location"].ToString();
-            string branch = Request.Form["Branch"].ToString();
-            string auditdate = Request.Form["AuditDate"].ToString();
-            string checkListType = Request.Form["CheckListType"].ToString();
+            try
+            {
+                string location = Request.Form["Location"].ToString();
+                string branch = Request.Form["Branch"].ToString();
+                string auditdate = Request.Form["AuditDate"].ToString();
+                string checkListType = Request.Form["CheckListType"].ToString();
 
-            var data = _dataAccesLayer.GetReportValuesV2(location, branch, auditdate, checkListType);
-            Document pdfDoc = new Document(PageSize.A4, 0, 0, 0, 0);
-            PdfWriter pdfWriter = PdfWriter.GetInstance(pdfDoc, Response.OutputStream);
-            pdfDoc.Open();
-            PdfReportBuilder builder = new PdfReportBuilder(pdfDoc,_dataAccesLayer);
-            builder.CreateHeader(data.Header);
-            builder.CreateDetails(data.MasterdetailList);
-            pdfWriter.CloseStream = false;
-            pdfDoc.Close();
-            Response.Buffer = true;
-            Response.ContentType = "application/pdf";
-            Response.AddHeader("content-disposition", $"attachment;filename={data.Header.BranchName.Trim()}.pdf");
-            Response.Cache.SetCacheability(HttpCacheability.NoCache);
-            Response.Write(pdfDoc);
-            Response.End();
+                var data = _dataAccesLayer.GetReportValuesV2(location, branch, auditdate, checkListType);
+                Document pdfDoc = new Document(PageSize.A4, 0, 0, 0, 0);
+                PdfWriter pdfWriter = PdfWriter.GetInstance(pdfDoc, Response.OutputStream);
+                pdfDoc.Open();
+                PdfReportBuilder builder = new PdfReportBuilder(pdfDoc, _dataAccesLayer);
+                builder.CreateHeader(data.Header);
+                builder.CreateDetails(data.MasterdetailList);
+                pdfWriter.CloseStream = false;
+                pdfDoc.Close();
+                Response.Buffer = true;
+                Response.ContentType = "application/pdf";
+                Response.AddHeader("content-disposition", $"attachment;filename={data.Header.BranchName.Trim()}.pdf");
+                Response.Cache.SetCacheability(HttpCacheability.NoCache);
+                Response.Write(pdfDoc);
+                Response.End();
+                
+            }
+            catch(Exception ex)
+            {
+                _loggerManager.LogError(ex.Message + Environment.NewLine + ex.StackTrace);
+            }
             return View();
-
         }
 
         public ActionResult RetrieveImage(int ImageId)
@@ -136,7 +143,7 @@ namespace Sams.Extensions.Web.Controllers
         }
         public ActionResult ViewMore(string CheckListId,string AuditDate, string Location, string Branch)
         {
-            var images = _dataAccesLayer.FetchCheckListImageList(Location, Branch, AuditDate, CheckListId);
+            var images = _dataAccesLayer.FetchCheckListImageList(Location, Branch, AuditDate, CheckListId,true);
             return View(images);
         }
 

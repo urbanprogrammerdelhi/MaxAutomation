@@ -167,6 +167,7 @@ namespace Sams.Extensions
                     table.AddCell(DetailCell(checkListItem.ChecklistId.ToString(), DetailBackgroundColor, new CellPadding { Bottom = 5, Top = 5, Left = 20, Right = 0 }));
                     table.AddCell(DetailCell(checkListItem.SubHeader, DetailBackgroundColor, DetailDefaultLongPadding));
                     table.AddCell(DetailCell(checkListItem.Text, DetailBackgroundColor, new CellPadding { Bottom = 5, Top = 5, Left = 40, Right = 0 }));
+                   
                     var imageArray = _branchCodeData.GetImageById(checkListItem.ImageAutoId,!string.IsNullOrEmpty(checkListItem.ChecklistType));
                     table.AddCell(DefaultImageCell(imageArray, DetailDefaultLongPadding));
                     table.AddCell(DetailCell(checkListItem.Remarks, DetailBackgroundColor, DetailDefaultPadding));

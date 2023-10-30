@@ -108,7 +108,7 @@
 
                     <tr style="background-color: white;color:black;font-family:Verdana;font-size:11px;font-weight:normal;border:2px solid gray;">
                         <td class="Column1">
-                            @Html.DisplayFor(modelItem => checkListItem.ChecklistId)
+                            @Html.DisplayFor(modelItem => checkListItem.NewChecklistId)
                         </td>
                         <td class="Column2">
                             @Html.DisplayFor(modelItem => checkListItem.SubHeader)
@@ -122,7 +122,7 @@
                                     <img style="width:150px;height:150px;" src='@Url.Action("RetrieveImage", "BranchNew", new {ImageId = checkListItem.ImageAutoId})' />
                                 </div>
                                 <div class="row">
-                                    <a href="@Url.Action("ViewMore", "Branch",new {CheckListId=checkListItem.ChecklistId,AuditDate=Model.AuditDate,Location=Model.Location,Branch=Model.Branch })" target="_blank">View More</a>
+                                    <a href="@Url.Action("ViewMore", "BranchNew",new {CheckListId=checkListItem.NewChecklistId,AuditDate=Model.AuditDate,Location=Model.Location,Branch=Model.Branch })" target="_blank">View More</a>
                                 </div>
                             </div>
                         </td>

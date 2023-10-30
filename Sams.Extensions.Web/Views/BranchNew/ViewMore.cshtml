@@ -28,7 +28,7 @@
             <div class="form-control form-group">
                 @foreach (var item in Model)
                 {
-                    <img style="width:300px;height:300px;padding:5px;" src='@Url.Action("RetrieveImage", "Branch", new {ImageId = item.ImageAutoId})' />
+                    <img style="width:300px;height:300px;padding:5px;" src='@Url.Action("RetrieveImage", "BranchNew", new {ImageId = item.ImageAutoId})' />
 
                 }
             </div>

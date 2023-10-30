@@ -138,6 +138,13 @@
                 alert('Please select a location to continue');
                 return false;
             }
+            let selectedChecklistType = $("#SelectedChecklistType").val();
+            if (selectedChecklistType == null || selectedChecklistType == '' || selectedChecklistType == 'Select Checklist Type') {
+                alert('Please select a Checklist Type to continue');
+                return false;
+            }
+            
+
             let fromDate = $("#FromDate").val();
             let toDate = $("#ToDate").val();
             if (fromDate == null || fromDate == '')

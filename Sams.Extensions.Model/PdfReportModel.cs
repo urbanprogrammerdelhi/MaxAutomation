@@ -58,6 +58,7 @@ namespace Sams.Extensions.Model
         public int HeaderIndex { get; set; }
         public string Photo { get; set; }
         public string ChecklistType { get; set; }
+        public string NewChecklistId { get; set; }
 
 
     }
