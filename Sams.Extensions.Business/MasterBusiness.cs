@@ -17,6 +17,11 @@ namespace Sams.Extensions.Business
             _masterData = masterData;
         }
 
+        public List<ClientModel> FetchClients(string locationId)
+        {
+            return _masterData.FetchClients(locationId);
+        }
+
         public List<CompanyDetails> FetchCompanyDetails()
         {
             return _masterData.FetchCompanies();
@@ -35,6 +40,11 @@ namespace Sams.Extensions.Business
         public List<ReportDataModel> FetchReports(string companycode)
         {
             return _masterData.FetchReports(companycode);
+        }
+
+        public List<SiteModel> FetchSites(string locationId, string clientCode, string companyCode)
+        {
+            return _masterData.FetchSites(locationId, clientCode, companyCode);
         }
 
         public List<string> ListOfPosts()

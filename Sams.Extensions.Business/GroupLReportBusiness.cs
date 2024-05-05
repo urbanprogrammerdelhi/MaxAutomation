@@ -2,6 +2,7 @@
 using Sams.Extensions.Model;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace Sams.Extensions.Business
             _reportData = reportData;
         }
 
-        public GroupLReportDataSet GenerateDashboard(GroupLReportSearchModel searchModel)
+        public List<GroupLReportDataSet> GenerateDashboard(GroupLReportSearchModel searchModel)
         {
             try
             {
@@ -29,7 +30,30 @@ namespace Sams.Extensions.Business
             }
         }
 
-      
+        //public GroupLReportDataSet<DataSet> GenerateFsaReport(GroupLReportSearchModel searchModel)
+        //{
+        //    try
+        //    {
+        //        return _reportData.GenerateFsaReport(searchModel);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //    }
+        //}
+
+        public List<string> GenerateFsaReportDetails(GroupLReportSearchModel searchModel)
+        {
+            try
+            {
+                return _reportData.GenerateFsaReportDetails(searchModel);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         List<string> IGroupLReportBusiness.GenerateDashboardReport(GroupLReportSearchModel searchModel)
         {
             try

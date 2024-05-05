@@ -8,19 +8,17 @@ namespace Sams.Extensions.Model
 {
     public class CheckListReportModel
     {
-                   
-        public int CheckListID { get; set; }
-        public string ChecklistDetail { get; set; }
-        public string EmpId { get; set; }
-        public string EmployeeName { get; set; }
-        public string Date { get; set; }
-        public string Time { get; set; }
-        public string ClientCode { get; set; }
-        public string Status { get; set; }
-        public byte[] Image { get; set; }
 
+        public int AutoID { get; set; }
 
-
+        public int HeaderAutoID { get; set; }
+        public string SiteName { get; set; }
+        public string ChecklistHeader { get; set; }
+        public string ChecklistName { get; set; }
+        public string ChecklistStatus { get; set; }
+        public string CompletionTime { get; set; }
+        public string Remarks { get; set; }
+        public byte[] ChecklistImage { get; set; }
 
 
     }

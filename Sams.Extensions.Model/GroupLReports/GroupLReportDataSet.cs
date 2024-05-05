@@ -13,5 +13,6 @@ namespace Sams.Extensions.Model
        public DataTable ReportData { get; set; }
         public string[] RequiredFields { get; set; }
         public string[] ComparisionFields { get; set; }
+       
     }
 }

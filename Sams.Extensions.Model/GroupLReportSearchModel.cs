@@ -13,5 +13,8 @@ namespace Sams.Extensions.Model
         public string ReportDate { get; set; }
         public string EmployeeNumber { get; set; }
         public GroupLReports CurrentReport { get; set; }
-   }
+        public string ClientCode { get; set; }
+        public string SiteCode { get; set; }
+
+    }
 }

@@ -17,10 +17,16 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Group L Reports</title>
+    <title>GroupL Reports</title>
+    <style>
+        .required:after {
+            content: " *";
+            color: red;
+        }
+    </style>
 
 </head>
-<body>
+<body style="overflow:no-display;">
     @using (Html.BeginForm("SubmitRequest", "GroupLReports", FormMethod.Post))
     {
         <div style="width:100%;padding:10px;">
@@ -32,26 +38,34 @@
 
                         <div class="row">
                             <div class="col-md-3">
-                                <label for="Company">Company</label>
+                                <label for="Company" class="required">Report</label>
+                                @Html.DropDownListFor(model => model.CurrentReport, Model.Reports as List<SelectListItem>, "Select Report", new { @class = "form-control" })
+                            </div>
+                            <div class="col-md-3">
+                                <label for="Company" class="required">Company </label>
                                 @Html.DropDownListFor(model => model.CurrentCompany, Model.Companies as List<SelectListItem>, "Select Company", new { @class = "form-control", @disabled = "disabled" })
                             </div>
                             <div class="col-md-3">
-                                <label for="Company">Company</label>
+                                <label for="Region" class="required">Region</label>
                                 @Html.DropDownListFor(model => model.CurrentRegion, Model.Regions as List<SelectListItem>, "Select Region", new { @class = "form-control" })
                             </div>
                             <div class="col-md-3">
-                                <label for="Location">Location</label>
-                                @Html.DropDownListFor(model => model.CurrentLocation, Model.Locations as List<SelectListItem>, "Select Location", new { @class = "form-control" })
+                                <label for="Location" class="required">Branch</label>
+                                @Html.DropDownListFor(model => model.CurrentLocation, Model.Locations as List<SelectListItem>, "Select Branch", new { @class = "form-control" })
                             </div>
-                            <div class="col-md-3">
-                                <label for="Company">Report</label>
-                                @Html.DropDownListFor(model => model.CurrentReport, Model.Reports as List<SelectListItem>, "Select Report", new { @class = "form-control" })
+                            <div class="col-md-3" id="DvCient">
+                                <label for="Client">Client</label>
+                                @Html.DropDownListFor(model => model.ClientCode, Model.Clients as List<SelectListItem>, "Select Client", new { @class = "form-control" })
                             </div>
-
+                            <div class="col-md-3" id="DvSite">
+                                <label for="Site">Site</label>
+                                @Html.DropDownListFor(model => model.SiteCode, Model.Sites as List<SelectListItem>, "Select Sites", new { @class = "form-control" })
+                            </div>
                             <div class="col-md-2">
-                                <label for="FromDate">Report Date</label>
+                                <label for="FromDate" class="required">Report Date</label>
                                 @Html.EditorFor(model => model.ReportDate, new { htmlAttributes = new { @class = "form-control", @readonly = "true" } })
                             </div>
+
                             <div class="form-group">
                                 <input type="submit" id="btnViewEmployeeRoster" name="Submit" value="Search" class="btn btn-primary SubmitButton" onclick="return ValidateSearch();" />
                                 @if (Model.CanExportReport)
@@ -70,53 +84,82 @@
             @if (Model.CanExportReport)
             {
 
-                <div class="BodyHeaderSection">
-                    <div class="card">
-                        <div class="card-body bg-info text-white bodyHeaderContent"><h4>@Model.ReportHeader</h4></div>
-                    </div>
-                    <div style="min-width:100%;overflow:auto;height:380px;padding-top:10px;">
-                        <table border='1' cellpadding='5' cellspacing='0' style="border: 1px solid #ccc;font-family: Verdana; font-size: 10pt;">
+            <div class="BodyHeaderSection">
+                <div class="card">
+                    <div class="card-body bg-info text-white bodyHeaderContent"><h4>@Model.ReportHeader</h4></div>
+                </div>
+                <div style="min-width:100%;overflow:auto;height:380px;padding-top:10px;">
+
+                    @foreach (var currentReport in Model.ReportData)
+                    {
+                        <table border='2' cellpadding='5' cellspacing='5' style="border: 1px solid black;font-family: Verdana; font-size: 10pt; margin-top:10px;">
 
                             <tr style="background-color:lightblue;color:black;font-family:Verdana;font-size:11px;font-weight:bold;">
-                                <th style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;">
-                                    Sl.No
-                                </th>
-                                @foreach (string dc in Model.RequiredFields)
+                                @if (currentReport.CurrentReport != GroupLReports.FSAReport)
                                 {
-                                    <th style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;">
+                                    <th style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;text-align:center;">
+                                        Sl.No
+                                    </th>
+                                }
+                                @foreach (string dc in currentReport.RequiredFields)
+                                {
+                                    <th style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;text-align:center;">
                                         @dc.ParseToText()
                                     </th>
 
                                 }
 
                             </tr>
-                            @foreach (var item in Model.ReportData.AsEnumerable().Select((x, i) => new { Data = x, Index = i + 1 }))
+                            @foreach (var item in currentReport.ReportData.AsEnumerable().Select((x, i) => new { Data = x, Index = i + 1 }))
                             {
-                                <tr>
-                                    <td style="border: 1px solid #ccc;padding:5px;">@item.Index</td>
-                                    @foreach (var field in Model.ComparisionFields)
+                            <tr>
+                                @if (currentReport.CurrentReport != GroupLReports.FSAReport)
+                                {
+                                    <td style="border: 1px solid #ccc;padding:5px; ">@item.Index</td>
+                                }
+                                @foreach (var field in currentReport.ComparisionFields)
+                                {
+                                    var currentField = item.Data[field.Replace(" ", string.Empty).Trim()];
+                                    if (currentField.GetType() == typeof(byte[]))
                                     {
-                                        var currentField = item.Data[field.Replace(" ", string.Empty).Trim()];
-                                        if (currentField.GetType() == typeof(byte[]))
+                                        var imgData = currentField as byte[];
+                                        var imageBase64 = Convert.ToBase64String(imgData);
+                                        var imgUrl = String.Format("data:image/png;base64,{0}", imageBase64);
+                                        <td style="border: 1px solid #ccc;padding:5px;">
+                                            <img src="@imgUrl" height="100px" width="100px" />
+                                        </td>
+                                    }
+                                    else if (field.Contains("Pictures"))
+                                    {
+                                        if (!string.IsNullOrEmpty(currentField.ParseToText()))
                                         {
-                                            var imgData = currentField as byte[];
-                                            var imageBase64 = Convert.ToBase64String(imgData);
-                                            var imgUrl = String.Format("data:image/png;base64,{0}", imageBase64);
+                                            var imageUrl = $"https://www.ifm360.in/APS/FSAImages/{currentField.ParseToText()}";
                                             <td style="border: 1px solid #ccc;padding:5px;">
-                                                <img src="@imgUrl" height="75px" width="75px" />
+                                                <img src="@imageUrl" height="100px" width="100px" />
                                             </td>
+
                                         }
                                         else
                                         {
-                                            <td style="border: 1px solid #ccc;padding:5px;">@currentField.ParseToText()</td>
-
+                                            <td style="border: 1px solid #ccc;padding:5px;">
+                                                <img src = "Images/NoImagesFound.jpg" height="100px" width="100px" />
+                                            </td>
                                         }
                                     }
-                                </tr>
+                                    else
+                                    {
+
+                                        <td style="border: 1px solid #ccc;padding:5px;min-height:200px;max-width:600px;">@currentField.ParseToText()</td>
+
+                                    }
+                                }
+                            </tr>
                             }
                         </table>
-                    </div>
+                    }
                 </div>
+
+            </div>
 
             }
             else
@@ -140,25 +183,71 @@
     <script>
         function ValidateSearch()
         {
-            let selectedCompany = $("#CurrentCompany").val();
-            if (selectedCompany == null || selectedCompany == '') {
-                alert('Please select a company to continue');
+
+            let currentReportIndex = $("#CurrentReport")[0].selectedIndex;
+            if (currentReportIndex <= 0)
+            {
+                alert('Please select the Report type.');
                 return false;
+            }
+            let currentCompanyIndex = $("#CurrentCompany")[0].selectedIndex;
+            if (currentCompanyIndex <= 0) {
+                alert('Please select the Company.');
+                return false;
+            }
+            let currentRegionIndex = $("#CurrentRegion")[0].selectedIndex;
+            if (currentRegionIndex <= 0) {
+                alert('Please select the Region.');
+                return false;
+            }
+            let currentBranchIndex = $("#CurrentLocation")[0].selectedIndex;
+            if (currentBranchIndex <= 0) {
+                alert('Please select the Branch.');
+                return false;
+            }
+            let reportId = $("#CurrentReport").val();
+            if (reportId == 3) {
+                let currentClientIndex = $("#ClientCode")[0].selectedIndex;
+                if (currentClientIndex <= 0)
+                {
+                    alert('Please select the Client.');
+                    return false;
+                }
+
+                let currentSiteIndex = $("#SiteCode")[0].selectedIndex;
+                if (currentSiteIndex <= 0) {
+                    alert('Please select the Site.');
+                    return false;
+                }
             }
 
-            let selectedLocation = $("#CurrentLocation").val();
-            if (selectedLocation == null || selectedLocation == '' || selectedLocation == 'Select Location') {
-                alert('Please select a location to continue');
-                return false;
-            }
-            let selectedReport = $("#CurrentReport").val();
-            if (selectedReport == null || selectedReport == '' || selectedReport == 'Select Report') {
-                alert('Please select a Report to continue');
-                return false;
-            }
             let reportDate = $("#ReportDate").val();
-            if (reportDate == null || reportDate == '' || reportDate == undefined) { alert('Please enter Report Date'); return false; }
+            if (reportDate == null || reportDate == '' || reportDate == undefined)
+            {
+                alert('Please enter Report Date');
+                return false;
+            }
             return true;
+
+            //let selectedCompany = $("#CurrentCompany").val();
+            //if (selectedCompany == null || selectedCompany == '') {
+            //    alert('Please select a company to continue');
+            //    return false;
+            //}
+
+            //let selectedLocation = $("#CurrentLocation").val();
+            //if (selectedLocation == null || selectedLocation == '' || selectedLocation == 'Select Location') {
+            //    alert('Please select a location to continue');
+            //    return false;
+            //}
+            //let selectedReport = $("#CurrentReport").val();
+            //if (selectedReport == null || selectedReport == '' || selectedReport == 'Select Report') {
+            //    alert('Please select a Report to continue');
+            //    return false;
+            //}
+            //let reportDate = $("#ReportDate").val();
+            //if (reportDate == null || reportDate == '' || reportDate == undefined) { alert('Please enter Report Date'); return false; }
+            //return true;
         }
         function ValidateExport()
         {
@@ -198,6 +287,68 @@
                 }
             });
         });
+
+
+        $("#ClientCode").change(function () {
+             let clientCode = $(this).val();
+             let companyCode = $("#CurrentCompany").val();
+             let locationCode = $('#CurrentLocation').val();
+
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: '@Url.Action("FetchSites", "GroupLReports")',
+                data: { "locationCode": locationCode , "clientCode": clientCode, "companyCode": companyCode},
+                success: function (json, textStatus) {
+                    $("#SiteCode").empty();
+
+                    json = json || {};
+                    $("#SiteCode").append('<option>Select Site </option>');
+
+                    for (var i = 0; i < json.length; i++) {
+                        $("#SiteCode").append('<option value="' + json[i].Value + '">' + json[i].Text + '</option>');
+                    }
+                },
+                error: function () {
+                    alert("Data Not Found");
+                }
+            });
+        });
+
+
+        $("#CurrentLocation").change(function () {
+
+
+
+
+
+
+
+            let locationCode = $(this).val();
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: '@Url.Action("FetchClients", "GroupLReports")',
+                data: { "locationCode": locationCode },
+                success: function (json, textStatus) {
+                    $("#ClientCode").empty();
+                    $("#SiteCode").empty();
+
+                    json = json || {};
+                    $("#ClientCode").append('<option>Select Client </option>');
+
+                    for (var i = 0; i < json.length; i++) {
+                        $("#ClientCode").append('<option value="' + json[i].Value + '">' + json[i].Text + '</option>');
+                    }
+                },
+                error: function () {
+                    alert("Data Not Found");
+                }
+                });
+
+        });
+
+
         function base64ToArrayBuffer(base64) {
             var binaryString = window.atob(base64);
             var binaryLen = binaryString.length;
@@ -216,35 +367,24 @@
             link.download = fileName;
             link.click();
         };
-        @*$("#btnExport").click(function ()
-        {
-            let isValidated = ValidateExport();
-            if (isValidated) {
-                showLoader();
 
-        $.ajax({
-            cache: false,
-            type: "POST",
-            url: '@Url.Action("ExportToPdf", "GroupLReports")',
-            data: { "location": $("#CurrentLocation").val(), "reportDate": $("#ReportDate").val(), "reportName": $("#CurrentReport").val() },
-            success: function (json) {
-                //alert('success');
-                //debugger;
-                var sampleArr = base64ToArrayBuffer(json);
-                saveByteArray("Sample Report", sampleArr);
-                //let hft = json;
-                HideLoader();
-            },
-            error: function (ex) {
-                //alert(ex);
-                //alert("Data Not Found");
-                HideLoader();
-            }
-        });
-    }
-    return false;
 
-});*@
+        //  $("#CurrentReport").change(function () {
+        //    let reportId=$(this).val();
+        //      $("#DvCient").hide();
+        //      $("#DvSite").hide();
+
+        //      if (reportId == 3) {
+
+        //          $("#DvCient").show();
+        //          $("#DvSite").show();
+
+        //      }
+
+
+        //});
+
+
         $("#CurrentRegion").change(function () {
             let regionCode = $(this).val();
             let companyCode = $("#CurrentCompany").val();
@@ -256,7 +396,7 @@
                 success: function (json, textStatus) {
                     $("#CurrentLocation").empty();
                     json = json || {};
-                    $("#CurrentLocation").append('<option>Select Location </option>');
+                    $("#CurrentLocation").append('<option>Select Branch </option>');
 
                     for (var i = 0; i < json.length; i++) {
                         $("#CurrentLocation").append('<option value="' + json[i].Value + '">' + json[i].Text + '</option>');

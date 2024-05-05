@@ -32,13 +32,43 @@ namespace Sams.Extensions.Data
 
         }
 
-        public GroupLReportDataSet GenerateDashboard(GroupLReportSearchModel searchModel)
+        public List<GroupLReportDataSet> GenerateDashboard(GroupLReportSearchModel searchModel)
         {
             try
             {
-                var currentMethod = GroupLDashboards[searchModel.CurrentReport];
-                var dt = currentMethod.Invoke(searchModel);
-                return new GroupLReportDataSet { ReportData = dt, CurrentReport = searchModel.CurrentReport, RequiredFields = GroupLRequiredFields[searchModel.CurrentReport][0], ComparisionFields = GroupLRequiredFields[searchModel.CurrentReport][1] };
+                var output = new List<GroupLReportDataSet>();
+                if (searchModel.CurrentReport == GroupLReports.FSAReport)
+                {
+                    var ds = GenerateFsaReport(searchModel);
+                    output.Add(new GroupLReportDataSet
+                    {
+                        ComparisionFields =ConfigurationFields.FsaReportHeaderComparisionFields
+                        ,RequiredFields=ConfigurationFields.FsaReportHeaderRequiredFields
+                        ,CurrentReport=searchModel.CurrentReport,ReportData=ds.Tables[0]
+                     });
+                    output.Add(new GroupLReportDataSet
+                    {
+                        ComparisionFields = ConfigurationFields.FsaReportDetailsComparisionFields,
+                        RequiredFields = ConfigurationFields.FsaReportDetailsRequiredFields,
+                        CurrentReport = searchModel.CurrentReport,
+                        ReportData = ds.Tables[1]
+                    });
+                    output.Add(new GroupLReportDataSet
+                    {
+                        ComparisionFields = ConfigurationFields.FsaReportFooterComparisionFields,
+                        RequiredFields = ConfigurationFields.FsaReportFooterRequiredFields,
+                        CurrentReport = searchModel.CurrentReport,
+                        ReportData = ds.Tables[2]
+                    });
+                    return output;
+                }
+                else
+                {
+                    var currentMethod = GroupLDashboards[searchModel.CurrentReport];
+                    var dt = currentMethod.Invoke(searchModel);
+                    output.Add(new GroupLReportDataSet { ReportData = dt, CurrentReport = searchModel.CurrentReport, RequiredFields = GroupLRequiredFields[searchModel.CurrentReport][0], ComparisionFields = GroupLRequiredFields[searchModel.CurrentReport][1] });
+                    return output;
+                }
             }
             catch (Exception ex)
             {
@@ -58,12 +88,11 @@ namespace Sams.Extensions.Data
                     connection.Open();
                     SqlCommand command = new SqlCommand();
                     command.Connection = connection;
-                    command.CommandText = "udp_GetChecklistDetailGroupL";
+                    command.CommandText = "udp_GetChecklistReportGroupL";
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add(new SqlParameter("@LocationAutoId", searchModel.LocationAutoId));
-                    command.Parameters.Add(new SqlParameter("@FromDate", searchModel.ReportDate));
-                    command.Parameters.Add(new SqlParameter("@ToDate", searchModel.ReportDate));
-                    command.Parameters.Add(new SqlParameter("@EmployeeNumber", searchModel.EmployeeNumber));
+                    command.Parameters.Add(new SqlParameter("@clientCode", searchModel.ClientCode));
+                    command.Parameters.Add(new SqlParameter("@asmtID", searchModel.SiteCode));
+                    command.Parameters.Add(new SqlParameter("@date", searchModel.ReportDate));
                     SqlDataAdapter adpt = new SqlDataAdapter();
                     adpt.SelectCommand = command;
                     var dt = new DataTable();
@@ -103,7 +132,7 @@ namespace Sams.Extensions.Data
                     connection.Open();
                     SqlCommand command = new SqlCommand();
                     command.Connection = connection;
-                    command.CommandText = "udp_GetEmployeeAttendanceMIlkBasket";
+                    command.CommandText = "udp_GetEmployeePhotoAttendanceGroupL";//"udp_GetEmployeeAttendanceMIlkBasket";
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("@LocationAutoId", searchModel.LocationAutoId));
                     command.Parameters.Add(new SqlParameter("@FromDate", searchModel.ReportDate));
@@ -160,7 +189,7 @@ namespace Sams.Extensions.Data
             {
                 List<string> result = new List<string>();
                 var photoDashboardData = dt.ToList<PhotoDashboardModel>().ToList();
-                var splitedPhotoDashBoard = photoDashboardData.Split(15).ToList();
+                var splitedPhotoDashBoard = photoDashboardData.Split(7).ToList();
                 int counter = 1;
                 foreach (var photoDashBoard in splitedPhotoDashBoard)
                 {
@@ -229,5 +258,94 @@ namespace Sams.Extensions.Data
             }
 
         }
+        private DataSet GenerateFsaReport(GroupLReportSearchModel searchModel)
+        {
+            try
+            {
+
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand();
+                    command.Connection = connection;
+                    command.CommandText = "udp_GetFSAReportExtension";
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("@ClientCode", searchModel.ClientCode));                    
+                    SqlDataAdapter adpt = new SqlDataAdapter();
+                    adpt.SelectCommand = command;
+                    var ds = new DataSet();
+                    adpt.Fill(ds);
+                    return ds;
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public List<string> GenerateFsaReportDetails(GroupLReportSearchModel searchModel)
+        {
+            List<string> output = new List<string>();
+            try
+            {
+                var ds = GenerateFsaReport(searchModel);
+                var header = ds.Tables[0].ToList<FsaReportHeader>();
+                var details = ds.Tables[1].ToList<FsaReportDetails>();
+                var footer = ds.Tables[2].ToList<FsaReportFooter>();
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append(HtmlUtilityConstants.HtmlBeginTag)
+                  .Append(HtmlUtilityConstants.HeadBeginTag)
+                  .Append(HtmlUtilityConstants.BodyBeginTag);
+                sb.Append("<h1>FSA Report</h1>");
+                sb.Append("<br/>");
+
+                sb.Append(header.GenerateHtmlTableV4(ConfigurationFields.FsaReportHeaderRequiredFields, ConfigurationFields.FsaReportHeaderComparisionFields));
+                sb.Append("<br/>");
+                var firstRecords = details.Take(7);
+                var fsaDetails = details.Skip(7).Split(8);
+                sb.Append(firstRecords.ToList().GenerateHtmlTableV4(ConfigurationFields.FsaReportDetailsRequiredFields, ConfigurationFields.FsaReportDetailsComparisionFields));
+                output.Add(sb.ToString());
+                foreach(var detail in fsaDetails)
+                {
+                    output.Add(detail.ToList().GenerateHtmlTableV4(ConfigurationFields.FsaReportDetailsRequiredFields, ConfigurationFields.FsaReportDetailsComparisionFields));
+                }
+                sb = new StringBuilder();
+                sb.Append(footer.GenerateHtmlTableV4(ConfigurationFields.FsaReportFooterRequiredFields, ConfigurationFields.FsaReportFooterComparisionFields));
+                sb.Append(HtmlUtilityConstants.BodyEndTag).Append(HtmlUtilityConstants.HeadEndTag).Append(HtmlUtilityConstants.HtmlEndTag);
+                output.Add(sb.ToString());
+                return output;
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
+        }
+
+        //GroupLReportDataSet<DataSet> IGroupLReportData.GenerateFsaReport(GroupLReportSearchModel searchModel)
+        //{
+        //    try
+        //    {
+        //        var ds = GenerateFsaReport(searchModel);
+        //        return new GroupLReportDataSet<DataSet>
+        //        {
+        //            ReportData = ds
+        //            , CurrentReport = searchModel.CurrentReport,
+        //            HeaderComparasionFields =ConfigurationFields.FsaReportHeaderComparisionFields
+        //        ,FooterRequiredFields=ConfigurationFields.FsaReportFooterRequiredFields
+        //        ,DetailsComparasionFields=ConfigurationFields.FsaReportDetailsComparisionFields
+        //        ,DetailsRequiredFields=ConfigurationFields.FsaReportDetailsRequiredFields
+        //        ,FooterComparasionFields=ConfigurationFields.FsaReportFooterComparisionFields,
+        //        HeaderRequiredFields=ConfigurationFields.FsaReportHeaderRequiredFields
+        //        };
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //    }
+        //}
     }
 }

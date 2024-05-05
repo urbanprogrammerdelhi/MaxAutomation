@@ -147,6 +147,23 @@ namespace Sams.Extensions.Web.Controllers
             return View(images);
         }
 
+        public ActionResult SetImage(byte[] image)
+        {
+            if (image != null)
+            {
+                return File(image, "image/jpg");
+            }
+            else
+            {
+                string path = Server.MapPath("~/Images/NoImagesFound.jpg");
+
+                //Read the File data into Byte Array.
+                byte[] bytes = System.IO.File.ReadAllBytes(path);
+
+                //Send the File to Download.
+                return File(bytes, "image/jpg");
+            }
+        }
     }
   
 }

@@ -29,6 +29,8 @@ namespace Sams.Extensions
         private static readonly System.Drawing.Color GroupBackgroundColor = System.Drawing.Color.Gray;
         private static readonly CellPadding DetailDefaultPadding = new CellPadding { Bottom = 5, Top = 5, Left = 50, Right = 10 };
         private static readonly CellPadding DetailDefaultLongPadding = new CellPadding { Bottom = 10, Top = 10, Left = 30, Right = 10 };
+        private static readonly CellPadding DetailDefaultRemarksPadding = new CellPadding { Bottom = 5, Top = 5, Left = 25, Right = 10 };
+
 
         public PdfReportBuilder(Document pdfDoc, IBranchCodeData branchCodeData)
         {
@@ -62,25 +64,31 @@ namespace Sams.Extensions
 
         private PdfPCell DefaultImageCell(byte[] ImageStream, CellPadding padding)
         {
-
             PdfPCell imagecell = new PdfPCell();
-            if (ImageStream != null)
-            {
-                Image image = Image.GetInstance(ImageStream);
-                image.ScaleAbsolute(100, 50);
-                imagecell.AddElement(image);
-            }
-            else
-            {
-                string defaultImage = ConfigurationManager.AppSettings["BaseUrl"].ToString() + @"NoImagesFound.jpg";
-                Image image = Image.GetInstance(defaultImage);
-                image.ScaleAbsolute(100, 40);
-                imagecell.AddElement(image);
-            }
-            imagecell.PaddingTop = padding.Top;
-            imagecell.PaddingBottom = padding.Bottom;
-            imagecell.PaddingLeft = padding.Left;
 
+            try
+            {
+                if (ImageStream != null)
+                {
+                    Image image = Image.GetInstance(ImageStream);
+                    image.ScaleAbsolute(100, 50);
+                    imagecell.AddElement(image);
+                }
+                else
+                {
+                    string defaultImage = ConfigurationManager.AppSettings["BaseUrl"].ToString() + @"NoImagesFound.jpg";
+                    Image image = Image.GetInstance(defaultImage);
+                    image.ScaleAbsolute(100, 40);
+                    imagecell.AddElement(image);
+                }
+                imagecell.PaddingTop = padding.Top;
+                imagecell.PaddingBottom = padding.Bottom;
+                imagecell.PaddingLeft = padding.Left;
+            }
+            catch(Exception ex)
+            {
+
+            }
             return imagecell;
         }
        
@@ -157,20 +165,27 @@ namespace Sams.Extensions
             table.AddCell(HeaderCell("Comments", HeaderBackgroundColor, new CellPadding { Bottom = 10, Top = 5, Left = 20, Right = 0 }));
             foreach (IGrouping<string, ReportBody> packageGroup in details)
             {
-                string header = packageGroup.Key;//.Substring(0, packageGroup.Key.LastIndexOf(","));
-                var cell = HeaderCell(header, GroupBackgroundColor, TopLabelHeader);
-                cell.Colspan = 5;
-                cell.HorizontalAlignment = Element.ALIGN_MIDDLE;
-                table.AddCell(cell);
-                foreach (ReportBody checkListItem in packageGroup)
+                try
                 {
-                    table.AddCell(DetailCell(checkListItem.ChecklistId.ToString(), DetailBackgroundColor, new CellPadding { Bottom = 5, Top = 5, Left = 20, Right = 0 }));
-                    table.AddCell(DetailCell(checkListItem.SubHeader, DetailBackgroundColor, DetailDefaultLongPadding));
-                    table.AddCell(DetailCell(checkListItem.Text, DetailBackgroundColor, new CellPadding { Bottom = 5, Top = 5, Left = 40, Right = 0 }));
-                   
-                    var imageArray = _branchCodeData.GetImageById(checkListItem.ImageAutoId,!string.IsNullOrEmpty(checkListItem.ChecklistType));
-                    table.AddCell(DefaultImageCell(imageArray, DetailDefaultLongPadding));
-                    table.AddCell(DetailCell(checkListItem.Remarks, DetailBackgroundColor, DetailDefaultPadding));
+                    string header = packageGroup.Key;//.Substring(0, packageGroup.Key.LastIndexOf(","));
+                    var cell = HeaderCell(header, GroupBackgroundColor, TopLabelHeader);
+                    cell.Colspan = 5;
+                    cell.HorizontalAlignment = Element.ALIGN_MIDDLE;
+                    table.AddCell(cell);
+                    foreach (ReportBody checkListItem in packageGroup)
+                    {
+                        table.AddCell(DetailCell(checkListItem.ChecklistId.ToString(), DetailBackgroundColor, new CellPadding { Bottom = 5, Top = 5, Left = 20, Right = 0 }));
+                        table.AddCell(DetailCell(checkListItem.SubHeader, DetailBackgroundColor, DetailDefaultLongPadding));
+                        table.AddCell(DetailCell(checkListItem.Text, DetailBackgroundColor, new CellPadding { Bottom = 5, Top = 5, Left = 40, Right = 0 }));
+
+                        var imageArray = _branchCodeData.GetImageById(checkListItem.ImageAutoId, !string.IsNullOrEmpty(checkListItem.ChecklistType));
+                        table.AddCell(DefaultImageCell(imageArray, DetailDefaultLongPadding));
+                        table.AddCell(DetailCell(checkListItem.Remarks, DetailBackgroundColor, DetailDefaultRemarksPadding));
+                    }
+                }
+                catch
+                {
+
                 }
             }
             _pdfDoc.Add(table);

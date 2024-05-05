@@ -17,8 +17,11 @@ namespace Sams.Extensions.Dal
         List<ReportDataModel> FetchReports(string companycode);
         List<Region> FetchRegions(string companycode);
         List<string> ListOfPosts();
-    }
-   
+        List<ClientModel> FetchClients(string locationId);
+        List<SiteModel> FetchSites(string locationId,string clientCode,string companyCode);
 
- 
+    }
+
+
+
 }

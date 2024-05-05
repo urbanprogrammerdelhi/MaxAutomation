@@ -20,6 +20,7 @@ namespace Sams.Extensions.Model
         public ILookup<string, ReportBody> MasterdetailList { get; set; }
         public ReportBody ColumnDetails { get; set; }
         public string ChecklistType { get; set; }
+        public string SpocSignature { get; set; }
 
 
     }

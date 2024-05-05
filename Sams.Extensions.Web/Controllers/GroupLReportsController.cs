@@ -66,12 +66,14 @@ namespace Sams.Extensions.Web.Controllers
                     Reports = new List<SelectListItem>(),
                     ReportHeaders = new Dictionary<GroupLReports, string>(),
                     ReportHeader = "Reports",
-                    ReportDate=DateTime.Now
+                    ReportDate=DateTime.Now,
+                    SiteCode=string.Empty,ClientCode=string.Empty,Sites=new List<SelectListItem>(),Clients=new List<SelectListItem>()
                 };
                
                 vm.ReportHeaders.Add(GroupLReports.PhotoDashboard, "Photo Dashboard Report");
                 vm.ReportHeaders.Add(GroupLReports.RegisterDashboard, "Register Dashboard Report");
                 vm.ReportHeaders.Add(GroupLReports.CheckListDashboard, "Checklist Dashboard Report");
+                vm.ReportHeaders.Add(GroupLReports.FSAReport, "FSA Report");
 
                 var reports = _master.FetchReports(vm.CurrentCompany);
                 vm.Reports = reports.ToSelectList("ReportId", "ReportName");
@@ -82,7 +84,8 @@ namespace Sams.Extensions.Web.Controllers
                     var regions = _master.FetchRegions(vm.CurrentCompany);
                     vm.Regions = regions.ToSelectList("RegionName", "RegionDescription");
                 }
-               if(searchModel!=null)
+               
+                if (searchModel!=null)
                {
                     vm.ReportDate = Convert.ToDateTime(searchModel.ReportDate);
                     vm.CurrentRegion = searchModel.CurrentRegion;
@@ -90,12 +93,22 @@ namespace Sams.Extensions.Web.Controllers
                     var locations = _master.FetchLocations(vm.CurrentCompany, vm.CurrentRegion);
                     vm.Locations = locations.ToSelectList("LocationAutoId", "Locationdesc");
                     vm.CurrentReport = ((int)searchModel.CurrentReport).ParseToText();
-                    var reportData = _groupLReportBusiness.GenerateDashboard(searchModel);
-                    if (reportData != null && reportData.ReportData != null && reportData.ReportData.Rows.Count > 0)
+                    vm.ClientCode = searchModel.ClientCode;
+                    vm.SiteCode = searchModel.SiteCode;
+                    if (!string.IsNullOrEmpty(vm.CurrentLocation))
                     {
-                        vm.ReportData = reportData.ReportData;
-                        vm.ComparisionFields = reportData.ComparisionFields;
-                        vm.RequiredFields = reportData.RequiredFields;
+                        var clients = _master.FetchClients(vm.CurrentLocation);
+                        vm.Clients = clients.ToSelectList("ClientCode", "ClientName");
+                    }
+                    if (!string.IsNullOrEmpty(vm.ClientCode))
+                    {
+                        var sites = _master.FetchSites(vm.CurrentLocation, vm.ClientCode, vm.CurrentCompany);
+                        vm.Sites = sites.ToSelectList("AsmtId", "AsmtName");
+                    }
+                    var reportData = _groupLReportBusiness.GenerateDashboard(searchModel);
+                    if (reportData != null && reportData.Count>0)
+                    {
+                        vm.ReportData = reportData;
                         vm.CanExportReport = true;
                         vm.ReportHeader = vm.ReportHeaders[(GroupLReports)Enum.Parse(typeof(GroupLReports), vm.CurrentReport)];
                     }
@@ -121,7 +134,7 @@ namespace Sams.Extensions.Web.Controllers
         public ActionResult FetchRegions(string CompanyCode)
         {
             var locations = _master.FetchRegions(CompanyCode);
-            var locationList = locations.ToSelectList("RegionName", "RegiRegionDescriptiononName");
+            var locationList = locations.ToSelectList("RegionName", "RegionDescriptiononName");
             return Json(locationList, JsonRequestBehavior.AllowGet);
         }
 
@@ -132,7 +145,7 @@ namespace Sams.Extensions.Web.Controllers
             try
             {
 
-             
+
                 switch (Submit)
                 {
                     case "Export to Pdf":
@@ -144,7 +157,10 @@ namespace Sams.Extensions.Web.Controllers
                             LocationAutoId = Request.Form["CurrentLocation"].ParseToText(),
                             CurrentReport = (GroupLReports)Request.Form["CurrentReport"].ParseInt(),
                             ReportDate = Request.Form["ReportDate"].ParseToText(),
-                            CurrentRegion = Request.Form["CurrentRegion"].ParseToText()
+                            CurrentRegion = Request.Form["CurrentRegion"].ParseToText(),
+                            ClientCode = Request.Form["ClientCode"].ParseToText(),
+                            SiteCode = Request.Form["SiteCode"].ParseToText()
+
 
                         };
                         TempData["GroupLSearchData"] = searchModel;
@@ -170,7 +186,9 @@ namespace Sams.Extensions.Web.Controllers
                     EmployeeNumber = "All",
                     LocationAutoId = Request.Form["CurrentLocation"].ParseToText(),
                     CurrentReport = (GroupLReports)Request.Form["CurrentReport"].ParseInt(),
-                    ReportDate = Request.Form["ReportDate"].ParseToText()
+                    ReportDate = Request.Form["ReportDate"].ParseToText(),
+                    ClientCode = Request.Form["ClientCode"].ParseToText(),
+                    SiteCode = Request.Form["SiteCode"].ParseToText()
 
                 };
                 SelectPdf.PdfDocument mainDocument = new SelectPdf.PdfDocument();
@@ -182,7 +200,15 @@ namespace Sams.Extensions.Web.Controllers
                 //var reports = _groupLReportBusiness.GenerateDashboardReport(new GroupLReportSearchModel { EmployeeNumber = "All", ReportDate = "07-07-2023 00:00", LocationAutoId = "1",CurrentReport=GroupLReports.CheckListDashboard });
                 //var reports = _groupLReportBusiness.GenerateDashboardReport(new GroupLReportSearchModel { EmployeeNumber = "All", ReportDate = "07-06-2023 00:00", LocationAutoId = "1",CurrentReport=GroupLReports.RegisterDashboard });
                 #endregion
-                var reports = _groupLReportBusiness.GenerateDashboardReport(searchModel);
+                List<string> reports;
+                if (searchModel.CurrentReport == GroupLReports.FSAReport)
+                {
+                    reports = _groupLReportBusiness.GenerateFsaReportDetails(searchModel);
+                }
+                else
+                {
+                    reports = _groupLReportBusiness.GenerateDashboardReport(searchModel);
+                }
                 if (reports == null || reports.Count <= 0)
                 {
                     TempData["Message"] = new MessageInfo { HasIssue = false, Message = "No records found" };
@@ -286,6 +312,24 @@ namespace Sams.Extensions.Web.Controllers
                 return View("Error");
             }
         }
+
+
+
+        [HttpPost]
+        public ActionResult FetchClients(string locationCode)
+        {
+            var locations = _master.FetchClients(locationCode);
+            var locationList = locations.ToSelectList("ClientCode", "ClientName");
+            return Json(locationList, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public ActionResult FetchSites(string locationCode,string clientCode,string companyCode)
+        {
+            var locations = _master.FetchSites(locationCode, clientCode, companyCode);
+            var locationList = locations.ToSelectList("AsmtId", "AsmtName");
+            return Json(locationList, JsonRequestBehavior.AllowGet);
+        }
+
     }
 
 }

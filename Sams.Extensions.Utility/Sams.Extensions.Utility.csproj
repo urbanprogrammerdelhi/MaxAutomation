@@ -67,6 +67,7 @@
     <Compile Include="ConfigurationFields.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="CommonUtility.cs" />
+    <Compile Include="HtmlUtilityConstants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SQLHelper.cs" />
   </ItemGroup>

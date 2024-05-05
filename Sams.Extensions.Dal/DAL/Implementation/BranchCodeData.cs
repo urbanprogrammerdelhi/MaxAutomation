@@ -204,6 +204,7 @@ namespace Sams.Extensions.Dal
                         var detail = ds.Tables[0].ToList<ReportBody>();
                         result.MasterdetailList = detail.ToLookup(lkp => lkp.MainHeader);// + "," + lkp.HeaderIndex);
                         result.ColumnDetails = detail.FirstOrDefault();
+                        //result.SpocSignature = ds.Tables[2].Rows[0][0].ParseToText();
                         return result;
                     }
                 }

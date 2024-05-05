@@ -1,6 +1,8 @@
 ﻿using ClosedXML.Excel;
+using Sams.Extensions.Model;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Dynamic;
 using System.Linq;
@@ -13,22 +15,7 @@ namespace Sams.Extensions.Utility
 {
     public static class Extensions
     {
-        static readonly string DefaultHeaderFormat = "<th style='background-color: #B8DBFD;border: 1px solid #ccc'>{0}</th>";
-        static readonly string BeginTableTag = "<table border='1' cellpadding='5' cellspacing='0' style='border: 1px solid #ccc;font-family: Arial; font-size: 10pt;'>";
-        static readonly string EndTableTag = "</table>";
-        static readonly string BeginRowTag = "<tr>";
-        static readonly string EndRowTag = "</tr>";
-        static readonly string HtmlBeginTag = "<html>";
-        static readonly string HtmlEndTag = "</html>";
-        static readonly string BodyBeginTag = "<body>";
-        static readonly string BodyEndTag = "</body>";
-        static readonly string HeadBeginTag = "<head>";
-        static readonly string HeadEndTag = "</head>";
-        static readonly string ColumnFormat = "<td style='border: 1px solid #ccc;padding:5px;'>{0}</td>";
-        static readonly string ImageFormat = "<img height='75px' width='75px' src=\'data:image/jpg;base64,@Image ></img>";
-        static readonly string DefaultCellBeginFormat = "<td style='border: 1px solid #ccc;padding:5px;'>";
-        static readonly string DefaultCellEndingTag = "</td>";
-        static readonly string ImageStartingTag = "<img height='75px' width='75px' src=\'data:image/jpg;base64,";
+       
         public static int ParseInt(this string input)
         {
             if (int.TryParse(input, out int output))
@@ -100,19 +87,19 @@ namespace Sams.Extensions.Utility
                     requiredFields = typeof(T).GetProperties().Select(p => p.Name);
                 }
                 StringBuilder sb = new StringBuilder();
-                sb.Append(HtmlBeginTag)
-                    .Append(HeadBeginTag)
-                    .Append(BodyBeginTag);
-                sb.Append(BeginTableTag).Append(BeginRowTag);
+                sb.Append(HtmlUtilityConstants.HtmlBeginTag)
+                    .Append(HtmlUtilityConstants.HeadBeginTag)
+                    .Append(HtmlUtilityConstants.BodyBeginTag);
+                sb.Append(HtmlUtilityConstants.BeginTableTag).Append(HtmlUtilityConstants.BeginRowTag);
                 foreach (var field in requiredFields)
                 {
-                    sb.Append(string.Format(DefaultHeaderFormat, field));
+                    sb.Append(string.Format(HtmlUtilityConstants.DefaultHeaderFormat, field));
                 }
-                sb.Append(EndRowTag);
+                sb.Append(HtmlUtilityConstants.EndRowTag);
                 int counter = 1;
                 foreach (var row in list)
                 {
-                    sb.Append(BeginRowTag);
+                    sb.Append(HtmlUtilityConstants.BeginRowTag);
                     foreach (var field in requiredFields)
                     {
 
@@ -124,32 +111,32 @@ namespace Sams.Extensions.Utility
                                 var image = property.GetValue(row, null);
                                 if (image != null)
                                 {
-                                    sb.Append(DefaultCellBeginFormat);
-                                    sb.Append(ImageStartingTag);
+                                    sb.Append(HtmlUtilityConstants.DefaultCellBeginFormat);
+                                    sb.Append(HtmlUtilityConstants.ImageStartingTag);
                                     sb.Append(Convert.ToBase64String((byte[])property.GetValue(row, null)) + "' />");
-                                    sb.Append(DefaultCellEndingTag);
+                                    sb.Append(HtmlUtilityConstants.DefaultCellEndingTag);
                                 }
                                 else
                                 {
-                                    sb.Append(string.Format(ColumnFormat, property.GetValue(row, null)));
+                                    sb.Append(string.Format(HtmlUtilityConstants.ColumnFormat, property.GetValue(row, null)));
                                 }
                             }
                             else
                             {
-                                sb.Append(string.Format(ColumnFormat, property.GetValue(row, null)));
+                                sb.Append(string.Format(HtmlUtilityConstants.ColumnFormat, property.GetValue(row, null)));
                             }
                         }
                         else
                         {
 
-                            sb.Append(string.Format(ColumnFormat, string.Empty));
+                            sb.Append(string.Format(HtmlUtilityConstants.ColumnFormat, string.Empty));
 
                         }
                     }
-                    sb.Append(EndRowTag);
+                    sb.Append(HtmlUtilityConstants.EndRowTag);
                     counter++;
                 }
-                sb.Append(EndTableTag).Append(BodyEndTag).Append(HeadEndTag).Append(HtmlEndTag);
+                sb.Append(HtmlUtilityConstants.EndTableTag).Append(HtmlUtilityConstants.BodyEndTag).Append(HtmlUtilityConstants.HeadEndTag).Append(HtmlUtilityConstants.HtmlEndTag);
                 return sb.ToString();
 
             }
@@ -275,19 +262,19 @@ Func<IEnumerable<T>, TData> dataSelector)
                     requiredFields = typeof(T).GetProperties().Select(p => p.Name);
                 }
                 StringBuilder sb = new StringBuilder();
-                sb.Append(HtmlBeginTag)
-                    .Append(HeadBeginTag)
-                    .Append(BodyBeginTag);
-                sb.Append(BeginTableTag).Append(BeginRowTag);
+                sb.Append(HtmlUtilityConstants.HtmlBeginTag)
+                    .Append(HtmlUtilityConstants.HeadBeginTag)
+                    .Append(HtmlUtilityConstants.BodyBeginTag);
+                sb.Append(HtmlUtilityConstants.BeginTableTag).Append(HtmlUtilityConstants.BeginRowTag);
                 foreach (var field in requiredFields)
                 {
-                    sb.Append(string.Format(DefaultHeaderFormat, field));
+                    sb.Append(string.Format(HtmlUtilityConstants.DefaultHeaderFormat, field));
                 }
-                sb.Append(EndRowTag);
+                sb.Append(HtmlUtilityConstants.EndRowTag);
                 int counter = 1;
                 foreach (var row in list)
                 {
-                    sb.Append(BeginRowTag);
+                    sb.Append(HtmlUtilityConstants.BeginRowTag);
                     foreach (var field in comparisionFields)
                     {
                         var property = row.GetType().GetProperty(field.Replace(" ", string.Empty).Trim());
@@ -298,32 +285,32 @@ Func<IEnumerable<T>, TData> dataSelector)
                                 var image = property.GetValue(row, null);
                                 if (image != null)
                                 {
-                                    sb.Append(DefaultCellBeginFormat);
-                                    sb.Append(ImageStartingTag);
+                                    sb.Append(HtmlUtilityConstants.DefaultCellBeginFormat);
+                                    sb.Append(HtmlUtilityConstants.ImageStartingTag);
                                     sb.Append(Convert.ToBase64String((byte[])image) + "' />");
-                                    sb.Append(DefaultCellEndingTag);
+                                    sb.Append(HtmlUtilityConstants.DefaultCellEndingTag);
                                 }
                                 else
                                 {
-                                    sb.Append(string.Format(ColumnFormat, property.GetValue(row, null)));
+                                    sb.Append(string.Format(HtmlUtilityConstants.ColumnFormat, property.GetValue(row, null)));
                                 }
                             }
                             else
                             {
-                                sb.Append(string.Format(ColumnFormat, property.GetValue(row, null)));
+                                sb.Append(string.Format(HtmlUtilityConstants.ColumnFormat, property.GetValue(row, null)));
                             }
                         }
                         else
                         {
 
-                            sb.Append(string.Format(ColumnFormat, string.Empty));
+                            sb.Append(string.Format(HtmlUtilityConstants.ColumnFormat, string.Empty));
 
                         }
                     }
-                    sb.Append(EndRowTag);
+                    sb.Append(HtmlUtilityConstants.EndRowTag);
                     counter++;
                 }
-                sb.Append(EndTableTag).Append(BodyEndTag).Append(HeadEndTag).Append(HtmlEndTag);
+                sb.Append(HtmlUtilityConstants.EndTableTag).Append(HtmlUtilityConstants.BodyEndTag).Append(HtmlUtilityConstants.HeadEndTag).Append(HtmlUtilityConstants.HtmlEndTag);
                 return sb.ToString();
 
             }
@@ -350,11 +337,155 @@ Func<IEnumerable<T>, TData> dataSelector)
         }
         public static string RemoveDateColumnName(this string columnName)
         {
-            if(columnName.Contains("_"))
+            if (columnName.Contains("_"))
             {
                 return columnName.Substring(columnName.LastIndexOf("_") + 1);
             }
             return columnName;
         }
+
+
+        public static string GenerateSimpleHeader<T>(this T item,IEnumerable<string> requiredFields, IEnumerable<string> comparisionFields) where T:new()
+        {
+            try
+            {
+                if (item == null) { return string.Empty; }
+                if (requiredFields == null || requiredFields.Count() <= 0)
+                {
+                    requiredFields = typeof(T).GetProperties().Select(p => p.Name);
+                }
+                StringBuilder sb = new StringBuilder();
+                int counter = 0;
+                sb.Append(HtmlUtilityConstants.BeginTableTag);
+                foreach (var field in comparisionFields)
+                {
+                    sb.Append(HtmlUtilityConstants.BeginRowTag);
+                    var fieldName = field.Replace(" ", string.Empty).Trim();
+                    var property = item.GetType().GetProperty(fieldName);
+                    if (property != null)
+                    {
+                        sb.Append(string.Format(HtmlUtilityConstants.ColumnFormat, $"{requiredFields.ToArray()[counter]}:"));
+                        if (property.PropertyType == typeof(byte[]))
+                        {
+                            var image = property.GetValue(item, null);
+                            if (image != null)
+                            {
+                                sb.Append(HtmlUtilityConstants.DefaultCellBeginFormat);
+                                sb.Append(HtmlUtilityConstants.ImageStartingTag);
+                                sb.Append(Convert.ToBase64String((byte[])image) + "' />");
+                                sb.Append(HtmlUtilityConstants.DefaultCellEndingTag);
+                            }
+                            else
+                            {
+                                sb.Append(string.Format(HtmlUtilityConstants.ColumnFormat, property.GetValue(item, null)));
+                            }
+                        }
+                        else
+                        {
+                            sb.Append(string.Format(HtmlUtilityConstants.ColumnFormat, property.GetValue(item, null)));
+                        }
+                    }
+                    else
+                    {
+
+                        sb.Append(string.Format(HtmlUtilityConstants.ColumnFormat, string.Empty));
+
+                    }
+                    sb.Append(HtmlUtilityConstants.EndRowTag);
+                    counter++;
+                }              
+
+                sb.Append(HtmlUtilityConstants.EndTableTag);
+                return sb.ToString();
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public static string GenerateHtmlTableV4<TAny>(this List<TAny> list, IEnumerable<string> requiredFields = null, IEnumerable<string> comparisionFields = null) //--where TAny : class()
+        {
+            try
+            {
+                if (list == null || list.Count <= 0) { return string.Empty; }
+                if (requiredFields == null || requiredFields.Count() <= 0)
+                {
+                    requiredFields = typeof(TAny).GetProperties().Select(p => p.Name);
+                }
+                StringBuilder sb = new StringBuilder();
+                sb.Append(HtmlUtilityConstants.BeginTableTag).Append(HtmlUtilityConstants.BeginRowTag);
+                foreach (var field in requiredFields)
+                {
+                    sb.Append(string.Format(HtmlUtilityConstants.DefaultHeaderFormat, field));
+                }
+                sb.Append(HtmlUtilityConstants.EndRowTag);
+                int counter = 1;
+                foreach (var row in list)
+                {
+                    sb.Append(HtmlUtilityConstants.BeginRowTag);
+                    foreach (var field in comparisionFields)
+                    {
+                        var property = row.GetType().GetProperty(field.Replace(" ", string.Empty).Trim());
+                        if (property != null)
+                        {
+                            if (property.PropertyType == typeof(byte[]))
+                            {
+                                var image = property.GetValue(row, null);
+                                if (image != null)
+                                {
+                                    sb.Append(HtmlUtilityConstants.DefaultCellBeginFormat);
+                                    sb.Append(HtmlUtilityConstants.ImageStartingTag);
+                                    sb.Append(Convert.ToBase64String((byte[])image) + "' />");
+                                    sb.Append(HtmlUtilityConstants.DefaultCellEndingTag);
+                                }
+                                else
+                                {
+                                    sb.Append(string.Format(HtmlUtilityConstants.ColumnFormat, property.GetValue(row, null)));
+                                }
+                            }
+                            else if (property.PropertyType == typeof(string) && property.Name.Contains("Pictures"))
+                            {
+                                var image = property.GetValue(row, null);
+                                if (image != null && !string.IsNullOrEmpty(image.ParseToText())) 
+                                {
+                                    sb.Append(HtmlUtilityConstants.DefaultImageCellBeginFormat);
+                                    var imageCell = HtmlUtilityConstants.ImageUrlFormat;
+                                    imageCell = imageCell.Replace("@imageUrl",$"https://www.ifm360.in/APS/FSAImages/{image}");
+                                    sb.Append(imageCell);
+                                    sb.Append(HtmlUtilityConstants.DefaultCellEndingTag);
+                                }
+                                else
+                                {
+                                    var noImageFormat = HtmlUtilityConstants.noimageformat.Replace("ImageUrl", ConfigurationManager.AppSettings["BaseUrl"] + "NoImagesFound.jpg");
+                                    sb.Append(string.Format(HtmlUtilityConstants.ImageColumnFormat, noImageFormat));
+                                }
+                            }
+                          
+                            else
+                            {
+                                sb.Append(string.Format(HtmlUtilityConstants.ColumnFormat, property.GetValue(row, null)));
+                            }
+                        }
+                        else
+                        {
+
+                            sb.Append(string.Format(HtmlUtilityConstants.ColumnFormat, string.Empty));
+
+                        }
+                    }
+                    sb.Append(HtmlUtilityConstants.EndRowTag);
+                    counter++;
+                }
+                sb.Append(HtmlUtilityConstants.EndTableTag);
+                return sb.ToString();
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
     }
 }

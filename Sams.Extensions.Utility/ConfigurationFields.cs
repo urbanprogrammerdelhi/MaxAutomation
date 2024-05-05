@@ -38,6 +38,16 @@ namespace Sams.Extensions.Utility
         public static string[] RegisterReportRequiredFields = ConfigurationManager.AppSettings["RegisterReportRequiredFields"].Split(',');
         public static string[] RegisterReportComparisionFields = ConfigurationManager.AppSettings["RegisterReportComparisionFields"].Split(',');
 
+        public static string[] FsaReportHeaderRequiredFields = ConfigurationManager.AppSettings["FsaReportHeaderRequiredFields"].Split(',');
+        public static string[] FsaReportHeaderComparisionFields = ConfigurationManager.AppSettings["FsaReportHeaderComparisionFields"].Split(',');
+
+        public static string[] FsaReportDetailsRequiredFields = ConfigurationManager.AppSettings["FsaReportDetailsRequiredFields"].Split(',');
+        public static string[] FsaReportDetailsComparisionFields = ConfigurationManager.AppSettings["FsaReportDetailsComparisionFields"].Split(',');
+
+        public static string[] FsaReportFooterRequiredFields = ConfigurationManager.AppSettings["FsaReportFooterRequiredFields"].Split(',');
+        public static string[] FsaReportFooterComparisionFields = ConfigurationManager.AppSettings["FsaReportFooterComparisionFields"].Split(',');
+
+
 
 
         #endregion
