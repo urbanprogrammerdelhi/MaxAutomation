@@ -30,9 +30,11 @@ namespace Sams.Extensions.Utility
         public static readonly string ImageStartingTag = "<img height='75px' width='75px' src=\'data:image/jpg;base64,";
         public static readonly string ImageUrlFormat = "<img height='150px' width='150px' src=@imageUrl ></img>";
         public static readonly string noimageformat = "<img src ='ImageUrl' height='150px' width='150px' />";
-        //public static readonly string FcaReport = "<td style='border: 1px solid #ccc;padding:5px;width:100%;'>";
-        //public static readonly string DefaultCellBeginFormat = "<td style='border: 1px solid #ccc;padding:5px;width:100%;'>";
-        //public static readonly string DefaultCellBeginFormat = "<td style='border: 1px solid #ccc;padding:5px;width:100%;'>";
+
+
+        public static readonly string FsaHeaderTableBeginFormat = "<table width='1024px' border='1' cellpadding='2' cellspacing='2' style='border: 1px solid black;font-family: Verdana; font-size: 10pt; margin-top:10px;'>";
+        public static readonly string FsaHeaderThBeginFormat = "<th width='50%' style='background-color: #B8DBFD;border: 1px solid #ccc;text-align:center;'>{0}</th>";
+        public static readonly string FsaHeaderDetailsHeaderBeginFormat = "<th min-width='{0}%' style='background-color: #B8DBFD;border: 1px solid #ccc;text-align:center;'>{1}</th>";
 
 
 

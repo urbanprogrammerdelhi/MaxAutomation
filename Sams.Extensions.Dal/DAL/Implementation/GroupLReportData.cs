@@ -37,38 +37,38 @@ namespace Sams.Extensions.Data
             try
             {
                 var output = new List<GroupLReportDataSet>();
-                if (searchModel.CurrentReport == GroupLReports.FSAReport)
-                {
-                    var ds = GenerateFsaReport(searchModel);
-                    output.Add(new GroupLReportDataSet
-                    {
-                        ComparisionFields =ConfigurationFields.FsaReportHeaderComparisionFields
-                        ,RequiredFields=ConfigurationFields.FsaReportHeaderRequiredFields
-                        ,CurrentReport=searchModel.CurrentReport,ReportData=ds.Tables[0]
-                     });
-                    output.Add(new GroupLReportDataSet
-                    {
-                        ComparisionFields = ConfigurationFields.FsaReportDetailsComparisionFields,
-                        RequiredFields = ConfigurationFields.FsaReportDetailsRequiredFields,
-                        CurrentReport = searchModel.CurrentReport,
-                        ReportData = ds.Tables[1]
-                    });
-                    output.Add(new GroupLReportDataSet
-                    {
-                        ComparisionFields = ConfigurationFields.FsaReportFooterComparisionFields,
-                        RequiredFields = ConfigurationFields.FsaReportFooterRequiredFields,
-                        CurrentReport = searchModel.CurrentReport,
-                        ReportData = ds.Tables[2]
-                    });
-                    return output;
-                }
-                else
-                {
+                //if (searchModel.CurrentReport == GroupLReports.FSAReport)
+                //{
+                //    var ds = GenerateFsaReport(searchModel);
+                //    output.Add(new GroupLReportDataSet
+                //    {
+                //        ComparisionFields =ConfigurationFields.FsaReportHeaderComparisionFields
+                //        ,RequiredFields=ConfigurationFields.FsaReportHeaderRequiredFields
+                //        ,CurrentReport=searchModel.CurrentReport,ReportData=ds.Tables[0]
+                //     });
+                //    output.Add(new GroupLReportDataSet
+                //    {
+                //        ComparisionFields = ConfigurationFields.FsaReportDetailsComparisionFields,
+                //        RequiredFields = ConfigurationFields.FsaReportDetailsRequiredFields,
+                //        CurrentReport = searchModel.CurrentReport,
+                //        ReportData = ds.Tables[1]
+                //    });
+                //    output.Add(new GroupLReportDataSet
+                //    {
+                //        ComparisionFields = ConfigurationFields.FsaReportFooterComparisionFields,
+                //        RequiredFields = ConfigurationFields.FsaReportFooterRequiredFields,
+                //        CurrentReport = searchModel.CurrentReport,
+                //        ReportData = ds.Tables[2]
+                //    });
+                //    return output;
+                //}
+                //else
+                //{
                     var currentMethod = GroupLDashboards[searchModel.CurrentReport];
                     var dt = currentMethod.Invoke(searchModel);
                     output.Add(new GroupLReportDataSet { ReportData = dt, CurrentReport = searchModel.CurrentReport, RequiredFields = GroupLRequiredFields[searchModel.CurrentReport][0], ComparisionFields = GroupLRequiredFields[searchModel.CurrentReport][1] });
                     return output;
-                }
+                //}
             }
             catch (Exception ex)
             {
@@ -258,7 +258,35 @@ namespace Sams.Extensions.Data
             }
 
         }
-        private DataSet GenerateFsaReport(GroupLReportSearchModel searchModel)
+
+        public FsaReportData FsaDetails(FsaSearchModel searchModel)
+        {
+            try
+            {
+                if (searchModel == null)
+                    return null;
+                if (string.IsNullOrEmpty(searchModel.ClientCode))
+                    return null;
+                if (!searchModel.FromDate.HasValue)
+                    return null;
+                if (!searchModel.ToDate.HasValue)
+                    return null;
+
+                var output = new FsaReportData();
+                
+                var ds = GenerateFsaReport(searchModel);
+                output.Header = ds.Tables[0].ToList<FsaReportHeader>();
+                output.Details = ds.Tables[1].ToList<FsaReportDetails>();
+                output.Footer = ds.Tables[2].ToList<FsaReportFooter>();
+                
+                return output;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        private DataSet GenerateFsaReport(FsaSearchModel searchModel)
         {
             try
             {
@@ -270,7 +298,11 @@ namespace Sams.Extensions.Data
                     command.Connection = connection;
                     command.CommandText = "udp_GetFSAReportExtension";
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add(new SqlParameter("@ClientCode", searchModel.ClientCode));                    
+                    command.Parameters.Add(new SqlParameter("@ClientCode", searchModel.ClientCode));
+                    command.Parameters.Add(new SqlParameter("@FromDate", searchModel.FromDate));
+
+                    command.Parameters.Add(new SqlParameter("@ToDate", searchModel.ToDate));
+
                     SqlDataAdapter adpt = new SqlDataAdapter();
                     adpt.SelectCommand = command;
                     var ds = new DataSet();
@@ -286,7 +318,7 @@ namespace Sams.Extensions.Data
             }
         }
 
-        public List<string> GenerateFsaReportDetails(GroupLReportSearchModel searchModel)
+        public List<string> GenerateFsaReportDetails(FsaSearchModel searchModel)
         {
             List<string> output = new List<string>();
             try
@@ -300,21 +332,20 @@ namespace Sams.Extensions.Data
                 sb.Append(HtmlUtilityConstants.HtmlBeginTag)
                   .Append(HtmlUtilityConstants.HeadBeginTag)
                   .Append(HtmlUtilityConstants.BodyBeginTag);
-                sb.Append("<h1>FSA Report</h1>");
+                sb.Append("<h1 >Fire security Audit Report</h1>");
                 sb.Append("<br/>");
 
-                sb.Append(header.GenerateHtmlTableV4(ConfigurationFields.FsaReportHeaderRequiredFields, ConfigurationFields.FsaReportHeaderComparisionFields));
-                sb.Append("<br/>");
+                sb.Append(header.GenerateFsaHeader(ConfigurationFields.FsaReportHeaderRequiredFields, ConfigurationFields.FsaReportHeaderComparisionFields));
                 var firstRecords = details.Take(7);
                 var fsaDetails = details.Skip(7).Split(8);
-                sb.Append(firstRecords.ToList().GenerateHtmlTableV4(ConfigurationFields.FsaReportDetailsRequiredFields, ConfigurationFields.FsaReportDetailsComparisionFields));
+                sb.Append(firstRecords.ToList().GenerateFsaDetails(ConfigurationFields.FsaReportDetailsRequiredFields, ConfigurationFields.FsaReportDetailsComparisionFields));
                 output.Add(sb.ToString());
                 foreach(var detail in fsaDetails)
                 {
-                    output.Add(detail.ToList().GenerateHtmlTableV4(ConfigurationFields.FsaReportDetailsRequiredFields, ConfigurationFields.FsaReportDetailsComparisionFields));
+                    output.Add(detail.ToList().GenerateFsaDetails(ConfigurationFields.FsaReportDetailsRequiredFields, ConfigurationFields.FsaReportDetailsComparisionFields));
                 }
                 sb = new StringBuilder();
-                sb.Append(footer.GenerateHtmlTableV4(ConfigurationFields.FsaReportFooterRequiredFields, ConfigurationFields.FsaReportFooterComparisionFields));
+                sb.Append(footer.GenerateFsaFooter(ConfigurationFields.FsaReportFooterRequiredFields, ConfigurationFields.FsaReportFooterComparisionFields));
                 sb.Append(HtmlUtilityConstants.BodyEndTag).Append(HtmlUtilityConstants.HeadEndTag).Append(HtmlUtilityConstants.HtmlEndTag);
                 output.Add(sb.ToString());
                 return output;
@@ -348,4 +379,8 @@ namespace Sams.Extensions.Data
         //    }
         //}
     }
+
+
+
+    
 }

@@ -308,6 +308,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityMvcActivator.cs" />
+    <Compile Include="Controllers\FsaReportController.cs" />
     <Compile Include="Controllers\BranchnNewController.cs" />
     <Compile Include="Controllers\GroupLReportsController.cs" />
     <Compile Include="Controllers\EmployeeRosterController.cs" />
@@ -458,6 +459,9 @@
     <Content Include="Views\GroupLReports\_RegisterDashboard.cshtml" />
     <Content Include="Views\GroupLReports\_CheckListDashboard.cshtml" />
     <Content Include="Views\GroupLReports\_FSAReport.cshtml" />
+    <Content Include="Views\FsaReport\Index.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

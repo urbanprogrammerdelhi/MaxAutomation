@@ -487,5 +487,256 @@ Func<IEnumerable<T>, TData> dataSelector)
             }
         }
 
+
+        public static string GenerateFsaHeader(this List<FsaReportHeader> list, IEnumerable<string> requiredFields = null, IEnumerable<string> comparisionFields = null) //--where TAny : class()
+        {
+            try
+            {
+                if (list == null || list.Count <= 0) { return string.Empty; }
+                if (requiredFields == null || requiredFields.Count() <= 0)
+                {
+                    requiredFields = typeof(FsaReportHeader).GetProperties().Select(p => p.Name);
+                }
+                StringBuilder sb = new StringBuilder();
+                sb.Append(HtmlUtilityConstants.FsaHeaderTableBeginFormat).Append(HtmlUtilityConstants.BeginRowTag);
+                foreach (var field in requiredFields)
+                {
+                    sb.Append(string.Format(HtmlUtilityConstants.FsaHeaderThBeginFormat, field));
+                }
+                sb.Append(HtmlUtilityConstants.EndRowTag);
+                int counter = 1;
+                foreach (var row in list)
+                {
+                    sb.Append(HtmlUtilityConstants.BeginRowTag);
+                    foreach (var field in comparisionFields)
+                    {
+                        var property = row.GetType().GetProperty(field.Replace(" ", string.Empty).Trim());
+                        if (property != null)
+                        {  
+                           sb.Append(string.Format(HtmlUtilityConstants.ColumnFormat, property.GetValue(row, null)));                           
+                        }
+                        else
+                        {
+                            sb.Append(string.Format(HtmlUtilityConstants.ColumnFormat, string.Empty));
+
+                        }
+                    }
+                    sb.Append(HtmlUtilityConstants.EndRowTag);
+                    counter++;
+                }
+                sb.Append(HtmlUtilityConstants.EndTableTag);
+                return sb.ToString();
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public static string GenerateFsaDetails(this List<FsaReportDetails> list, IEnumerable<string> requiredFields = null, IEnumerable<string> comparisionFields = null) //--where TAny : class()
+        {
+            try
+            {
+                if (list == null || list.Count <= 0) { return string.Empty; }
+                if (requiredFields == null || requiredFields.Count() <= 0)
+                {
+                    requiredFields = typeof(FsaReportHeader).GetProperties().Select(p => p.Name);
+                }
+                StringBuilder sb = new StringBuilder();
+                sb.Append(HtmlUtilityConstants.FsaHeaderTableBeginFormat).Append(HtmlUtilityConstants.BeginRowTag);
+
+                foreach (var field in requiredFields)
+                {
+                    var columnSize = 10;
+                    switch(field)
+                    {
+                        case "SlNo.":
+                            columnSize = 10;
+                            break;
+                        case "Category":
+                            columnSize = 40;
+                            break;
+                        case "Audit":
+                            columnSize = 15;
+                            break;
+                        case "Required Action":
+                            columnSize = 10;
+                            break;
+                        case "Pictures":
+                            columnSize = 35;
+                            break;
+                    }
+                    
+                    sb.Append(string.Format(HtmlUtilityConstants.FsaHeaderDetailsHeaderBeginFormat,columnSize, field));
+                }
+                sb.Append(HtmlUtilityConstants.EndRowTag);
+                int counter = 1;
+                foreach (var row in list)
+                {
+                    sb.Append(HtmlUtilityConstants.BeginRowTag);
+                    foreach (var field in comparisionFields)
+                    {
+                        var property = row.GetType().GetProperty(field.Replace(" ", string.Empty).Trim());
+                        if (property != null)
+                        {
+                            if (property.PropertyType == typeof(byte[]))
+                            {
+                                var image = property.GetValue(row, null);
+                                if (image != null)
+                                {
+                                    sb.Append(HtmlUtilityConstants.DefaultCellBeginFormat);
+                                    sb.Append(HtmlUtilityConstants.ImageStartingTag);
+                                    sb.Append(Convert.ToBase64String((byte[])image) + "' />");
+                                    sb.Append(HtmlUtilityConstants.DefaultCellEndingTag);
+                                }
+                                else
+                                {
+                                    sb.Append(string.Format(HtmlUtilityConstants.ColumnFormat, property.GetValue(row, null)));
+                                }
+                            }
+                            else if (property.PropertyType == typeof(string) && property.Name.Contains("Pictures"))
+                            {
+                                var image = property.GetValue(row, null);
+                                if (image != null && !string.IsNullOrEmpty(image.ParseToText()))
+                                {
+                                    sb.Append(HtmlUtilityConstants.DefaultImageCellBeginFormat);
+                                    var imageCell = HtmlUtilityConstants.ImageUrlFormat;
+                                    //imageCell = imageCell.Replace("@imageUrl", $"https://www.ifm360.in/APS/FSAImages/{image}");
+                                    imageCell = imageCell.Replace("@imageUrl", $"{ConfigurationManager.AppSettings["FSAImagePath"].ParseToText()}/{image}");
+
+                                    sb.Append(imageCell);
+                                    sb.Append(HtmlUtilityConstants.DefaultCellEndingTag);
+                                }
+                                else
+                                {
+                                    var noImageFormat = HtmlUtilityConstants.noimageformat.Replace("ImageUrl", ConfigurationManager.AppSettings["BaseUrl"] + "NoImagesFound.jpg");
+                                    sb.Append(string.Format(HtmlUtilityConstants.ImageColumnFormat, noImageFormat));
+                                }
+                            }
+
+                            else
+                            {
+                                sb.Append(string.Format(HtmlUtilityConstants.ColumnFormat, property.GetValue(row, null)));
+                            }
+                        }
+                        else
+                        {
+
+                            sb.Append(string.Format(HtmlUtilityConstants.ColumnFormat, string.Empty));
+
+                        }
+                    }
+                    sb.Append(HtmlUtilityConstants.EndRowTag);
+                    counter++;
+                }
+                sb.Append(HtmlUtilityConstants.EndTableTag);
+                return sb.ToString();
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public static string GenerateFsaFooter(this List<FsaReportFooter> list, IEnumerable<string> requiredFields = null, IEnumerable<string> comparisionFields = null) //--where TAny : class()
+        {
+            try
+            {
+                if (list == null || list.Count <= 0) { return string.Empty; }
+                if (requiredFields == null || requiredFields.Count() <= 0)
+                {
+                    requiredFields = typeof(FsaReportHeader).GetProperties().Select(p => p.Name);
+                }
+                StringBuilder sb = new StringBuilder();
+                sb.Append(HtmlUtilityConstants.FsaHeaderTableBeginFormat).Append(HtmlUtilityConstants.BeginRowTag);
+
+                foreach (var field in requiredFields)
+                {
+                    var columnSize = 10;
+                    switch (field)
+                    {
+                        case "SlNo.":
+                            columnSize = 10;
+                            break;
+                        case "Category":
+                            columnSize = 80;
+                            break;
+                        case "Qty":
+                            columnSize = 10;
+                            break;
+                       
+                    }
+
+                    sb.Append(string.Format(HtmlUtilityConstants.FsaHeaderDetailsHeaderBeginFormat, columnSize, field));
+                }
+                sb.Append(HtmlUtilityConstants.EndRowTag);
+                int counter = 1;
+                foreach (var row in list)
+                {
+                    sb.Append(HtmlUtilityConstants.BeginRowTag);
+                    foreach (var field in comparisionFields)
+                    {
+                        var property = row.GetType().GetProperty(field.Replace(" ", string.Empty).Trim());
+                        if (property != null)
+                        {
+                            if (property.PropertyType == typeof(byte[]))
+                            {
+                                var image = property.GetValue(row, null);
+                                if (image != null)
+                                {
+                                    sb.Append(HtmlUtilityConstants.DefaultCellBeginFormat);
+                                    sb.Append(HtmlUtilityConstants.ImageStartingTag);
+                                    sb.Append(Convert.ToBase64String((byte[])image) + "' />");
+                                    sb.Append(HtmlUtilityConstants.DefaultCellEndingTag);
+                                }
+                                else
+                                {
+                                    sb.Append(string.Format(HtmlUtilityConstants.ColumnFormat, property.GetValue(row, null)));
+                                }
+                            }
+                            else if (property.PropertyType == typeof(string) && property.Name.Contains("Pictures"))
+                            {
+                                var image = property.GetValue(row, null);
+                                if (image != null && !string.IsNullOrEmpty(image.ParseToText()))
+                                {
+                                    sb.Append(HtmlUtilityConstants.DefaultImageCellBeginFormat);
+                                    var imageCell = HtmlUtilityConstants.ImageUrlFormat;
+                                    imageCell = imageCell.Replace("@imageUrl", $"https://www.ifm360.in/APS/FSAImages/{image}");
+                                    sb.Append(imageCell);
+                                    sb.Append(HtmlUtilityConstants.DefaultCellEndingTag);
+                                }
+                                else
+                                {
+                                    var noImageFormat = HtmlUtilityConstants.noimageformat.Replace("ImageUrl", ConfigurationManager.AppSettings["BaseUrl"] + "NoImagesFound.jpg");
+                                    sb.Append(string.Format(HtmlUtilityConstants.ImageColumnFormat, noImageFormat));
+                                }
+                            }
+
+                            else
+                            {
+                                sb.Append(string.Format(HtmlUtilityConstants.ColumnFormat, property.GetValue(row, null)));
+                            }
+                        }
+                        else
+                        {
+
+                            sb.Append(string.Format(HtmlUtilityConstants.ColumnFormat, string.Empty));
+
+                        }
+                    }
+                    sb.Append(HtmlUtilityConstants.EndRowTag);
+                    counter++;
+                }
+                sb.Append(HtmlUtilityConstants.EndTableTag);
+                return sb.ToString();
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
     }
 }

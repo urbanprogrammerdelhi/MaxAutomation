@@ -12,7 +12,9 @@ namespace Sams.Extensions.Business
     {
         List<GroupLReportDataSet> GenerateDashboard(GroupLReportSearchModel searchModel);
         List<string> GenerateDashboardReport(GroupLReportSearchModel searchModel);
-        List<string> GenerateFsaReportDetails(GroupLReportSearchModel searchModel);
+        List<string> GenerateFsaReportDetails(FsaSearchModel searchModel);
+        FsaReportData FsaDetails(FsaSearchModel searchModel);
+
         //GroupLReportDataSet<DataSet> GenerateFsaReport(GroupLReportSearchModel searchModel);
 
 

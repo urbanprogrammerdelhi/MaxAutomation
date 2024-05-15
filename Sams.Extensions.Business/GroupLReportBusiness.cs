@@ -18,6 +18,18 @@ namespace Sams.Extensions.Business
             _reportData = reportData;
         }
 
+        public FsaReportData FsaDetails(FsaSearchModel searchModel)
+        {
+            try
+            {
+                return _reportData.FsaDetails(searchModel);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         public List<GroupLReportDataSet> GenerateDashboard(GroupLReportSearchModel searchModel)
         {
             try
@@ -42,7 +54,7 @@ namespace Sams.Extensions.Business
         //    }
         //}
 
-        public List<string> GenerateFsaReportDetails(GroupLReportSearchModel searchModel)
+        public List<string> GenerateFsaReportDetails(FsaSearchModel searchModel)
         {
             try
             {
@@ -53,6 +65,8 @@ namespace Sams.Extensions.Business
                 throw;
             }
         }
+
+      
 
         List<string> IGroupLReportBusiness.GenerateDashboardReport(GroupLReportSearchModel searchModel)
         {

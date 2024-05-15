@@ -12,7 +12,8 @@ namespace Sams.Extensions.Data
     {
         List<GroupLReportDataSet> GenerateDashboard(GroupLReportSearchModel searchModel);
         List<string> GenerateDashboardReport(GroupLReportSearchModel searchModel);
-        List<string> GenerateFsaReportDetails(GroupLReportSearchModel searchModel);
+        List<string> GenerateFsaReportDetails(FsaSearchModel searchModel);
+        FsaReportData FsaDetails(FsaSearchModel searchModel);
         //GroupLReportDataSet GenerateFsaReport(GroupLReportSearchModel searchModel);
     }
 }

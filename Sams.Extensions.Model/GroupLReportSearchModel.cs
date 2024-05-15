@@ -17,4 +17,11 @@ namespace Sams.Extensions.Model
         public string SiteCode { get; set; }
 
     }
+    public class FsaSearchModel
+    {
+        public string ClientCode { get; set; }
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
+
+    }
 }

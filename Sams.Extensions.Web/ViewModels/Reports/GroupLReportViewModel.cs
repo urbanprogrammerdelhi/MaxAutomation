@@ -32,10 +32,7 @@ namespace Sams.Extensions.Web
 
 
     }
-    public class Repor
-    {
-        public DataTable ReportData { get; set; }
-        public string[] RequiredFields { get; set; }
-        public string[] ComparisionFields { get; set; }
-    }
+   
+
+
 }

@@ -15,4 +15,15 @@ namespace Sams.Extensions.Model
         public string[] ComparisionFields { get; set; }
        
     }
+    public class FsaReportData
+    {
+        public FsaReportHeader CurrentHeader => new FsaReportHeader();
+        public FsaReportDetails CurrentDetails => new FsaReportDetails();
+        public FsaReportFooter CurrentFooter => new FsaReportFooter();
+        public List<FsaReportHeader> Header { get; set; }
+        public List<FsaReportDetails> Details { get; set; }
+        public List<FsaReportFooter> Footer { get; set; }
+
+       
+    }
 }

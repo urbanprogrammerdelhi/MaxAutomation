@@ -201,14 +201,9 @@ namespace Sams.Extensions.Web.Controllers
                 //var reports = _groupLReportBusiness.GenerateDashboardReport(new GroupLReportSearchModel { EmployeeNumber = "All", ReportDate = "07-06-2023 00:00", LocationAutoId = "1",CurrentReport=GroupLReports.RegisterDashboard });
                 #endregion
                 List<string> reports;
-                if (searchModel.CurrentReport == GroupLReports.FSAReport)
-                {
-                    reports = _groupLReportBusiness.GenerateFsaReportDetails(searchModel);
-                }
-                else
-                {
+                
                     reports = _groupLReportBusiness.GenerateDashboardReport(searchModel);
-                }
+               
                 if (reports == null || reports.Count <= 0)
                 {
                     TempData["Message"] = new MessageInfo { HasIssue = false, Message = "No records found" };
@@ -238,8 +233,10 @@ namespace Sams.Extensions.Web.Controllers
                 }
                 var pdfBytes = mainDocument.Save();
                 mainDocument.Close();
-                FileResult fileResult = new FileContentResult(pdfBytes, "application/pdf");
-                fileResult.FileDownloadName = $"Document_Part{counter}.pdf";
+                FileResult fileResult = new FileContentResult(pdfBytes, "application/pdf")
+                {
+                    FileDownloadName = $"Document_Part{counter}.pdf"
+                };
                 fileResult.ExecuteResult(this.ControllerContext);
                 return fileResult;
 

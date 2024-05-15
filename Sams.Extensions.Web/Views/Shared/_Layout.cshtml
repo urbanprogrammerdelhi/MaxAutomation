@@ -38,7 +38,11 @@
                         }
 
                         <li>@Html.ActionLink("Reports", "Index", "GroupLReports")</li>
+                        @if (userInfo.UserName.ToLower().Contains("fsa"))
+                        {
+                            <li>@Html.ActionLink("FSA Reports", "Index", "FsaReport")</li>
 
+                        }
                     </ul>
                     @Html.Partial("_LoginPartial")
                 </div>
