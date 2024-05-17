@@ -95,11 +95,11 @@ namespace Sams.Extensions.Web.Controllers
                     vm.CurrentReport = ((int)searchModel.CurrentReport).ParseToText();
                     vm.ClientCode = searchModel.ClientCode;
                     vm.SiteCode = searchModel.SiteCode;
-                    if (!string.IsNullOrEmpty(vm.CurrentLocation))
-                    {
-                        var clients = _master.FetchClients(vm.CurrentLocation);
-                        vm.Clients = clients.ToSelectList("ClientCode", "ClientName");
-                    }
+                    //if (!string.IsNullOrEmpty(vm.CurrentLocation))
+                    //{
+                    //    var clients = _master.FetchClients(vm.CurrentLocation,vm.ClientCode, vm.CurrentCompany);
+                    //    vm.Clients = clients.ToSelectList("ClientCode", "ClientName");
+                    //}
                     if (!string.IsNullOrEmpty(vm.ClientCode))
                     {
                         var sites = _master.FetchSites(vm.CurrentLocation, vm.ClientCode, vm.CurrentCompany);
@@ -312,13 +312,13 @@ namespace Sams.Extensions.Web.Controllers
 
 
 
-        [HttpPost]
-        public ActionResult FetchClients(string locationCode)
-        {
-            var locations = _master.FetchClients(locationCode);
-            var locationList = locations.ToSelectList("ClientCode", "ClientName");
-            return Json(locationList, JsonRequestBehavior.AllowGet);
-        }
+       // [HttpPost]
+        //public ActionResult FetchClients(string locationCode, string year, string Quater)
+        //{
+        //    var locations = _master.FetchClients(locationCode, year, Quater);
+        //    var locationList = locations.ToSelectList("ClientCode", "ClientName");
+        //    return Json(locationList, JsonRequestBehavior.AllowGet);
+        //}
         [HttpPost]
         public ActionResult FetchSites(string locationCode,string clientCode,string companyCode)
         {

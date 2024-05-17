@@ -32,7 +32,7 @@
         <div style="width:100%;padding:10px;">
             <div class="PageHeaderSection" style="height:100%;position:unset;">
                 <div class="card">
-                    <div class="card-body bg-info text-white text-center"><h4>Fire security Audit Report</h4></div>
+                    <div class="card-body bg-info text-white text-center"><h4>Fire Safety Audit Report</h4></div>
                 </div>
                 <div class="card-body">
 
@@ -49,7 +49,7 @@
                             </div>
                             <div class="col-md-3">
                                 <label for="Location">Zone</label>
-                                @Html.DropDownListFor(model => model.CurrentLocation, Model.Locations as List<SelectListItem>, "Select Zone", new { @class = "form-control" })
+                                @Html.DropDownListFor(model => model.CurrentLocation, Model.Locations as List<SelectListItem>, "All", new { @class = "form-control" })
                             </div>
                             <div class="col-md-3">
                                 <label for="Location">Client</label>
@@ -156,7 +156,7 @@
                                     else
                                     {
                                         <td style="border: 1px solid #ccc;padding:5px;">
-                                            <img src="@imageUrl" width="150" height="150" />
+                                            <img src="@imageUrl" width="150" height="150"  />
                                         </td>
                                     }
 
@@ -246,11 +246,11 @@
                 alert('Please select a Quarter to continue');
                 return false;
             }
-            let selectedLocation = $("#CurrentLocation").val();
-            if (selectedLocation == null || selectedLocation == '' || selectedLocation=='Select Zone') {
-                alert('Please select a Zone to continue');
-                return false;
-            }
+            //let selectedLocation = $("#CurrentLocation").val();
+            //if (selectedLocation == null || selectedLocation == '' || selectedLocation=='Select Zone') {
+            //    alert('Please select a Zone to continue');
+            //    return false;
+            //}
 
             let selectedClient = $("#CurrentClient").val();
             if (selectedClient == null || selectedClient == '' || selectedClient == 'Select Client') {
@@ -263,13 +263,45 @@
 
          $("#CurrentLocation").change(function () {
 
-            let locationCode = $(this).val();
+             let locationCode = $(this).val();
+             let selectedYear = $("#CurrentYear").val();
+             let selectedQuarter = $("#CurrentQuarter").val();
             $.ajax({
                 cache: false,
                 type: "POST",
                 url: '@Url.Action("FetchClients", "FsaReport")',
-                data: { "locationCode": locationCode },
+                data: { "locationCode": locationCode, selectedYear, selectedQuarter },
                 success: function (json, textStatus) {
+
+                    $("#CurrentClient").empty();
+
+                    json = json || {};
+                    $("#CurrentClient").append('<option>Select Client </option>');
+
+                    for (var i = 0; i < json.length; i++) {
+                        $("#CurrentClient").append('<option value="' + json[i].Value + '">' + json[i].Text + '</option>');
+                    }
+                },
+                error: function () {
+                    alert("Data Not Found");
+                }
+                });
+
+        });
+
+        $("#CurrentQuarter").change(function () {
+
+            let locationCode = $("#CurrentLocation").val();
+             let selectedYear = $("#CurrentYear").val();
+            let selectedQuarter = $(this).val();
+            
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: '@Url.Action("FetchClients", "FsaReport")',
+                data: { "locationCode": locationCode, selectedYear, selectedQuarter },
+                success: function (json, textStatus) {
+
                     $("#CurrentClient").empty();
 
                     json = json || {};

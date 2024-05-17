@@ -28,7 +28,7 @@ namespace Sams.Extensions.Utility
 
         public static readonly string DefaultCellEndingTag = "</td>";
         public static readonly string ImageStartingTag = "<img height='75px' width='75px' src=\'data:image/jpg;base64,";
-        public static readonly string ImageUrlFormat = "<img height='150px' width='150px' src=@imageUrl ></img>";
+        public static readonly string ImageUrlFormat = "<img height='150px' width='150px' src=@imageUrl onclick=window.open(@url,'Image','width=100%,height=100%,resizable=1'); ></img>";
         public static readonly string noimageformat = "<img src ='ImageUrl' height='150px' width='150px' />";
 
 

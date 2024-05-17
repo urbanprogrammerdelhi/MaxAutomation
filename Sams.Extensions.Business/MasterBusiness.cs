@@ -17,9 +17,9 @@ namespace Sams.Extensions.Business
             _masterData = masterData;
         }
 
-        public List<ClientModel> FetchClients(string locationId)
+        public List<ClientModel> FetchClients(string locationId,DateTime? fromDate, DateTime? toDate)
         {
-            return _masterData.FetchClients(locationId);
+            return _masterData.FetchClients(locationId, fromDate, toDate);
         }
 
         public List<CompanyDetails> FetchCompanyDetails()

@@ -104,16 +104,18 @@ namespace Sams.Extensions.Dal
             }
         }
 
-        public List<ClientModel> FetchClients(string locationId)
+        public List<ClientModel> FetchClients(string locationId, DateTime? fromDate , DateTime? toDate)
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
                 SqlCommand command = new SqlCommand();
                 command.Connection = connection;
-                command.CommandText = "udp_GetClientListGroupL";
+                command.CommandText = "udp_GetClientListGroupL_1";
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.Add(new SqlParameter("@LocationAutoID", locationId));
+                command.Parameters.Add(new SqlParameter("@FromDate", fromDate));
+                command.Parameters.Add(new SqlParameter("@ToDate", toDate));
                 SqlDataAdapter adpt = new SqlDataAdapter();
                 adpt.SelectCommand = command;
                 var dt = new DataTable();

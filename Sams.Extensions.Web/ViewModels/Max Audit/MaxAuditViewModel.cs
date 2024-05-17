@@ -16,9 +16,9 @@ namespace Sams.Extensions.Web
     {
 
         private static readonly string[] FirstQuarter = new string[] {"1","2","3" };
-        private static readonly string[] SecondQuarter = new string[] { "4", "5", "6" };
-        private static readonly string[] ThirdQuarter = new string[] { "7", "8", "9" };
-        private static readonly string[] FourthQuarter = new string[] { "10", "11", "12" };
+        private static readonly string[] SecondQuarter = new string[] { "4","5","6" };
+        private static readonly string[] ThirdQuarter = new string[] { "7","8","9" };
+        private static readonly string[] FourthQuarter = new string[] { "10","11","12" };
         private static readonly Dictionary<string, string[]> QuarterDictionary = new Dictionary<string, string[]>
         {
             {"Jan-Mar",FirstQuarter },
@@ -115,9 +115,7 @@ namespace Sams.Extensions.Web
         public string CurrentClient { get; set; }
         public string CurrentYear { get; set; }
         public string CurrentQuarter { get; set; }
-
-
-     
+                    
         public static FsaViewModel DefaultInstance
         {
             get
@@ -126,7 +124,7 @@ namespace Sams.Extensions.Web
                 return new FsaViewModel
                 {
                     ReportData = new FsaReportData(),
-                    CurrentLocation = string.Empty,
+                    CurrentLocation = "All",
                     Locations = new List<SelectListItem>(),
                     Clients= new List<SelectListItem>(),
                     CurrentClient=string.Empty,

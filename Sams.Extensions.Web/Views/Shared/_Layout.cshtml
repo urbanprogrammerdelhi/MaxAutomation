@@ -11,9 +11,9 @@
    
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
+    <div class="navbar navbar-inverse navbar-fixed-top" >
+        <div class="container" >
+            <div class="navbar-header" >
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -23,8 +23,8 @@
             @if (Session["UserInfo"] != null)
             {
                 var userInfo = (Account)Session["UserInfo"];
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
+                <div class="navbar-collapse collapse"  >
+                    <ul class="nav navbar-nav" style="color:aqua"  >
                         @*@if (userInfo.Company.ToUpper() == "KSAAMSS")
         {
             <li>@Html.ActionLink("Upload Employee Roster", "Index", "EmployeeRoster")</li>
@@ -32,7 +32,7 @@
         }*@
                         @if (userInfo.Company.ToUpper() == "MAX")
                         {
-                            <li>@Html.ActionLink("Max Automation", "Index", "Branch")</li>
+                            <li style="color:rebeccapurple !important">@Html.ActionLink("Max Automation", "Index", "Branch")</li>
                             <li>@Html.ActionLink("Max Automation New", "Index", "BranchNew")</li>
 
                         }
@@ -55,9 +55,9 @@
     <div class="container body-content" style="margin:5px;">
         @RenderBody()
         <hr />
-        <footer>
+        @*<footer>
             <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
+        </footer>*@
     </div>
 
     @Scripts.Render("~/bundles/jquery")

@@ -184,10 +184,7 @@ namespace Sams.Extensions.Utility
                 throw;
             }
         }
-
-
-
-
+                     
         public static int ParseToInteger(this string str)
         {
             if (int.TryParse(str, out int result)) return result;
@@ -601,12 +598,13 @@ Func<IEnumerable<T>, TData> dataSelector)
                                 {
                                     sb.Append(HtmlUtilityConstants.DefaultImageCellBeginFormat);
                                     var imageCell = HtmlUtilityConstants.ImageUrlFormat;
-                                    //imageCell = imageCell.Replace("@imageUrl", $"https://www.ifm360.in/APS/FSAImages/{image}");
-                                    imageCell = imageCell.Replace("@imageUrl", $"{ConfigurationManager.AppSettings["FSAImagePath"].ParseToText()}/{image}");
-
+                                    imageCell = imageCell.Replace("@imageUrl", $"https://www.ifm360.in/APS/FSAImages/{image}");
+                                  //  imageCell = imageCell.Replace("@imageUrl", $"{ConfigurationManager.AppSettings["FSAImagePath"].ParseToText()}/{image}");
+                                    imageCell = imageCell.Replace("@url", $"https://www.ifm360.in/APS/FSAImages/WhatsApp%20Image%202022-10-14%20at%2012.23.30%20PM.jpeg");
                                     sb.Append(imageCell);
                                     sb.Append(HtmlUtilityConstants.DefaultCellEndingTag);
                                 }
+    
                                 else
                                 {
                                     var noImageFormat = HtmlUtilityConstants.noimageformat.Replace("ImageUrl", ConfigurationManager.AppSettings["BaseUrl"] + "NoImagesFound.jpg");

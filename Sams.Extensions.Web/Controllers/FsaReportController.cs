@@ -41,15 +41,17 @@ namespace Sams.Extensions.Web.Controllers
                 var currentCompany = (Session["UserInfo"] as Account).Company;
                 var locations = _master.FetchLocations(currentCompany, "All");
                 vm.Locations = locations.ToSelectList("LocationAutoId", "Locationdesc");
-                if (!string.IsNullOrEmpty(vm.CurrentLocation))
-                {
-                    var clients = _master.FetchClients(vm.CurrentLocation);
-                    vm.Clients = clients.ToSelectList("ClientCode", "ClientName");
-                }
+                
+               
                 DateTime? fromDate;
                 DateTime? toDate;
                 FsaConstants.CalculateFromToDate(vm.CurrentYear, vm.CurrentQuarter, out fromDate, out toDate);
-               
+
+                //if (!string.IsNullOrEmpty(vm.CurrentLocation))
+                //{
+                    var clients = _master.FetchClients(vm.CurrentLocation, fromDate, toDate);
+                    vm.Clients = clients.ToSelectList("ClientCode", "ClientName");
+               // }
                 vm.ReportData = _groupLReportBusiness.FsaDetails(new FsaSearchModel { ClientCode = vm.CurrentClient, FromDate = fromDate, ToDate = toDate });
                 return View(vm);
             }
@@ -76,13 +78,16 @@ namespace Sams.Extensions.Web.Controllers
             var locations = _master.FetchLocations(CompanyCode, RegionCode);
             var locationList = locations.ToSelectList("LocationAutoId", "Locationdesc");
             return Json(locationList, JsonRequestBehavior.AllowGet);
-        }
-       
+        }      
      
         [HttpPost]
-        public ActionResult FetchClients(string locationCode)
+        public ActionResult FetchClients(string locationCode, string selectedYear, string selectedQuarter)
         {
-            var locations = _master.FetchClients(locationCode);
+            DateTime? fromDate;
+            DateTime? toDate;
+            FsaConstants.CalculateFromToDate(selectedYear, selectedQuarter, out fromDate, out toDate);
+
+            var locations = _master.FetchClients(locationCode, fromDate, toDate);
             var locationList = locations.ToSelectList("ClientCode", "ClientName");
             return Json(locationList, JsonRequestBehavior.AllowGet);
         }
