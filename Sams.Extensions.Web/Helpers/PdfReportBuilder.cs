@@ -62,7 +62,7 @@ namespace Sams.Extensions
             return imagecell;
         }
 
-        private PdfPCell DefaultImageCell(byte[] ImageStream, CellPadding padding)
+        private PdfPCell DefaultImageCell(byte[] ImageStream, CellPadding padding,string viewMoreUrl)
         {
             PdfPCell imagecell = new PdfPCell();
 
@@ -73,6 +73,11 @@ namespace Sams.Extensions
                     Image image = Image.GetInstance(ImageStream);
                     image.ScaleAbsolute(100, 50);
                     imagecell.AddElement(image);
+                    Paragraph paragraph = new Paragraph();
+                    Anchor anchor = new Anchor("View");
+                    anchor.Reference = viewMoreUrl;
+                    paragraph.Add(anchor);
+                    imagecell.AddElement(paragraph);
                 }
                 else
                 {
@@ -81,6 +86,8 @@ namespace Sams.Extensions
                     image.ScaleAbsolute(100, 40);
                     imagecell.AddElement(image);
                 }
+
+              
                 imagecell.PaddingTop = padding.Top;
                 imagecell.PaddingBottom = padding.Bottom;
                 imagecell.PaddingLeft = padding.Left;
@@ -152,7 +159,7 @@ namespace Sams.Extensions
             }
             _pdfDoc.Add(topHeaderValue);
         }
-        public void CreateDetails(ILookup<string, ReportBody> details)
+        public void CreateDetails(ILookup<string, ReportBody> details,string viewMoreUrl)
         {
             var baseUrl = ConfigurationManager.AppSettings["BaseUrl"].ToString();
 
@@ -177,9 +184,9 @@ namespace Sams.Extensions
                         table.AddCell(DetailCell(checkListItem.ChecklistId.ToString(), DetailBackgroundColor, new CellPadding { Bottom = 5, Top = 5, Left = 20, Right = 0 }));
                         table.AddCell(DetailCell(checkListItem.SubHeader, DetailBackgroundColor, DetailDefaultLongPadding));
                         table.AddCell(DetailCell(checkListItem.Text, DetailBackgroundColor, new CellPadding { Bottom = 5, Top = 5, Left = 40, Right = 0 }));
-
+                        var newviewMoreUrl = viewMoreUrl + $"&CheckListId={checkListItem.NewChecklistId}";
                         var imageArray = _branchCodeData.GetImageById(checkListItem.ImageAutoId, !string.IsNullOrEmpty(checkListItem.ChecklistType));
-                        table.AddCell(DefaultImageCell(imageArray, DetailDefaultLongPadding));
+                        table.AddCell(DefaultImageCell(imageArray, DetailDefaultLongPadding, newviewMoreUrl));
                         table.AddCell(DetailCell(checkListItem.Remarks, DetailBackgroundColor, DetailDefaultRemarksPadding));
                     }
                 }

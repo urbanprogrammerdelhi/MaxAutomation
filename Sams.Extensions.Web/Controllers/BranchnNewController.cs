@@ -6,6 +6,7 @@ using Sams.Extensions.Logger;
 using Sams.Extensions.Model;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -98,14 +99,15 @@ namespace Sams.Extensions.Web.Controllers
                 string branch = Request.Form["Branch"].ToString();
                 string auditdate = Request.Form["AuditDate"].ToString();
                 string checkListType = Request.Form["CheckListType"].ToString();
-
+                var viewMoreUrl = ConfigurationManager.AppSettings["MaxReportImageEndpoint"].ToString();
+                viewMoreUrl += $"?AuditDate={auditdate}&Location={location}&Branch={branch}";
                 var data = _dataAccesLayer.GetReportValuesV2(location, branch, auditdate, checkListType);
                 Document pdfDoc = new Document(PageSize.A4, 0, 0, 0, 0);
                 PdfWriter pdfWriter = PdfWriter.GetInstance(pdfDoc, Response.OutputStream);
                 pdfDoc.Open();
                 PdfReportBuilder builder = new PdfReportBuilder(pdfDoc, _dataAccesLayer);
                 builder.CreateHeader(data.Header);
-                builder.CreateDetails(data.MasterdetailList);
+                builder.CreateDetails(data.MasterdetailList, viewMoreUrl);
                 pdfWriter.CloseStream = false;
                 pdfDoc.Close();
                 Response.Buffer = true;

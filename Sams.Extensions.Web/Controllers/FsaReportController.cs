@@ -8,6 +8,7 @@ using Sams.Extensions.Utility;
 using SelectPdf;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -127,49 +128,72 @@ namespace Sams.Extensions.Web.Controllers
                 vm.CurrentClient = Request.Form["CurrentClient"].ParseToText();
                 vm.CurrentYear = Request.Form["CurrentYear"].ParseToText();
                 vm.CurrentQuarter = Request.Form["CurrentQuarter"].ParseToText();
-
-                SelectPdf.PdfDocument mainDocument = new SelectPdf.PdfDocument();
-               
                 DateTime? fromDate;
                 DateTime? toDate;
                 FsaConstants.CalculateFromToDate(vm.CurrentYear, vm.CurrentQuarter, out fromDate, out toDate);
-                var reports = _groupLReportBusiness.GenerateFsaReportDetails(new FsaSearchModel {ClientCode=vm.CurrentClient,FromDate=fromDate,ToDate=toDate });
 
-                if (reports == null || reports.Count <= 0)
-                {
-                    TempData["Message"] = new MessageInfo { HasIssue = false, Message = "No records found" };
-                    return RedirectToAction("Index");
-                }
-                int counter = 1;
-                foreach (var htmlString in reports)
-                {
-                    HtmlToPdf converter = new HtmlToPdf();
-
-                    // set converter options
-                    converter.Options.PdfPageSize = PdfPageSize.A4;
-                    converter.Options.PdfPageOrientation = PdfPageOrientation.Portrait;
-                    converter.Options.WebPageWidth = 1024;
-                    converter.Options.WebPageHeight = 768;
-
-                    // create a new pdf document converting an url
-                    //= converter.ConvertHtmlString(htmlString);
-                    mainDocument.Append(converter.ConvertHtmlString(htmlString));
-
-                    // close pdf document
+                #region Commented
+                //SelectPdf.PdfDocument mainDocument = new SelectPdf.PdfDocument();
 
 
-                    // return resulted pdf document
+                //var reports = _groupLReportBusiness.GenerateFsaReportDetails(new FsaSearchModel {ClientCode=vm.CurrentClient,FromDate=fromDate,ToDate=toDate });
 
-                    counter++;
-                }
-                var pdfBytes = mainDocument.Save();
-                mainDocument.Close();
-                FileResult fileResult = new FileContentResult(pdfBytes, "application/pdf")
-                {
-                    FileDownloadName = $"{vm.CurrentClient}_{DateTime.Now.ToString("ddmmyyyyhhmmss")}.pdf"
-                };
-                fileResult.ExecuteResult(this.ControllerContext);
-                return fileResult;
+                //if (reports == null || reports.Count <= 0)
+                //{
+                //    TempData["Message"] = new MessageInfo { HasIssue = false, Message = "No records found" };
+                //    return RedirectToAction("Index");
+                //}
+                //int counter = 1;
+                //foreach (var htmlString in reports)
+                //{
+                //    HtmlToPdf converter = new HtmlToPdf();
+
+                //    // set converter options
+                //    converter.Options.PdfPageSize = PdfPageSize.A4;
+                //    converter.Options.PdfPageOrientation = PdfPageOrientation.Portrait;
+                //    converter.Options.WebPageWidth = 1024;
+                //    converter.Options.WebPageHeight = 768;
+
+                //    // create a new pdf document converting an url
+                //    //= converter.ConvertHtmlString(htmlString);
+                //    mainDocument.Append(converter.ConvertHtmlString(htmlString));
+
+                //    // close pdf document
+
+
+                //    // return resulted pdf document
+
+                //    counter++;
+                //}
+                //var pdfBytes = mainDocument.Save();
+                //mainDocument.Close();
+                //FileResult fileResult = new FileContentResult(pdfBytes, "application/pdf")
+                //{
+                //    FileDownloadName = $"{vm.CurrentClient}_{DateTime.Now.ToString("ddmmyyyyhhmmss")}.pdf"
+                //};
+                //fileResult.ExecuteResult(this.ControllerContext);
+                //return fileResult;
+                #endregion
+
+
+                var fsaData = _groupLReportBusiness.FsaDetails(new FsaSearchModel { ClientCode = vm.CurrentClient, FromDate = fromDate, ToDate = toDate });
+                Document pdfDoc = new Document(PageSize.A4, 0, 0, 0, 0);
+                PdfWriter pdfWriter = PdfWriter.GetInstance(pdfDoc, Response.OutputStream);
+                pdfDoc.Open();
+                FsaReportBuilder builder = new FsaReportBuilder(pdfDoc, _groupLReportBusiness);
+                builder.CreateHeader(fsaData.Header.FirstOrDefault());
+                builder.CreateDetails(fsaData.Details, "");
+                builder.CreateBlankRow();
+                builder.CreateFooter(fsaData.Footer);
+
+                pdfWriter.CloseStream = false;
+                pdfDoc.Close();
+                Response.Buffer = true;
+                Response.ContentType = "application/pdf";
+                Response.AddHeader("content-disposition", $"attachment;filename={vm.CurrentClient}_{DateTime.Now.ToString("ddmmyyyyhhmmss")}.pdf");
+                Response.Cache.SetCacheability(HttpCacheability.NoCache);
+                Response.Write(pdfDoc);
+                Response.End();
 
             }
             catch (Exception ex)
@@ -177,9 +201,25 @@ namespace Sams.Extensions.Web.Controllers
                 _loggerManager.LogError($"Exception in Index {ex}");
                 return View("Error");
             }
+            return View();
         }
+        [AllowAnonymous]
+        public ActionResult ImageViewer(string imageName)
+        {
+            ViewBag.ImageName = imageName;
+            return View();
+        }
+        public ActionResult RetrieveImage(string imageName)
+        {
+          
 
+                //Read the File data into Byte Array.
+                byte[] bytes = System.IO.File.ReadAllBytes($@"{ConfigurationManager.AppSettings["FSAImagePath"]}/{imageName}");
 
+                //Send the File to Download.
+                return File(bytes, "image/jpg");
+            
+        }
 
         public ActionResult SetImage(byte[] image)
         {
