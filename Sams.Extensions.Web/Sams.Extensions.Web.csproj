@@ -378,6 +378,8 @@
     <Content Include="Content\Site.css" />
     <Content Include="Images\ImageWriterUpdated.png" />
     <Content Include="Images\Loader.gif" />
+    <Content Include="Images\Magnifier.jpg" />
+    <Content Include="Images\Magnifier.png" />
     <Content Include="Images\NoImagesFound.jpg" />
     <Content Include="Images\view_more.png" />
     <Content Include="Scripts\ai.0.22.9-build00167.js" />

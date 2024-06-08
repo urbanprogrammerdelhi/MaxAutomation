@@ -73,18 +73,30 @@ namespace Sams.Extensions
             {
                 if (!string.IsNullOrEmpty(imageName))
                 {
-                    //var imageUrl = $"https://www.ifm360.in/APS/FSAImages/{imageName}";
+                    var imageUrl = $"https://www.ifm360.in/APS/FSAImages/{imageName}";
 
-                    //Image image = Image.GetInstance(new Uri(imageUrl, UriKind.RelativeOrAbsolute));
+                    Image image = Image.GetInstance(new Uri(imageUrl, UriKind.RelativeOrAbsolute));
 
-                    Image image = Image.GetInstance($@"{ConfigurationManager.AppSettings["FSAImagePath"]}\{imageName}");
+                    //Image image = Image.GetInstance($@"{ConfigurationManager.AppSettings["FSAImagePath"]}\{imageName}");
                     image.ScaleToFit(120, 120);
                     imagecell.AddElement(image);
+
                     Paragraph paragraph = new Paragraph();
-                    Anchor anchor = new Anchor("View");
+                    Image anchorImage = Image.GetInstance(ConfigurationManager.AppSettings["BaseUrl"].ToString() + @"Magnifier.png");
+                    anchorImage.ScaleToFit(80, 80);
+                    Chunk cImage = new Chunk(anchorImage, 0, 0, false);
+                    Anchor anchor = new Anchor(cImage);
                     anchor.Reference = $@"{ConfigurationManager.AppSettings["FsaReportImageViewer"].ParseToText()}?imageName={imageName}";
                     paragraph.Add(anchor);
                     imagecell.AddElement(paragraph);
+                    
+                    //Paragraph paragraph = new Paragraph();
+                    //Anchor anchor = new Anchor("View");
+                    //anchor.Reference = $@"{ConfigurationManager.AppSettings["FsaReportImageViewer"].ParseToText()}?imageName={imageName}";
+                    //paragraph.Add(anchor);
+                    //imagecell.AddElement(paragraph);
+
+
                 }
                 else
                 {
@@ -144,7 +156,7 @@ namespace Sams.Extensions
             _pdfDoc.Add(headerLabel);
             var currentTable = DefaultTable(2);
             currentTable.SetWidths(new float[] { 30, 70 });
-            currentTable.AddCell(HeaderCell($"MLI Location Name & Code", HeaderBackgroundColor, TopHeader));
+            currentTable.AddCell(HeaderCell($"MLI Location Name", HeaderBackgroundColor, TopHeader));
             currentTable.AddCell(HeaderCell($"Office Address", HeaderBackgroundColor, TopHeader));
             currentTable.AddCell(HeaderCell($"{header.ClientDetails}", DetailBackgroundColor, TopHeader));
             currentTable.AddCell(HeaderCell($"{header.OfficeAddress}", DetailBackgroundColor, TopHeader));
@@ -178,17 +190,17 @@ namespace Sams.Extensions
            
 
             var table = DefaultTable(3);
-            table.SetWidths(new float[] { 10, 70, 20 });
-            table.AddCell(HeaderCell("S.No.", HeaderBackgroundColor, new CellPadding { Bottom = 10, Top = 5, Left = 20, Right = 0 }));
+            table.SetWidths(new float[] { 8, 84, 8 });
+            table.AddCell(HeaderCell("S.No.", HeaderBackgroundColor, new CellPadding { Bottom = 10, Top = 5, Left = 10, Right = 0 }));
             table.AddCell(HeaderCell("Category", HeaderBackgroundColor, new CellPadding { Bottom = 10, Top = 5, Left = 100, Right = 0 }));
-            table.AddCell(HeaderCell("Qty", HeaderBackgroundColor, new CellPadding { Bottom = 10, Top = 5, Left = 40, Right = 0 }));
+            table.AddCell(HeaderCell("Qty", HeaderBackgroundColor, new CellPadding { Bottom = 10, Top = 5, Left = 15, Right = 0 }));
 
             foreach (FsaReportFooter reportFooter in footer)
             {
 
                 table.AddCell(DetailCell(reportFooter.ChecklistID.ParseToText(), DetailBackgroundColor, new CellPadding { Bottom = 5, Top = 5, Left = 20, Right = 0 }));
                 table.AddCell(DetailCell(reportFooter.Category.ParseToText(), DetailBackgroundColor, DetailDefaultLongPadding));
-                table.AddCell(DetailCell(reportFooter.Qty.ParseToText(), DetailBackgroundColor, new CellPadding { Bottom = 5, Top = 5, Left = 40, Right = 0 }));
+                table.AddCell(DetailCell(reportFooter.Qty.ParseToText(), DetailBackgroundColor, new CellPadding { Bottom = 5, Top = 5, Left = 15, Right = 0 }));
             }
             _pdfDoc.Add(table);
         }

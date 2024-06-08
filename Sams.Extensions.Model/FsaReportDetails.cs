@@ -9,7 +9,7 @@ namespace Sams.Extensions.Model
 {
     public class  FsaReportHeader
     {
-        [Display(Name = "MLI Location Name & Code")]
+        [Display(Name = "MLI Location Name")]
         public string ClientDetails { get; set; }
         [Display(Name = "Office Address")]
         public string OfficeAddress { get; set; }
@@ -17,7 +17,7 @@ namespace Sams.Extensions.Model
 
     public class FsaReportDetails
     {
-        [Display(Name ="SlNo")]
+        [Display(Name ="S.No")]
         public string ShowID { get; set; }
         public string Category { get; set; }
         public string Audit { get; set; }
@@ -31,7 +31,7 @@ namespace Sams.Extensions.Model
     public class FsaReportFooter
     {
 
-        [Display(Name = "SlNo")]
+        [Display(Name = "S.No")]
         public string ChecklistID { get; set; }
         public string Category { get; set; }
         public string Qty { get; set; }
