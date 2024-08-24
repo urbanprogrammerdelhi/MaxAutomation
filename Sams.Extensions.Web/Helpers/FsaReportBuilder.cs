@@ -73,11 +73,11 @@ namespace Sams.Extensions
             {
                 if (!string.IsNullOrEmpty(imageName))
                 {
-                    var imageUrl = $"https://www.ifm360.in/APS/FSAImages/{imageName}";
+                    //var imageUrl = $"https://www.ifm360.in/APS/FSAImages/{imageName}";
 
-                    Image image = Image.GetInstance(new Uri(imageUrl, UriKind.RelativeOrAbsolute));
+                    //Image image = Image.GetInstance(new Uri(imageUrl, UriKind.RelativeOrAbsolute));
 
-                    //Image image = Image.GetInstance($@"{ConfigurationManager.AppSettings["FSAImagePath"]}\{imageName}");
+                    Image image = Image.GetInstance($@"{ConfigurationManager.AppSettings["FSAImagePath"]}\{imageName}");
                     image.ScaleToFit(120, 120);
                     imagecell.AddElement(image);
 

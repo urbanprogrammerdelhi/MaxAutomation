@@ -61,7 +61,6 @@ namespace Sams.Extensions.Model
         public string ChecklistType { get; set; }
         public string NewChecklistId { get; set; }
 
-
     }
     public class BranchDetails
     {

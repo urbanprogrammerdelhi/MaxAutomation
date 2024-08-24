@@ -125,6 +125,7 @@ namespace Sams.Extensions.Web.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public ActionResult RetrieveImage(int ImageId)
         {
             byte[] cover = _dataAccesLayer.GetImageById(ImageId,true);
@@ -143,6 +144,7 @@ namespace Sams.Extensions.Web.Controllers
                 return File(bytes, "image/jpg");
             }
         }
+        [AllowAnonymous]
         public ActionResult ViewMore(string CheckListId,string AuditDate, string Location, string Branch)
         {
             var images = _dataAccesLayer.FetchCheckListImageList(Location, Branch, AuditDate, CheckListId,true);
