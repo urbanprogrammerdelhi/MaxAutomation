@@ -10,6 +10,9 @@ namespace Sams.Extensions.Model
     {
         public string ClientCode { get; set; }
         public string ClientName { get; set; }
+        public string LocationCode { get; set; }
+        public string LocationDesc { get; set; }
+        public decimal LocationAutoID { get; set; }
     }
     public class SiteModel
     {

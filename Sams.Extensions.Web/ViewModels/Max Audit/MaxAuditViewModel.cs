@@ -104,9 +104,9 @@ namespace Sams.Extensions.Web
 
     public class FsaViewModel
     {
-        public bool CanExportReport { get { return (ReportData != null && ReportData.Header != null && ReportData.Header.Count > 0 && ReportData.Details != null && ReportData.Details.Count > 0 && ReportData.Footer != null && ReportData.Footer.Count > 0);  } }
+        public bool CanExportReport { get { return (ReportData != null && ReportData.Header != null && ReportData.Header.Count > 0 && ReportData.Details != null && ReportData.Details.Count > 0 && ReportData.Footer != null && ReportData.Footer.Count > 0); } }
         public FsaReportData ReportData { get; set; }
-
+        public List<FsaDetails> FsaDetailList { get; set; }
         public IList<SelectListItem> Locations { get; set; }
         public IList<SelectListItem> Clients { get; set; }
         public IList<SelectListItem> Years { get; set; }
@@ -115,7 +115,7 @@ namespace Sams.Extensions.Web
         public string CurrentClient { get; set; }
         public string CurrentYear { get; set; }
         public string CurrentQuarter { get; set; }
-                    
+                    public FsaDetails CurrentFsaDetails { get; set; }
         public static FsaViewModel DefaultInstance
         {
             get
@@ -131,7 +131,9 @@ namespace Sams.Extensions.Web
                     CurrentQuarter= string.Empty,
                     CurrentYear=DateTime.Now.Year.ToString(),
                     Quarters= FsaConstants.Quarters,
-                    Years= FsaConstants.Years
+                    Years= FsaConstants.Years,
+                    FsaDetailList=new List<FsaDetails>(),
+                    CurrentFsaDetails=new FsaDetails()
 
                 };
             }

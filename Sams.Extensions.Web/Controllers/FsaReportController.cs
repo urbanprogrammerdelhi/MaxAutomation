@@ -16,7 +16,7 @@ using System.Web.Mvc;
 namespace Sams.Extensions.Web.Controllers
 {
     [CustomAuthorizeAttribute]
-   public class FsaReportController : Controller
+    public class FsaReportController : Controller
     {
         private readonly IMasterBusiness _master;
         private readonly ILoggerManager _loggerManager;
@@ -38,22 +38,50 @@ namespace Sams.Extensions.Web.Controllers
                 if (TempData["FsaData"] != null)
                 {
                     vm = (FsaViewModel)TempData["FsaData"];
-                }              
+                }
                 var currentCompany = (Session["UserInfo"] as Account).Company;
                 var locations = _master.FetchLocations(currentCompany, "All");
                 vm.Locations = locations.ToSelectList("LocationAutoId", "Locationdesc");
-                
-               
+
+
                 DateTime? fromDate;
                 DateTime? toDate;
                 FsaConstants.CalculateFromToDate(vm.CurrentYear, vm.CurrentQuarter, out fromDate, out toDate);
 
                 //if (!string.IsNullOrEmpty(vm.CurrentLocation))
                 //{
-                    var clients = _master.FetchClients(vm.CurrentLocation, fromDate, toDate);
-                    vm.Clients = clients.ToSelectList("ClientCode", "ClientName");
-               // }
-                vm.ReportData = _groupLReportBusiness.FsaDetails(new FsaSearchModel { ClientCode = vm.CurrentClient, FromDate = fromDate, ToDate = toDate });
+                var clients = _master.FetchClients(vm.CurrentLocation, fromDate, toDate);
+                vm.Clients = clients.ToSelectList("ClientCode", "ClientName");
+                List<ClientModel> selectedClients = clients.ToList();
+                if (!string.IsNullOrEmpty(vm.CurrentClient) && vm.CurrentClient.ToLower() != "all")
+                {
+                    selectedClients=clients = clients.Where(cl => cl.ClientCode.ToLower() == vm.CurrentClient.ToLower()).ToList();
+                   
+                }
+                vm.FsaDetailList = new List<FsaDetails>();
+                int counter = 1;
+                foreach (var client in selectedClients)
+                {
+                    FsaDetails fsaDetails = new FsaDetails
+                    {
+                        Year = vm.CurrentYear,
+                        Quarter = vm.CurrentQuarter,
+                        Zone = client.LocationDesc,
+                        Client = client.ClientName,
+                        ClientCode = client.ClientCode,
+                        Action = "Action",
+                        SerialNumer = counter.ToString(),
+                        LocationCode = client.LocationCode,
+                        LocationAutoID = client.LocationAutoID
+                    };
+                    var requiredDetails = $"{vm.CurrentYear},{vm.CurrentQuarter},{client.ClientCode},{client.LocationAutoID}";
+                    fsaDetails.RequiredDetails = CryptographicUtility.EncryptString(requiredDetails);
+                    vm.FsaDetailList.Add(fsaDetails);
+                    counter++;
+                }
+
+
+                //vm.ReportData = _groupLReportBusiness.FsaDetails(new FsaSearchModel { ClientCode = vm.CurrentClient, FromDate = fromDate, ToDate = toDate });
                 return View(vm);
             }
             catch (Exception ex)
@@ -74,13 +102,13 @@ namespace Sams.Extensions.Web.Controllers
             return RedirectToAction("Index");
         }
         [HttpPost]
-        public ActionResult FetchLocations(string CompanyCode,string RegionCode)
+        public ActionResult FetchLocations(string CompanyCode, string RegionCode)
         {
             var locations = _master.FetchLocations(CompanyCode, RegionCode);
             var locationList = locations.ToSelectList("LocationAutoId", "Locationdesc");
             return Json(locationList, JsonRequestBehavior.AllowGet);
-        }      
-     
+        }
+
         [HttpPost]
         public ActionResult FetchClients(string locationCode, string selectedYear, string selectedQuarter)
         {
@@ -209,17 +237,20 @@ namespace Sams.Extensions.Web.Controllers
             ViewBag.ImageName = imageName;
             return View();
         }
+        [AllowAnonymous]
+
         public ActionResult RetrieveImage(string imageName)
         {
-          
 
-                //Read the File data into Byte Array.
-                byte[] bytes = System.IO.File.ReadAllBytes($@"{ConfigurationManager.AppSettings["FSAImagePath"]}/{imageName}");
 
-                //Send the File to Download.
-                return File(bytes, "image/jpg");
-            
+            //Read the File data into Byte Array.
+            byte[] bytes = System.IO.File.ReadAllBytes($@"{ConfigurationManager.AppSettings["FSAImagePath"]}/{imageName}");
+
+            //Send the File to Download.
+            return File(bytes, "image/jpg");
+
         }
+        [AllowAnonymous]
 
         public ActionResult SetImage(byte[] image)
         {
@@ -238,6 +269,24 @@ namespace Sams.Extensions.Web.Controllers
                 return File(bytes, "image/jpg");
             }
         }
+
+        public ActionResult Details(string ParamDetails)
+        {
+            var requiredDetails = CryptographicUtility.DecryptString(ParamDetails);
+            string[] paramArray = requiredDetails.Split(',');
+            DateTime? fromDate;
+            DateTime? toDate;
+            FsaConstants.CalculateFromToDate(paramArray[0], paramArray[1], out fromDate, out toDate);
+            var vm = FsaViewModel.DefaultInstance;
+            vm.CurrentClient = paramArray[2];
+            vm.CurrentQuarter = paramArray[1];
+            vm.CurrentYear = paramArray[0];
+            vm.CurrentLocation = paramArray[3];
+            var reportData = _groupLReportBusiness.FsaDetails(new FsaSearchModel { ClientCode = vm.CurrentClient, FromDate = fromDate, ToDate = toDate });
+            vm.ReportData = reportData;
+            return View(vm);
+        }
+
     }
-  
+
 }

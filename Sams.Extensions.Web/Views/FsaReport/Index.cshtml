@@ -24,6 +24,17 @@
             content: " *";
             color: red;
         }
+        .GridColumnStyle {
+            background-color: #B8DBFD;
+            border: 1px solid #ccc;
+            width: auto;
+            text-align: center;
+        }
+        .GridColumnStyleCell {
+            border: 1px solid #ccc;
+            width: auto;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -32,7 +43,7 @@
         <div style="width:100%;padding:10px;">
             <div class="PageHeaderSection" style="height:100%;position:unset;">
                 <div class="card">
-                    <div class="card-body bg-info text-white text-center"><h4>Fire Safety Audit Report</h4></div>
+                    <div class="card-body bg-info text-white text-center"><h4>Fire Safety Audit Dsshboard</h4></div>
                 </div>
                 <div class="card-body">
 
@@ -53,19 +64,14 @@
                             </div>
                             <div class="col-md-3">
                                 <label for="Location">Branch</label>
-                                @Html.DropDownListFor(model => model.CurrentClient, Model.Clients as List<SelectListItem>, "Select Branch", new { @class = "form-control" })
+                                @Html.DropDownListFor(model => model.CurrentClient, Model.Clients as List<SelectListItem>, "All", new { @class = "form-control" })
                             </div>
 
                             <div class="col-md-3">
-                                <input type="submit" name="Submit" class="btn btn-primary SubmitButton" value="Search" onclick="return ValidateSearch();"/>
-                               
+                                <input type="submit" name="Submit" class="btn btn-primary SubmitButton" value="Search" onclick="return ValidateSearch();" />
+
                             </div>
-                            <div class="col-md-3">
-                                @if (Model.CanExportReport)
-                                {
-                                    <input type="submit" id="btnExport" name="Submit" value="Export to Pdf" class="btn btn-primary SubmitButton" onclick="return ValidateSearch()" />
-                                }
-                            </div>
+                           
 
                         </div>
                     </div>
@@ -73,154 +79,82 @@
 
             </div>
             <div class="BodyHeaderSection">
-             
-                <div style="min-width:100%;overflow:auto;height:auto;padding-top:10px;">
-                    @if (Model.CanExportReport)
-                    {
-                        //Header
 
-                        <table border="1" cellpadding="2" cellspacing="2" style="border: 1px solid black;font-family: Verdana; font-size: 10pt; margin-top:10px;">
-                            <tr>
+                <div style="min-width:100%;overflow:auto;height:auto;padding-top:10px;height:400px;">
 
-                                <th width="50%" style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;text-align:center;">
-                                    @Html.DisplayNameFor(model => model.ReportData.CurrentHeader.ClientDetails)
 
-                                </th>
-                                <th width="50%" style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;text-align:center;">
-                                    @Html.DisplayNameFor(model => model.ReportData.CurrentHeader.OfficeAddress)
-                                </th>
-                            </tr>
-                            @foreach (var cr in Model.ReportData.Header)
+
+
+                    <table class="table-bordered" style="width:100%;height:auto;">
+                        <tr>
+                            <th width="10%" class="GridColumnStyle">
+                                @Html.DisplayNameFor(model => model.CurrentFsaDetails.SerialNumer)
+                            </th>
+                            <th width="10%" class="GridColumnStyle">
+                                @Html.DisplayNameFor(model => model.CurrentFsaDetails.Year)
+
+                            </th>
+                            <th width="15%" class="GridColumnStyle">
+                                @Html.DisplayNameFor(model => model.CurrentFsaDetails.Quarter)
+                            </th>
+                            <th width="15%" class="GridColumnStyle">
+                                @Html.DisplayNameFor(model => model.CurrentFsaDetails.Zone)
+                            </th>
+                            <th width="30%" class="GridColumnStyle">
+                                @Html.DisplayNameFor(model => model.CurrentFsaDetails.Client)
+                            </th>
+                            <th width="20%" class="GridColumnStyle">
+                               
+                            </th>
+                        </tr>
+                        @if (Model.FsaDetailList == null || @Model.FsaDetailList.Count <= 0)
+                        {
+                            <tr style="min-width:100%;"><td colspan="6">No records found</td></tr>
+                        }
+                        else
+                        {
+                            foreach (var fsa in Model.FsaDetailList)
                             {
+
                                 <tr>
-                                    <td style="border: 1px solid #ccc;padding:5px; ">
-                                        @cr.ClientDetails
+                                    <td class="GridColumnStyleCell">
+                                        @fsa.SerialNumer
                                     </td>
-                                    <td style="border: 1px solid #ccc;padding:5px; ">
-                                        @cr.OfficeAddress
+                                    <td class="GridColumnStyleCell">
+                                        @fsa.Year
+
+                                    </td>
+                                    <td class="GridColumnStyleCell">
+                                        @fsa.Quarter
+                                    </td>
+                                    <td class="GridColumnStyleCell">
+                                        @fsa.Zone
+
+                                    </td>
+                                    <td class="GridColumnStyleCell">
+                                        @fsa.Client
+
+                                    </td>
+                                    <td class="GridColumnStyleCell">
+                                        @Html.ActionLink("View Report", "Details", new { ParamDetails =fsa.RequiredDetails }, new { @class = "btn btn-primary" })
 
                                     </td>
                                 </tr>
                             }
+                        }
 
-                        </table>
-                        //Details
-
-                        @*<div id="DvDetails" style="min-width:100%;overflow:auto;max-height:400px;">*@
-
-                            <table border="1" cellpadding="2" cellspacing="2" style="border: 1px solid black;font-family: Verdana; font-size: 10pt; margin-top:10px;">
-                                <tr>
-
-                                    <th width="10%" style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;text-align:center;">
-                                        @Html.DisplayNameFor(model => model.ReportData.CurrentDetails.ShowID)
-
-                                    </th>
-                                    <th width="40%" style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;text-align:center;">
-                                        @Html.DisplayNameFor(model => model.ReportData.CurrentDetails.Category)
-                                    </th>
-                                    <th width="15%" style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;text-align:center;">
-                                        @Html.DisplayNameFor(model => model.ReportData.CurrentDetails.Audit)
-                                    </th>
-                                    <th width="10%" style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;text-align:center;">
-                                        @Html.DisplayNameFor(model => model.ReportData.CurrentDetails.RequiredAction)
-                                    </th>
-                                    <th width="35%" style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;text-align:center;">
-                                        @Html.DisplayNameFor(model => model.ReportData.CurrentDetails.Pictures)
-                                    </th>
-                                </tr>
-                                @foreach (var cr in Model.ReportData.Details)
-                                {
-                                    var imageUrl =  $"https://www.ifm360.in/APS/FSAImages/{cr.Pictures.ParseToText()}";
-
-                                <tr>
-                                    <td style="border: 1px solid #ccc;padding:5px; ">
-                                        @cr.ShowID
-                                    </td>
-                                    <td style="border: 1px solid #ccc;padding:5px; ">
-                                        @cr.Category
-
-                                    </td>
-                                    <td style="border: 1px solid #ccc;padding:5px; ">
-                                        @cr.Audit
-                                    </td>
-                                    <td style="border: 1px solid #ccc;padding:5px; ">
-                                        @cr.RequiredAction
-
-                                    </td>
-                                    @if (string.IsNullOrEmpty(cr.Pictures))
-                                    {
-                                        <td style="border: 1px solid #ccc;padding:5px;">
-                                           Not Applicable
-                                        </td>
-                                    }
-                                    else
-                                    {
-                                        <td style="border: 1px solid #ccc;padding:5px;">
-                                            <img src="@imageUrl" width="150" height="150"  />
-                                        </td>
-                                    }
-
-                                </tr>
-                                }
-
-                            </table>
-
-                        @*</div>*@
-
-
-                        //Footer
-
-                        @*<div id="DvFooter" style="min-width:100%;overflow:auto;max-height:400px;">*@
-
-                            <table border="1" cellpadding="2" cellspacing="2" style="border: 1px solid black;font-family: Verdana; font-size: 10pt; margin-top:10px;">
-                                <tr>
-
-                                    <th width="10%" style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;text-align:center;">
-                                        @Html.DisplayNameFor(model => model.ReportData.CurrentFooter.ChecklistID)
-
-                                    </th>
-                                    <th width="85%" style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;text-align:center;">
-                                        @Html.DisplayNameFor(model => model.ReportData.CurrentFooter.Category)
-                                    </th>
-                                    <th width="15%" style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;text-align:center;">
-                                        @Html.DisplayNameFor(model => model.ReportData.CurrentFooter.Qty)
-                                    </th>
-                                   
-                                </tr>
-                                @foreach (var cr in Model.ReportData.Footer)
-                                {
-
-                                    <tr>
-                                        <td style="border: 1px solid #ccc;padding:5px; ">
-                                            @cr.ChecklistID
-                                        </td>
-                                        <td style="border: 1px solid #ccc;padding:5px; ">
-                                            @cr.Category
-
-                                        </td>
-                                        <td style="border: 1px solid #ccc;padding:5px; ">
-                                            @cr.Qty
-                                        </td>
-                                       
-                                    </tr>
-                                }
-
-                            </table>
-
-                        @*</div>*@
+                    </table>
 
 
 
-        
 
-                    }
-                    else
-                    {
-                        <h4>No Records found</h4>
 
-                    }
+
+
+
+
                 </div>
-                    </div>
+            </div>
         </div>
     }
     <link rel="stylesheet" href="~/Content/bootstrap.css" />
@@ -252,11 +186,11 @@
             //    return false;
             //}
 
-            let selectedClient = $("#CurrentClient").val();
-            if (selectedClient == null || selectedClient == '' || selectedClient == 'Select Client') {
-                alert('Please select a client to continue');
-                return false;
-            }
+            //let selectedClient = $("#CurrentClient").val();
+            //if (selectedClient == null || selectedClient == '' || selectedClient == 'Select Client') {
+            //    alert('Please select a client to continue');
+            //    return false;
+            //}
 
             return true;
         }
@@ -276,7 +210,7 @@
                     $("#CurrentClient").empty();
 
                     json = json || {};
-                    $("#CurrentClient").append('<option>Select Client </option>');
+                    $("#CurrentClient").append('<option>All </option>');
 
                     for (var i = 0; i < json.length; i++) {
                         $("#CurrentClient").append('<option value="' + json[i].Value + '">' + json[i].Text + '</option>');
@@ -294,7 +228,7 @@
             let locationCode = $("#CurrentLocation").val();
              let selectedYear = $("#CurrentYear").val();
             let selectedQuarter = $(this).val();
-            
+
             $.ajax({
                 cache: false,
                 type: "POST",
@@ -305,7 +239,7 @@
                     $("#CurrentClient").empty();
 
                     json = json || {};
-                    $("#CurrentClient").append('<option>Select Client </option>');
+                    $("#CurrentClient").append('<option>All </option>');
 
                     for (var i = 0; i < json.length; i++) {
                         $("#CurrentClient").append('<option value="' + json[i].Value + '">' + json[i].Text + '</option>');

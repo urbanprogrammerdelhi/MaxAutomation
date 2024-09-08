@@ -27,57 +27,23 @@
     </style>
 </head>
 <body>
-    @using (Html.BeginForm("SubmitRequest", "FsaReport", FormMethod.Post))
+    @using (Html.BeginForm("Export", "FsaReport", FormMethod.Post))
     {
+        @Html.HiddenFor(model => model.CurrentYear);
+        @Html.HiddenFor(model => model.CurrentQuarter);
+        @Html.HiddenFor(model => model.CurrentLocation);
+        @Html.HiddenFor(model => model.CurrentClient);
         <div style="width:100%;padding:10px;">
-            <div class="PageHeaderSection" style="height:100%;position:unset;">
-                <div class="card">
-                    <div class="card-body bg-info text-white text-center"><h4>Fire Safety Audit Report</h4></div>
-                </div>
-                <div class="card-body">
 
-                    <div class="form-group">
-
-                        <div class="row">
-                            <div class="col-md-3">
-                                <label for="Location">Year</label>
-                                @Html.DropDownListFor(model => model.CurrentYear, Model.Years as List<SelectListItem>, "Select Year", new { @class = "form-control" })
-                            </div>
-                            <div class="col-md-3">
-                                <label for="Location">Quarter</label>
-                                @Html.DropDownListFor(model => model.CurrentQuarter, Model.Quarters as List<SelectListItem>, "Select Quarter", new { @class = "form-control" })
-                            </div>
-                            <div class="col-md-3">
-                                <label for="Location">Zone</label>
-                                @Html.DropDownListFor(model => model.CurrentLocation, Model.Locations as List<SelectListItem>, "All", new { @class = "form-control" })
-                            </div>
-                            <div class="col-md-3">
-                                <label for="Location">Branch</label>
-                                @Html.DropDownListFor(model => model.CurrentClient, Model.Clients as List<SelectListItem>, "Select Branch", new { @class = "form-control" })
-                            </div>
-
-                            <div class="col-md-3">
-                                <input type="submit" name="Submit" class="btn btn-primary SubmitButton" value="Search" onclick="return ValidateSearch();"/>
-                               
-                            </div>
-                            <div class="col-md-3">
-                                @if (Model.CanExportReport)
-                                {
-                                    <input type="submit" id="btnExport" name="Submit" value="Export to Pdf" class="btn btn-primary SubmitButton" onclick="return ValidateSearch()" />
-                                }
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-            </div>
             <div class="BodyHeaderSection">
-             
+
                 <div style="min-width:100%;overflow:auto;height:auto;padding-top:10px;">
                     @if (Model.CanExportReport)
                     {
-                        //Header
+                        <div class="card">
+                            <div class="card-body bg-info text-white text-center"><h4>Fire Safety Audit Report</h4></div>
+                        </div>
+                        <input type="submit" name="Submit" class="btn btn-primary SubmitButton" value="Export"  />
 
                         <table border="1" cellpadding="2" cellspacing="2" style="border: 1px solid black;font-family: Verdana; font-size: 10pt; margin-top:10px;">
                             <tr>
@@ -108,29 +74,29 @@
 
                         @*<div id="DvDetails" style="min-width:100%;overflow:auto;max-height:400px;">*@
 
-                            <table border="1" cellpadding="2" cellspacing="2" style="border: 1px solid black;font-family: Verdana; font-size: 10pt; margin-top:10px;">
-                                <tr>
+                        <table border="1" cellpadding="2" cellspacing="2" style="border: 1px solid black;font-family: Verdana; font-size: 10pt; margin-top:10px;">
+                            <tr>
 
-                                    <th width="10%" style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;text-align:center;">
-                                        @Html.DisplayNameFor(model => model.ReportData.CurrentDetails.ShowID)
+                                <th width="10%" style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;text-align:center;">
+                                    @Html.DisplayNameFor(model => model.ReportData.CurrentDetails.ShowID)
 
-                                    </th>
-                                    <th width="40%" style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;text-align:center;">
-                                        @Html.DisplayNameFor(model => model.ReportData.CurrentDetails.Category)
-                                    </th>
-                                    <th width="15%" style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;text-align:center;">
-                                        @Html.DisplayNameFor(model => model.ReportData.CurrentDetails.Audit)
-                                    </th>
-                                    <th width="10%" style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;text-align:center;">
-                                        @Html.DisplayNameFor(model => model.ReportData.CurrentDetails.RequiredAction)
-                                    </th>
-                                    <th width="35%" style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;text-align:center;">
-                                        @Html.DisplayNameFor(model => model.ReportData.CurrentDetails.Pictures)
-                                    </th>
-                                </tr>
-                                @foreach (var cr in Model.ReportData.Details)
-                                {
-                                    var imageUrl =  $"https://www.ifm360.in/APS/FSAImages/{cr.Pictures.ParseToText()}";
+                                </th>
+                                <th width="40%" style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;text-align:center;">
+                                    @Html.DisplayNameFor(model => model.ReportData.CurrentDetails.Category)
+                                </th>
+                                <th width="15%" style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;text-align:center;">
+                                    @Html.DisplayNameFor(model => model.ReportData.CurrentDetails.Audit)
+                                </th>
+                                <th width="10%" style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;text-align:center;">
+                                    @Html.DisplayNameFor(model => model.ReportData.CurrentDetails.RequiredAction)
+                                </th>
+                                <th width="35%" style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;text-align:center;">
+                                    @Html.DisplayNameFor(model => model.ReportData.CurrentDetails.Pictures)
+                                </th>
+                            </tr>
+                            @foreach (var cr in Model.ReportData.Details)
+                            {
+                                var imageUrl = $"https://www.ifm360.in/APS/FSAImages/{cr.Pictures.ParseToText()}";
 
                                 <tr>
                                     <td style="border: 1px solid #ccc;padding:5px; ">
@@ -150,20 +116,20 @@
                                     @if (string.IsNullOrEmpty(cr.Pictures))
                                     {
                                         <td style="border: 1px solid #ccc;padding:5px;">
-                                           Not Applicable
+                                            Not Applicable
                                         </td>
                                     }
                                     else
                                     {
                                         <td style="border: 1px solid #ccc;padding:5px;">
-                                            <img src="@imageUrl" width="150" height="150"  />
+                                            <img src="@imageUrl" width="150" height="150" />
                                         </td>
                                     }
 
                                 </tr>
-                                }
+                            }
 
-                            </table>
+                        </table>
 
                         @*</div>*@
 
@@ -172,46 +138,46 @@
 
                         @*<div id="DvFooter" style="min-width:100%;overflow:auto;max-height:400px;">*@
 
-                            <table border="1" cellpadding="2" cellspacing="2" style="border: 1px solid black;font-family: Verdana; font-size: 10pt; margin-top:10px;">
+                        <table border="1" cellpadding="2" cellspacing="2" style="border: 1px solid black;font-family: Verdana; font-size: 10pt; margin-top:10px;">
+                            <tr>
+
+                                <th width="10%" style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;text-align:center;">
+                                    @Html.DisplayNameFor(model => model.ReportData.CurrentFooter.ChecklistID)
+
+                                </th>
+                                <th width="85%" style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;text-align:center;">
+                                    @Html.DisplayNameFor(model => model.ReportData.CurrentFooter.Category)
+                                </th>
+                                <th width="15%" style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;text-align:center;">
+                                    @Html.DisplayNameFor(model => model.ReportData.CurrentFooter.Qty)
+                                </th>
+
+                            </tr>
+                            @foreach (var cr in Model.ReportData.Footer)
+                            {
+
                                 <tr>
+                                    <td style="border: 1px solid #ccc;padding:5px; ">
+                                        @cr.ChecklistID
+                                    </td>
+                                    <td style="border: 1px solid #ccc;padding:5px; ">
+                                        @cr.Category
 
-                                    <th width="10%" style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;text-align:center;">
-                                        @Html.DisplayNameFor(model => model.ReportData.CurrentFooter.ChecklistID)
+                                    </td>
+                                    <td style="border: 1px solid #ccc;padding:5px; ">
+                                        @cr.Qty
+                                    </td>
 
-                                    </th>
-                                    <th width="85%" style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;text-align:center;">
-                                        @Html.DisplayNameFor(model => model.ReportData.CurrentFooter.Category)
-                                    </th>
-                                    <th width="15%" style="background-color: #B8DBFD;border: 1px solid #ccc;width:auto;text-align:center;">
-                                        @Html.DisplayNameFor(model => model.ReportData.CurrentFooter.Qty)
-                                    </th>
-                                   
                                 </tr>
-                                @foreach (var cr in Model.ReportData.Footer)
-                                {
+                            }
 
-                                    <tr>
-                                        <td style="border: 1px solid #ccc;padding:5px; ">
-                                            @cr.ChecklistID
-                                        </td>
-                                        <td style="border: 1px solid #ccc;padding:5px; ">
-                                            @cr.Category
-
-                                        </td>
-                                        <td style="border: 1px solid #ccc;padding:5px; ">
-                                            @cr.Qty
-                                        </td>
-                                       
-                                    </tr>
-                                }
-
-                            </table>
+                        </table>
 
                         @*</div>*@
 
 
 
-        
+
 
                     }
                     else
@@ -220,7 +186,7 @@
 
                     }
                 </div>
-                    </div>
+            </div>
         </div>
     }
     <link rel="stylesheet" href="~/Content/bootstrap.css" />
@@ -294,7 +260,7 @@
             let locationCode = $("#CurrentLocation").val();
              let selectedYear = $("#CurrentYear").val();
             let selectedQuarter = $(this).val();
-            
+
             $.ajax({
                 cache: false,
                 type: "POST",

@@ -9,6 +9,8 @@ namespace Sams.Extensions.Utility
 {
     public class CommonUtility
     {
+
+
         public static readonly Dictionary<EmployeeRosterReports, string> EmployeeeRosterReports = new Dictionary<EmployeeRosterReports, string>
         {
             { EmployeeRosterReports.EmployeeRosterConsolidated,"Consolidated Report" },
