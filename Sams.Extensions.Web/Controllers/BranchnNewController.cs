@@ -107,7 +107,7 @@ namespace Sams.Extensions.Web.Controllers
                 pdfDoc.Open();
                 PdfReportBuilder builder = new PdfReportBuilder(pdfDoc, _dataAccesLayer);
                 builder.CreateHeader(data.Header);
-                builder.CreateDetails(data.MasterdetailList, viewMoreUrl);
+                builder.CreateDetails(data.MasterdetailList, viewMoreUrl,checkListType);
                 pdfWriter.CloseStream = false;
                 pdfDoc.Close();
                 Response.Buffer = true;
@@ -145,9 +145,9 @@ namespace Sams.Extensions.Web.Controllers
             }
         }
         [AllowAnonymous]
-        public ActionResult ViewMore(string CheckListId,string AuditDate, string Location, string Branch)
+        public ActionResult ViewMore(string CheckListId,string AuditDate, string Location, string Branch,string CheckListType)
         {
-            var images = _dataAccesLayer.FetchCheckListImageList(Location, Branch, AuditDate, CheckListId,true);
+            var images = _dataAccesLayer.FetchCheckListImageList(Location, Branch, AuditDate, CheckListId,true, CheckListType);
             return View(images);
         }
 

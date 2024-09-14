@@ -110,7 +110,7 @@ namespace Sams.Extensions.Dal
 
         }
 
-        public List<ImageModel> FetchCheckListImageList(string location,string branch,string auditDate,string checkListId, bool forCheckListId = false)
+        public List<ImageModel> FetchCheckListImageList(string location,string branch,string auditDate,string checkListId, bool forCheckListId = false,string CheckListType=null)
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
 
@@ -125,6 +125,7 @@ namespace Sams.Extensions.Dal
                 command.Parameters.Add(new SqlParameter("@ClientCode", branch));
                 command.Parameters.Add(new SqlParameter("@CheckListId", checkListId));
                 command.Parameters.Add(new SqlParameter("@forCheckListId", forCheckListId));
+                command.Parameters.Add(new SqlParameter("@CheckListType", CheckListType));
 
 
 

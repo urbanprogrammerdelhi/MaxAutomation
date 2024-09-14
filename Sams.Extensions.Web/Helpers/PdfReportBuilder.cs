@@ -2,6 +2,7 @@
 using iTextSharp.text.pdf;
 using Sams.Extensions.Dal;
 using Sams.Extensions.Model;
+using Sams.Extensions.Utility;
 using Sams.Extensions.Web.Helpers;
 using System;
 using System.Collections.Generic;
@@ -182,7 +183,7 @@ namespace Sams.Extensions
             _pdfDoc.Add(postHeader);
 
         }
-        public void CreateDetails(ILookup<string, ReportBody> details,string viewMoreUrl)
+        public void CreateDetails(ILookup<string, ReportBody> details,string viewMoreUrl,string checkListType=null)
         {
             var baseUrl = ConfigurationManager.AppSettings["BaseUrl"].ToString();
 
@@ -203,12 +204,16 @@ namespace Sams.Extensions
                     cell.Colspan = 5;
                     cell.HorizontalAlignment = Element.ALIGN_MIDDLE;
                     table.AddCell(cell);
-                    foreach (ReportBody checkListItem in packageGroup.OrderBy(chk=>chk.ChecklistId))
+                    foreach (ReportBody checkListItem in packageGroup.OrderBy(pg=>pg.NewChecklistId.ParseToInteger()))
                     {
-                        table.AddCell(DetailCell(checkListItem.ChecklistId.ToString(), DetailBackgroundColor, new CellPadding { Bottom = 5, Top = 5, Left = 5, Right = 0 }));
+                        table.AddCell(DetailCell(checkListItem.NewChecklistId.ParseToText(), DetailBackgroundColor, new CellPadding { Bottom = 5, Top = 5, Left = 5, Right = 0 }));
                         table.AddCell(DetailCell(checkListItem.SubHeader, DetailBackgroundColor, DetailDefaultLongPadding));
                         table.AddCell(DetailCell(checkListItem.Text, DetailBackgroundColor, new CellPadding { Bottom = 5, Top = 5, Left = 5, Right = 0 }));
-                        var newviewMoreUrl = viewMoreUrl + $"&CheckListId={checkListItem.NewChecklistId}";
+                        var newviewMoreUrl = viewMoreUrl + $"&CheckListId={checkListItem.ChecklistId}";
+                        if(!string.IsNullOrEmpty(checkListType))
+                        {
+                            newviewMoreUrl += "&CheckListType=" + checkListType;
+                        }
                         var imageArray = _branchCodeData.GetImageById(checkListItem.ImageAutoId, !string.IsNullOrEmpty(checkListItem.ChecklistType));
                          table.AddCell(DefaultImageCell(imageArray, DetailDefaultImagePadding, newviewMoreUrl));
                         table.AddCell(DetailCell(checkListItem.Remarks, DetailBackgroundColor, DetailDefaultRemarksPadding));
